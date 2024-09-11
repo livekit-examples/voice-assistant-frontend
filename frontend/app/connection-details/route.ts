@@ -1,7 +1,9 @@
-import { randomString } from '@/lib/client-utils';
-import { ConnectionDetails } from '@/lib/types';
-import { AccessToken, AccessTokenOptions, VideoGrant } from 'livekit-server-sdk';
-import { NextRequest, NextResponse } from 'next/server';
+import {
+  AccessToken,
+  AccessTokenOptions,
+  VideoGrant,
+} from "livekit-server-sdk";
+import { NextRequest, NextResponse } from "next/server";
 
 const API_KEY = process.env.LIVEKIT_API_KEY;
 const API_SECRET = process.env.LIVEKIT_API_SECRET;
@@ -10,34 +12,39 @@ const LIVEKIT_URL = process.env.LIVEKIT_URL;
 export async function GET(request: NextRequest) {
   try {
     // Parse query parameters
-    const roomName = request.nextUrl.searchParams.get('roomName');
-    const participantName = request.nextUrl.searchParams.get('participantName');
-    const metadata = request.nextUrl.searchParams.get('metadata') ?? '';
-    const region = request.nextUrl.searchParams.get('region');
+    const roomName = request.nextUrl.searchParams.get("roomName");
+    const participantName = request.nextUrl.searchParams.get("participantName");
+    const metadata = request.nextUrl.searchParams.get("metadata") ?? "";
+    const region = request.nextUrl.searchParams.get("region");
     const livekitServerUrl = region ? getLiveKitURL(region) : LIVEKIT_URL;
     if (livekitServerUrl === undefined) {
-      throw new Error('Invalid region');
+      throw new Error("Invalid region");
     }
 
-    if (typeof roomName !== 'string') {
-      return new NextResponse('Missing required query parameter: roomName', { status: 400 });
-    }
-    if (participantName === null) {
-      return new NextResponse('Missing required query parameter: participantName', { status: 400 });
-    }
+    // if (typeof roomName !== "string") {
+    //   return new NextResponse("Missing required query parameter: roomName", {
+    //     status: 400,
+    //   });
+    // }
+    // if (participantName === null) {
+    //   return new NextResponse(
+    //     "Missing required query parameter: participantName",
+    //     { status: 400 }
+    //   );
+    // }
 
     // Generate participant token
     const participantToken = await createParticipantToken(
       {
-        identity: `${participantName}__${randomString(4)}`,
-        name: participantName,
+        identity: `${participantName}__${Math.round(Math.random() * 10000)}`,
+        name: "participantName",
         metadata,
       },
-      roomName,
+      "roomName"
     );
 
     // Return connection details
-    const data: ConnectionDetails = {
+    const data = {
       serverUrl: livekitServerUrl,
       roomName: roomName,
       participantToken: participantToken,
@@ -51,9 +58,12 @@ export async function GET(request: NextRequest) {
   }
 }
 
-function createParticipantToken(userInfo: AccessTokenOptions, roomName: string) {
+function createParticipantToken(
+  userInfo: AccessTokenOptions,
+  roomName: string
+) {
   const at = new AccessToken(API_KEY, API_SECRET, userInfo);
-  at.ttl = '5m';
+  at.ttl = "5m";
   const grant: VideoGrant = {
     room: roomName,
     roomJoin: true,
@@ -69,7 +79,7 @@ function createParticipantToken(userInfo: AccessTokenOptions, roomName: string) 
  * Get the LiveKit server URL for the given region.
  */
 function getLiveKitURL(region: string | null): string {
-  let targetKey = 'LIVEKIT_URL';
+  let targetKey = "LIVEKIT_URL";
   if (region) {
     targetKey = `LIVEKIT_URL_${region}`.toUpperCase();
   }

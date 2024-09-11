@@ -25,14 +25,18 @@ function SimpleVoiceAssistant() {
 
 export default function Page() {
   const [shouldConnect, setShouldConnect] = useState(false);
+  const [details, setDetails] = useState<any>(undefined);
 
   const handlePreJoinSubmit = useCallback(async () => {
     const url = new URL(
-      process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT,
+      process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT!,
       window.location.origin
     );
     const connectionDetailsResp = await fetch(url.toString());
     const connectionDetailsData = await connectionDetailsResp.json();
+    console.log({ connectionDetailsData });
+
+    setDetails(connectionDetailsData);
   }, []);
 
   const onDeviceFailure = (e?: MediaDeviceFailure) => {
@@ -44,30 +48,27 @@ export default function Page() {
 
   return (
     <main data-lk-theme="default" className="">
-      <LiveKitRoom
-        audio={true}
-        token={token}
-        connect={shouldConnect}
-        serverUrl={}
-        onMediaDeviceFailure={onDeviceFailure}
-        onDisconnected={() => setShouldConnect(false)}
-        className=""
-      >
-        <div className="">
-          {shouldConnect ? (
+      {details ? (
+        <LiveKitRoom
+          audio={true}
+          token={details.participantToken}
+          connect={shouldConnect}
+          serverUrl={details.serverUrl}
+          onMediaDeviceFailure={onDeviceFailure}
+          onDisconnected={() => setShouldConnect(false)}
+          className=""
+        >
+          <div className="">
             <SimpleVoiceAssistant />
-          ) : (
-            <button
-              className="lk-button"
-              onClick={() => setShouldConnect(true)}
-            >
-              Connect
-            </button>
-          )}
-        </div>
-        <VoiceAssistantControlBar />
-        <RoomAudioRenderer />
-      </LiveKitRoom>
+          </div>
+          <VoiceAssistantControlBar />
+          <RoomAudioRenderer />
+        </LiveKitRoom>
+      ) : (
+        <button className="lk-button" onClick={() => handlePreJoinSubmit()}>
+          Connect
+        </button>
+      )}
     </main>
   );
 }
