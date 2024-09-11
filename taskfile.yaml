@@ -1,0 +1,73 @@
+version: "3"
+
+output: prefixed
+
+dotenv:
+  - "ui/.env.local"
+  - "agent/.env.local"
+
+tasks:
+  install:
+    desc: "Bootstrap application for local development"
+    deps:
+      - install_ui
+      - install_agent
+
+  install_sandbox:
+    desc: "Bootstrap application for sandbox environment"
+    deps:
+      - install_agent
+
+  install_ui:
+    dir: "frontend"
+    interactive: true
+    cmds:
+      - "pnpm install"
+
+  install_agent:
+    dir: "agent"
+    cmds:
+      - "python3 -m venv venv"
+      - cmd: "source venv/bin/activate"
+        platforms:
+          - darwin
+          - linux
+      - cmd: "powershell venv/Scripts/Activate.ps1"
+        platforms:
+          - windows
+      - cmd: "venv/bin/python3 -m pip install -r requirements.txt"
+        platforms:
+          - darwin
+          - linux
+      - cmd: "venv/Scripts/python -m pip install -r requirements.txt"
+        platforms:
+          - windows
+
+  dev:
+    interactive: true
+    deps:
+      - dev_ui
+      - dev_agent
+
+  dev_ui:
+    dir: "frontend"
+    cmds:
+      - "pnpm dev"
+
+  dev_agent:
+    dir: "agent"
+    cmds:
+      - cmd: "source venv/bin/activate"
+        platforms:
+          - darwin
+          - linux
+      - cmd: "powershell venv/Scripts/Activate.ps1"
+        platforms:
+          - windows
+      - cmd: "venv/bin/python3 agent.py start"
+        platforms:
+          - darwin
+          - linux
+      - cmd: "venv/Scripts/python agent.py start"
+        platforms:
+          - windows
