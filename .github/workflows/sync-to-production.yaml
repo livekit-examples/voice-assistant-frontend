@@ -5,20 +5,54 @@ on:
       - main
 
 jobs:
-  sync-branches:
+  sync-main-to-sandbox-production:
+    if: ${{ startsWith(github.ref, 'refs/tags/v1') && !contains(github.ref, 'beta') }}
+    name: Sync branch `main` to other branches (fast-forward enabled)
     runs-on: ubuntu-latest
-    name: Syncing branches
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Node
-        uses: actions/setup-node@v1
+      - name: Keep `v1` up to date with `main` (fast-forward enabled)
+        uses: jojomatik/sync-branch@v2
         with:
-          node-version: 12
-      - name: Opening pull request
-        id: pull
-        uses: tretuna/sync-branches@1.4.0
-        with:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          FROM_BRANCH: "main"
-          TO_BRANCH: "sandbox-production"
+          # The branch to sync from
+          #   Optional
+          #   Default: github.ref_name
+          source: "main"
+          # The branch to sync to
+          #   Optional
+          #   Default: `beta`
+          target: "sandbox-production"
+          # The strategy to use, if fast-forward is not possible (merge, rebase, force,
+          # fail).
+          #   Optional
+          #   Default: `merge`
+          #   Possible values:
+          #     - `merge`:  merge the source branch into the target branch
+          #     - `rebase`: rebase the target branch onto the source branch
+          #     - `force`:  force push the source branch to the target branch (overrides
+          #                 any changes on the target branch)
+          #     - `fail`:   pushes the source branch to the target branch, fails if the
+          #                 target branch contains changes that are not present in the
+          #                 source branch
+          strategy: "force"
+          # The changes to accept, if strategy `merge` leads to merge conflicts
+          #   Optional
+          #   Default: `target`
+          #   Possible values:
+          #     - `target`: forces conflicts to be auto-resolved cleanly by favoring
+          #                 the target version. All non-conflicting changes are reflected
+          #                 in the merge result.
+          #     - `source`: forces conflicts to be auto-resolved cleanly by favoring
+          #                 the source version. All non-conflicting changes are reflected
+          #                 in the merge result.
+          #     - `false`:  `merge` fails if any merge conflicts occur.
+          resolve_conflicts: "false"
+          # The name to create merge commits with
+          #   Required, if strategy `merge` is used
+          git_committer_name: ${{ secrets.BOT_GIT_NAME }}
+          # The email to create merge commits with
+          #   Required, if strategy `merge` is used
+          git_committer_email: ${{ secrets.BOT_GIT_EMAIL }}
+          # The access token to push to the repository
+          #   Optional
+          #   Default: github.token
+          github_token: ${{ secrets.GH_TOKEN }}
