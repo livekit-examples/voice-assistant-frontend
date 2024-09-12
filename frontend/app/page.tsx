@@ -1,74 +1,78 @@
 "use client";
 
+import "@livekit/components-styles";
+
 import {
   LiveKitRoom,
-  useToken,
   useVoiceAssistant,
   BarVisualizer,
   RoomAudioRenderer,
   VoiceAssistantControlBar,
 } from "@livekit/components-react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { MediaDeviceFailure } from "livekit-client";
+import type { ConnectionDetails } from "./connection-details/route";
+
+export default function Page() {
+  const [connectionDetails, updateConnectionDetails] = useState<
+    ConnectionDetails | undefined
+  >(undefined);
+
+  const onConnectButtonClicked = useCallback(async () => {
+    const url = new URL(
+      process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? "connection-details",
+      window.location.origin
+    );
+    const response = await fetch(url.toString());
+    const connectionDetailsData = await response.json();
+    updateConnectionDetails(connectionDetailsData);
+  }, []);
+
+  return (
+    <main data-lk-theme="default" className="h-full grid place-items-center">
+      <LiveKitRoom
+        token={connectionDetails?.participantToken}
+        serverUrl={connectionDetails?.serverUrl}
+        connect={connectionDetails !== undefined}
+        audio={true}
+        video={false}
+        onMediaDeviceFailure={onDeviceFailure}
+        onDisconnected={() => {
+          updateConnectionDetails(undefined);
+        }}
+        className="grid items-center grid-rows-[1fr_min-content]"
+      >
+        {connectionDetails ? (
+          <SimpleVoiceAssistant />
+        ) : (
+          <div className="flex w-full justify-center">
+            <button
+              className="lk-button"
+              onClick={() => onConnectButtonClicked()}
+            >
+              Connect
+            </button>
+          </div>
+        )}
+        <VoiceAssistantControlBar />
+        <RoomAudioRenderer />
+      </LiveKitRoom>
+    </main>
+  );
+}
 
 function SimpleVoiceAssistant() {
   const { state, audioTrack } = useVoiceAssistant();
   return (
-    <BarVisualizer
-      state={state}
-      barCount={7}
-      trackRef={audioTrack}
-      style={{ width: "75vw", height: "300px" }}
-    />
+    <div className="h-80">
+      <BarVisualizer state={state} barCount={7} trackRef={audioTrack} />
+    </div>
   );
 }
 
-export default function Page() {
-  const [shouldConnect, setShouldConnect] = useState(false);
-  const [details, setDetails] = useState<any>(undefined);
-
-  const handlePreJoinSubmit = useCallback(async () => {
-    const url = new URL(
-      process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT!,
-      window.location.origin
-    );
-    const connectionDetailsResp = await fetch(url.toString());
-    const connectionDetailsData = await connectionDetailsResp.json();
-    console.log({ connectionDetailsData });
-
-    setDetails(connectionDetailsData);
-  }, []);
-
-  const onDeviceFailure = (e?: MediaDeviceFailure) => {
-    console.error(e);
-    alert(
-      "Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab"
-    );
-  };
-
-  return (
-    <main data-lk-theme="default" className="">
-      {details ? (
-        <LiveKitRoom
-          audio={true}
-          token={details.participantToken}
-          connect={shouldConnect}
-          serverUrl={details.serverUrl}
-          onMediaDeviceFailure={onDeviceFailure}
-          onDisconnected={() => setShouldConnect(false)}
-          className=""
-        >
-          <div className="">
-            <SimpleVoiceAssistant />
-          </div>
-          <VoiceAssistantControlBar />
-          <RoomAudioRenderer />
-        </LiveKitRoom>
-      ) : (
-        <button className="lk-button" onClick={() => handlePreJoinSubmit()}>
-          Connect
-        </button>
-      )}
-    </main>
+function onDeviceFailure(error?: MediaDeviceFailure) {
+  console.error(error);
+  alert(
+    "Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab"
   );
 }
