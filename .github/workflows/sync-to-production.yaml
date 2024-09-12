@@ -6,7 +6,7 @@ on:
 
 jobs:
   sync-main-to-sandbox-production:
-    if: ${{ startsWith(github.ref, 'refs/tags/v1') && !contains(github.ref, 'beta') }}
+    # if: ${{ startsWith(github.ref, 'refs/tags/v1') && !contains(github.ref, 'beta') }}
     name: Sync branch `main` to other branches (fast-forward enabled)
     runs-on: ubuntu-latest
     steps:
