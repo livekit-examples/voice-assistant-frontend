@@ -29,8 +29,12 @@ export async function GET() {
       "roomName"
     );
 
+    if (LIVEKIT_SERVER_URL === undefined) {
+      throw new Error("LIVEKIT_SERVER_URL is not defined");
+    }
+
     // Return connection details
-    const data = {
+    const data: ConnectionDetails = {
       serverUrl: LIVEKIT_SERVER_URL,
       roomName: "voice_assistant_room",
       participantToken: participantToken,

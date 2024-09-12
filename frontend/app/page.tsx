@@ -20,7 +20,7 @@ export default function Page() {
 
   const onConnectButtonClicked = useCallback(async () => {
     const url = new URL(
-      process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? "connection-details",
+      process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? "/connection-details",
       window.location.origin
     );
     const response = await fetch(url.toString());
