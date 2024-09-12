@@ -1,5 +1,7 @@
 # Voice Assistant
 
+## Frontend
+
 First, run the development server:
 
 ```bash
