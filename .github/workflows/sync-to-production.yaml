@@ -22,7 +22,9 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@livekit.io'
 
-      - name: Force sync to sandbox-production
+      - name: Sync to sandbox-production
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git checkout sandbox-production || git checkout -b sandbox-production
           git merge --strategy-option theirs main
