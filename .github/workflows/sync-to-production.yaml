@@ -1,58 +1,29 @@
-name: Sync
+# .github/workflows/sync-main-to-sandbox-production.yml
+
+name: Sync main to sandbox-production
+
 on:
   push:
     branches:
       - main
 
 jobs:
-  sync-main-to-sandbox-production:
-    # if: ${{ startsWith(github.ref, 'refs/tags/v1') && !contains(github.ref, 'beta') }}
-    name: Sync branch `main` to other branches (fast-forward enabled)
+  sync:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Keep `v1` up to date with `main` (fast-forward enabled)
-        uses: jojomatik/sync-branch@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
         with:
-          # The branch to sync from
-          #   Optional
-          #   Default: github.ref_name
-          source: "main"
-          # The branch to sync to
-          #   Optional
-          #   Default: `beta`
-          target: "sandbox-production"
-          # The strategy to use, if fast-forward is not possible (merge, rebase, force,
-          # fail).
-          #   Optional
-          #   Default: `merge`
-          #   Possible values:
-          #     - `merge`:  merge the source branch into the target branch
-          #     - `rebase`: rebase the target branch onto the source branch
-          #     - `force`:  force push the source branch to the target branch (overrides
-          #                 any changes on the target branch)
-          #     - `fail`:   pushes the source branch to the target branch, fails if the
-          #                 target branch contains changes that are not present in the
-          #                 source branch
-          strategy: "force"
-          # The changes to accept, if strategy `merge` leads to merge conflicts
-          #   Optional
-          #   Default: `target`
-          #   Possible values:
-          #     - `target`: forces conflicts to be auto-resolved cleanly by favoring
-          #                 the target version. All non-conflicting changes are reflected
-          #                 in the merge result.
-          #     - `source`: forces conflicts to be auto-resolved cleanly by favoring
-          #                 the source version. All non-conflicting changes are reflected
-          #                 in the merge result.
-          #     - `false`:  `merge` fails if any merge conflicts occur.
-          resolve_conflicts: "false"
-          # The name to create merge commits with
-          #   Required, if strategy `merge` is used
-          git_committer_name: ${{ secrets.BOT_GIT_NAME }}
-          # The email to create merge commits with
-          #   Required, if strategy `merge` is used
-          git_committer_email: ${{ secrets.BOT_GIT_EMAIL }}
-          # The access token to push to the repository
-          #   Optional
-          #   Default: github.token
-          github_token: ${{ secrets.GH_TOKEN }}
+          fetch-depth: 0 # Fetch all history so we can force push
+
+      - name: Set up Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Force sync to sandbox-production
+        run: |
+          git checkout sandbox-production || git checkout -b sandbox-production
+          git merge --strategy-option theirs main
+          git push origin sandbox-production
