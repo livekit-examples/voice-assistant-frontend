@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 
 const API_KEY = process.env.LIVEKIT_API_KEY;
 const API_SECRET = process.env.LIVEKIT_API_SECRET;
-const LIVEKIT_SERVER_URL = process.env.LIVEKIT_SERVER_URL;
+const LIVEKIT_URL = process.env.LIVEKIT_URL;
 
 export type ConnectionDetails = {
   serverUrl: string;
@@ -29,13 +29,13 @@ export async function GET() {
       "roomName"
     );
 
-    if (LIVEKIT_SERVER_URL === undefined) {
-      throw new Error("LIVEKIT_SERVER_URL is not defined");
+    if (LIVEKIT_URL === undefined) {
+      throw new Error("LIVEKIT_URL is not defined");
     }
 
     // Return connection details
     const data: ConnectionDetails = {
-      serverUrl: LIVEKIT_SERVER_URL,
+      serverUrl: LIVEKIT_URL,
       roomName: "voice_assistant_room",
       participantToken: participantToken,
       participantName: participantIdentity,
