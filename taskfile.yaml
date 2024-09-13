@@ -26,6 +26,7 @@ tasks:
 
   install_agent:
     dir: "agent"
+    interactive: true
     cmds:
       - "python3 -m venv venv"
       - cmd: "source venv/bin/activate"
@@ -51,11 +52,13 @@ tasks:
 
   dev_ui:
     dir: "frontend"
+    interactive: true
     cmds:
       - "pnpm dev"
 
   dev_agent:
     dir: "agent"
+    interactive: true
     cmds:
       - cmd: "source venv/bin/activate"
         platforms:
