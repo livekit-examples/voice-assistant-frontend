@@ -10,21 +10,21 @@ tasks:
   install:
     desc: "Bootstrap application for local development"
     deps:
-      - install_ui
-      - install_agent
+      - install_frontend
+      - install_sandbox
 
   install_sandbox:
     desc: "Bootstrap application for sandbox environment"
     deps:
       - install_agent
 
-  install_ui:
+  install_frontend:
     dir: "frontend"
     interactive: true
     cmds:
       - "pnpm install"
 
-  install_agent:
+  install_sandbox:
     dir: "agent"
     interactive: true
     cmds:
@@ -47,16 +47,16 @@ tasks:
   dev:
     interactive: true
     deps:
-      - dev_ui
-      - dev_agent
+      - dev_frontend
+      - dev_sandbox
 
-  dev_ui:
+  dev_frontend:
     dir: "frontend"
     interactive: true
     cmds:
       - "pnpm dev"
 
-  dev_agent:
+  dev_sandbox:
     dir: "agent"
     interactive: true
     cmds:
