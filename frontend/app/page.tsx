@@ -12,6 +12,7 @@ import {
 import { useCallback, useState } from "react";
 import { MediaDeviceFailure } from "livekit-client";
 import type { ConnectionDetails } from "./api/connection-details/route";
+import { NoAgentNotification } from "@/components/NoAgentNotification";
 
 export default function Page() {
   const [connectionDetails, updateConnectionDetails] = useState<
@@ -67,6 +68,17 @@ function SimpleVoiceAssistant() {
   return (
     <div className="h-80">
       <BarVisualizer state={state} barCount={7} trackRef={audioTrack} />
+      <p className="font-mono text-center">{state}</p>
+      <NoAgentNotification state={state}>
+        <p className="font-bold mb-1">No agent</p>
+        <p>
+          No agent has joined the room yet. Please ensure you&#39;ve followed
+          the setup instructions and started your agent on your machine.{" "}
+          <a href="#" className="underline">
+            Learn more
+          </a>
+        </p>
+      </NoAgentNotification>
     </div>
   );
 }
