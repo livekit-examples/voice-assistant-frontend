@@ -11,7 +11,7 @@ import {
 } from "@livekit/components-react";
 import { useCallback, useState } from "react";
 import { MediaDeviceFailure } from "livekit-client";
-import type { ConnectionDetails } from "./connection-details/route";
+import type { ConnectionDetails } from "./api/connection-details/route";
 
 export default function Page() {
   const [connectionDetails, updateConnectionDetails] = useState<
@@ -20,7 +20,8 @@ export default function Page() {
 
   const onConnectButtonClicked = useCallback(async () => {
     const url = new URL(
-      process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? "/connection-details",
+      process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ??
+        "/api/connection-details",
       window.location.origin
     );
     const response = await fetch(url.toString());
