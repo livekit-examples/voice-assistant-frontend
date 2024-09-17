@@ -1,22 +1,54 @@
 version: "3"
 
-output: prefixed
+output: interleaved
 
 dotenv:
-  - "ui/.env.local"
+  - "frontend/.env.local"
   - "agent/.env.local"
 
 tasks:
+  post_create:
+    desc: "Runs after this template is instantiated as a Sandbox or Bootstrap"
+    cmds:
+      - task: post_create_sandbox
+      - task: post_create_frontend
+
+  post_create_sandbox:
+    silent: true
+    cmds:
+      - echo -e "To setup and run the agent:\n"
+      - echo -e "    cd {{.USER_WORKING_DIR}}/agent"
+      - echo -e "    python3 -m venv venv"
+      - platforms: [darwin, linux]
+        cmd: echo -e "    source venv/bin/activate"
+      - platforms: [windows]
+        cmd: echo -e "    powershell venv/Scripts/Activate.ps1"
+      - echo -e "    python3 -m pip install -r requirements.txt"
+      - echo -e "    python3 agent.py start\n"
+
+  post_create_frontend:
+    silent: true
+    cmds:
+      - echo -e "To setup and run the frontend:\n"
+      - echo -e "    cd {{.USER_WORKING_DIR}}/frontend"
+      - echo -e "    pnpm install"
+      - echo -e "    pnpm dev\n"
+
   install:
     desc: "Bootstrap application for local development"
     deps:
-      - install_frontend
       - install_sandbox
+      - install_frontend
 
   install_sandbox:
-    desc: "Bootstrap application for sandbox environment"
-    deps:
-      - install_agent
+    dir: "agent"
+    cmds:
+      - "python3 -m venv venv"
+      - platforms: [darwin, linux]
+        cmd: "source venv/bin/activate"
+      - platforms: [windows]
+        cmd: "powershell venv/Scripts/Activate.ps1"
+      - "python3 -m pip install -r requirements.txt"
 
   install_frontend:
     dir: "frontend"
@@ -24,53 +56,24 @@ tasks:
     cmds:
       - "pnpm install"
 
-  install_sandbox:
-    dir: "agent"
-    interactive: true
-    cmds:
-      - "python3 -m venv venv"
-      - cmd: "source venv/bin/activate"
-        platforms:
-          - darwin
-          - linux
-      - cmd: "powershell venv/Scripts/Activate.ps1"
-        platforms:
-          - windows
-      - cmd: "venv/bin/python3 -m pip install -r requirements.txt"
-        platforms:
-          - darwin
-          - linux
-      - cmd: "venv/Scripts/python -m pip install -r requirements.txt"
-        platforms:
-          - windows
-
   dev:
     interactive: true
     deps:
-      - dev_frontend
       - dev_sandbox
+      - dev_frontend
+
+  dev_sandbox:
+    dir: "agent"
+    interactive: true
+    cmds:
+      - platforms: [darwin, linux]
+        cmd: "source venv/bin/activate"
+      - platforms: [windows]
+        cmd: "powershell venv/Scripts/Activate.ps1"
+      - "python3 agent.py start"
 
   dev_frontend:
     dir: "frontend"
     interactive: true
     cmds:
       - "pnpm dev"
-
-  dev_sandbox:
-    dir: "agent"
-    interactive: true
-    cmds:
-      - cmd: "source venv/bin/activate"
-        platforms:
-          - darwin
-          - linux
-      - cmd: "powershell venv/Scripts/Activate.ps1"
-        platforms:
-          - windows
-      - cmd: "venv/bin/python3 agent.py start"
-        platforms:
-          - darwin
-          - linux
-      - cmd: "venv/Scripts/python agent.py start"
-        platforms:
-          - windows
