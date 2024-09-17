@@ -17,7 +17,7 @@ tasks:
     silent: true
     cmds:
       - echo -e "To setup and run the agent:\n"
-      - echo -e "    cd {{.USER_WORKING_DIR}}/agent"
+      - echo -e "    cd {{.ROOT_DIR}}/agent"
       - echo -e "    python3 -m venv venv"
       - platforms: [darwin, linux]
         cmd: echo -e "    source venv/bin/activate"
