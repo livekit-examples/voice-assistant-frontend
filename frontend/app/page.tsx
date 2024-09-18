@@ -22,10 +22,13 @@ export default function Page() {
   const onConnectButtonClicked = useCallback(async () => {
     const url = new URL(
       process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ??
-        "/api/connection-details",
+      "/api/connection-details",
       window.location.origin
     );
-    const response = await fetch(url.toString());
+    const subdomain = window.location.host.split(".")[0];
+    const response = await fetch(
+      url.toString(),
+      { headers: { "X-Sandbox-ID": subdomain } });
     const connectionDetailsData = await response.json();
     updateConnectionDetails(connectionDetailsData);
   }, []);
