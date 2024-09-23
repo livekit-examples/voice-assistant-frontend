@@ -1,7 +1,7 @@
-import type { VoiceAssistantState } from "@livekit/components-react";
+import type { AgentState } from "@livekit/components-react";
 import React from "react";
 interface NoAgentNotificationProps extends React.PropsWithChildren<object> {
-  state: VoiceAssistantState;
+  state: AgentState;
 }
 
 /**

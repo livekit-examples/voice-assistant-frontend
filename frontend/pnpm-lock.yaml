@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@livekit/components-react':
-        specifier: ^2.5.3
-        version: 2.5.3(@livekit/protocol@1.20.1)(livekit-client@2.5.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.7.0)
+        specifier: ^2.6.0
+        version: 2.6.0(@livekit/protocol@1.20.1)(livekit-client@2.5.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.7.0)
       '@livekit/components-styles':
         specifier: ^1.1.1
         version: 1.1.1
@@ -85,11 +85,11 @@ packages:
   '@floating-ui/core@1.6.7':
     resolution: {integrity: sha512-yDzVT/Lm101nQ5TCVeK65LtdN7Tj4Qpr9RTXJ2vPFLqtLxwOrpoxAHAJI8J3yYWUc40J0BDBheaitK5SJmno2g==}
 
-  '@floating-ui/dom@1.6.8':
-    resolution: {integrity: sha512-kx62rP19VZ767Q653wsP1XZCGIirkE09E0QUGNYTM/ttbbQHqcGPdSfWFxUyyNLc/W6aoJRBajOSXhP6GXjC0Q==}
+  '@floating-ui/dom@1.6.11':
+    resolution: {integrity: sha512-qkMCxSR24v2vGkhYDo/UzxfJN3D4syqSjyuTFz6C7XcpU1pASPRieNI0Kj5VP3/503mOfYiGY891ugBX1GlABQ==}
 
-  '@floating-ui/utils@0.2.7':
-    resolution: {integrity: sha512-X8R8Oj771YRl/w+c1HqAC1szL8zWQRwFvgDwT129k9ACdBoud/+/rX9V0qiMl6LWUdP9voC2nDVZYPMQQsb6eA==}
+  '@floating-ui/utils@0.2.8':
+    resolution: {integrity: sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==}
 
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
@@ -126,19 +126,19 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@livekit/components-core@0.11.4':
-    resolution: {integrity: sha512-8Dr/9WCEov5AW42KrTnLTuoEIK1yWHcdvvJl8znxx59uUVlE8o6IvsFnofNlfRJ2fCADSnw0K2yEpLQjwLel2Q==}
+  '@livekit/components-core@0.11.5':
+    resolution: {integrity: sha512-aaWPQJEfbY5tUND+diB7sW/6dRWN/H9lwqVy7L3nt15MszN1lX7ZlM9gA4ODquv+wUyFhxYfjRm7jVuV/g234g==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@livekit/protocol': ^1.16.0
+      '@livekit/protocol': ^1.20.1
       livekit-client: ^2.4.0
       tslib: ^2.6.2
 
-  '@livekit/components-react@2.5.3':
-    resolution: {integrity: sha512-RKqi2KDltsqTdw5xx0ahEfHtuFvQoTjmJ/M1pukqU7Eczcuwga4AuEESxWkq6ct7Zenabru4eYjFbScc60L3og==}
+  '@livekit/components-react@2.6.0':
+    resolution: {integrity: sha512-02J4qhgetAyBs4+vNOsdLDuocufHKujT9L9W2yNnHQFE9SO/JVxxpN5OXzupBnPNh5U2f37VkTsp1lAtxJM2Hg==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@livekit/protocol': ^1.16.0
+      '@livekit/protocol': ^1.20.1
       livekit-client: ^2.4.0
       react: '>=18'
       react-dom: '>=18'
@@ -1720,14 +1720,14 @@ snapshots:
 
   '@floating-ui/core@1.6.7':
     dependencies:
-      '@floating-ui/utils': 0.2.7
+      '@floating-ui/utils': 0.2.8
 
-  '@floating-ui/dom@1.6.8':
+  '@floating-ui/dom@1.6.11':
     dependencies:
       '@floating-ui/core': 1.6.7
-      '@floating-ui/utils': 0.2.7
+      '@floating-ui/utils': 0.2.8
 
-  '@floating-ui/utils@0.2.7': {}
+  '@floating-ui/utils@0.2.8': {}
 
   '@humanwhocodes/config-array@0.11.14':
     dependencies:
@@ -1767,18 +1767,18 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@livekit/components-core@0.11.4(@livekit/protocol@1.20.1)(livekit-client@2.5.1)(tslib@2.7.0)':
+  '@livekit/components-core@0.11.5(@livekit/protocol@1.20.1)(livekit-client@2.5.1)(tslib@2.7.0)':
     dependencies:
-      '@floating-ui/dom': 1.6.8
+      '@floating-ui/dom': 1.6.11
       '@livekit/protocol': 1.20.1
       livekit-client: 2.5.1
       loglevel: 1.9.1
       rxjs: 7.8.1
       tslib: 2.7.0
 
-  '@livekit/components-react@2.5.3(@livekit/protocol@1.20.1)(livekit-client@2.5.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.7.0)':
+  '@livekit/components-react@2.6.0(@livekit/protocol@1.20.1)(livekit-client@2.5.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.7.0)':
     dependencies:
-      '@livekit/components-core': 0.11.4(@livekit/protocol@1.20.1)(livekit-client@2.5.1)(tslib@2.7.0)
+      '@livekit/components-core': 0.11.5(@livekit/protocol@1.20.1)(livekit-client@2.5.1)(tslib@2.7.0)
       '@livekit/protocol': 1.20.1
       clsx: 2.1.1
       livekit-client: 2.5.1
