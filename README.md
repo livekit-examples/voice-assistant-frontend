@@ -1,21 +1,25 @@
-# Voice Assistant
+# Voice assistant frontend
+
+A minimalistic frontend for interacting with LiveKit Agents.
 
 ![Screenshot of the frontend application.](/.github/assets/frontent-screenshot.jpeg)
 
-> [!NOTE]
-> Continue reading only if you plan to modify the frontend app. If you’re just working with the agent code, there’s no need to touch the frontend. Use the hosted sandbox frontend instead.
+> [!TIP]
+> The best way to test this application along with many others is to use [LiveKit Sandbox](https://cloud.livekit.io/projects/p_/sandbox). Spin up your sandbox in a matter of seconds and test and share your local agents without having to worry about hosting your front end.
 
-First, run the development server:
+## Development setup
 
-```bash
-# Frontend code lives in /frontend
-cd frontend
-# Make sure the frontend dependencies are installed (only required once).
+- Copy and rename `.env.example` to `.env.local`, then add the required environment variables to connect to your LiveKit server.
+
+> [!TIP]
+> If you are using **LiveKit Cloud**, you can find your project environment variables [here](https://cloud.livekit.io/projects/p_/settings/keys).
+
+```shell
+# Make sure dependencies are installed (only required once).
 pnpm install
 # Run den local development server.
 pnpm dev
+# Open http://localhost:3000 in your browser.
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
