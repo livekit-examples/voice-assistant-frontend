@@ -1,11 +1,5 @@
 # Voice Assistant
 
-## Agent
-
-TODO
-
-## Frontend
-
 ![Screenshot of the frontend application.](/.github/assets/frontent-screenshot.jpeg)
 
 > [!NOTE]
