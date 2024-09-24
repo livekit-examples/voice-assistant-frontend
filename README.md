@@ -1,6 +1,6 @@
 # Voice assistant frontend
 
-A minimalistic frontend for interacting with LiveKit Agents.
+A minimalistic frontend for interacting with [LiveKit Agents](https://docs.livekit.io/agents).
 
 ![Screenshot of the frontend application.](/.github/assets/frontent-screenshot.jpeg)
 
