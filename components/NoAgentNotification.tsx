@@ -33,7 +33,7 @@ export function NoAgentNotification(props: NoAgentNotificationProps) {
   return (
     <>
       {showNotification ? (
-        <div className="fixed text-sm left-1/2 -translate-x-1/2 flex top-6 items-center gap-4 bg-[#131313] font-mono px-4 py-3 rounded">
+        <div className="fixed text-sm left-1/2 max-w-[90vw] -translate-x-1/2 flex top-6 items-center gap-4 bg-[#1F1F1F] px-4 py-3 rounded-lg">
           <div>
             {/* Warning Icon */}
             <svg
@@ -51,7 +51,13 @@ export function NoAgentNotification(props: NoAgentNotificationProps) {
               />
             </svg>
           </div>
-          {props.children}
+          <p className="text-pretty w-max">
+            It&apos;s quiet... too quiet. Is your agent lost? Make sure your
+            agent is set up and running correctly.
+          </p>
+          <a href="#" className="underline whitespace-nowrap">
+            View guide
+          </a>
           <button onClick={() => setShowNotification(false)}>
             {/* Close Icon */}
             <svg

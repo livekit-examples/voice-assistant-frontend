@@ -22,13 +22,10 @@ export default function Page() {
   const onConnectButtonClicked = useCallback(async () => {
     const url = new URL(
       process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ??
-      "/api/connection-details",
+        "/api/connection-details",
       window.location.origin
     );
-    const subdomain = window.location.host.split(".")[0];
-    const response = await fetch(
-      url.toString(),
-      { headers: { "X-Sandbox-ID": subdomain } });
+    const response = await fetch(url.toString());
     const connectionDetailsData = await response.json();
     updateConnectionDetails(connectionDetailsData);
   }, []);
@@ -72,14 +69,7 @@ function SimpleVoiceAssistant() {
     <div className="h-80">
       <BarVisualizer state={state} barCount={7} trackRef={audioTrack} />
       <p className="text-center">{state}</p>
-      <NoAgentNotification state={state}>
-        <p>
-          No agent joined this session. Follow the guide to setup your agent.
-        </p>
-        <a href="#" className="underline whitespace-nowrap">
-          View guide
-        </a>
-      </NoAgentNotification>
+      <NoAgentNotification state={state} />
     </div>
   );
 }
