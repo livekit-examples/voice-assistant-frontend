@@ -47,12 +47,12 @@ export default function Page() {
         {connectionDetails ? (
           <SimpleVoiceAssistant />
         ) : (
-          <div className="flex w-full justify-center">
+          <div className="flex w-full justify-center text-sm">
             <button
-              className="lk-button"
+              className="lk-button uppercase"
               onClick={() => onConnectButtonClicked()}
             >
-              Connect
+              Start a conversation
             </button>
           </div>
         )}
