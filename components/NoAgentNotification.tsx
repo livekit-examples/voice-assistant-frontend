@@ -70,9 +70,13 @@ export function NoAgentNotification(props: NoAgentNotificationProps) {
             It&apos;s quiet... too quiet. Is your agent lost? Ensure your agent
             is properly configured and running on your machine.
           </p>
-          {/* <a href="#" className="underline whitespace-nowrap">
+          <a
+            href="https://github.com/livekit-examples/voice-assistant-frontend/blob/main/README.md"
+            target="_blank"
+            className="underline whitespace-nowrap"
+          >
             View guide
-          </a> */}
+          </a>
           <button onClick={() => setShowNotification(false)}>
             {/* Close Icon */}
             <svg
