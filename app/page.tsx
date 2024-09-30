@@ -1,6 +1,5 @@
 "use client";
 
-import "@livekit/components-styles";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   LiveKitRoom,
@@ -9,11 +8,13 @@ import {
   RoomAudioRenderer,
   VoiceAssistantControlBar,
   AgentState,
+  DisconnectButton,
 } from "@livekit/components-react";
 import { useCallback, useEffect, useState } from "react";
 import { MediaDeviceFailure } from "livekit-client";
 import type { ConnectionDetails } from "./api/connection-details/route";
 import { NoAgentNotification } from "@/components/NoAgentNotification";
+import { CloseIcon } from "@/components/CloseIcon";
 
 export default function Page() {
   const [connectionDetails, updateConnectionDetails] = useState<
@@ -51,11 +52,7 @@ export default function Page() {
         }}
         className="grid grid-rows-[2fr_1fr] items-center"
       >
-        <div className="relative">
-          <div>
-            <SimpleVoiceAssistant onStateChange={setAgentState} />
-          </div>
-        </div>
+        <SimpleVoiceAssistant onStateChange={setAgentState} />
         <div className="relative h-[100px]">
           {connectionDetails === undefined && (
             <button
@@ -72,13 +69,18 @@ export default function Page() {
                 animate={{ opacity: 1, transform: "translateY(0px)" }}
                 exit={{ opacity: 0, transform: "translateY(10px)" }}
                 transition={{ duration: 1, ease: [0.09, 1.04, 0.245, 1.055] }}
+                className="flex h-8  justify-center"
               >
-                <VoiceAssistantControlBar />
+                <VoiceAssistantControlBar controls={{ leave: false }} />
+                <DisconnectButton>
+                  <CloseIcon />
+                </DisconnectButton>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
         <RoomAudioRenderer />
+        <NoAgentNotification state={agentState} />
       </LiveKitRoom>
     </main>
   );
@@ -88,11 +90,9 @@ function SimpleVoiceAssistant(props: {
   onStateChange: (state: AgentState) => void;
 }) {
   const { state, audioTrack } = useVoiceAssistant();
-
   useEffect(() => {
     props.onStateChange(state);
   }, [props, state]);
-
   return (
     <div className="h-[300px]">
       <BarVisualizer
@@ -102,7 +102,6 @@ function SimpleVoiceAssistant(props: {
         className="agent-visualizer"
         options={{ minHeight: 24 }}
       />
-      <NoAgentNotification state={state} />
     </div>
   );
 }
