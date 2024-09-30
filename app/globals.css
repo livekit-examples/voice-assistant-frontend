@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --lk-va-bar-width: 72px;
+    --lk-control-bar-height: unset;
+  }
+
+  .lk-agent-control-bar,
+  .lk-control-bar {
+    border-top: unset !important;
+  }
+
+  .agent-visualizer > .lk-audio-bar {
+    width: 72px;
+  }
+}

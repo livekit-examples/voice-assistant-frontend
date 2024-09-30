@@ -1,15 +1,16 @@
 "use client";
 
 import "@livekit/components-styles";
-
+import { AnimatePresence, motion } from "framer-motion";
 import {
   LiveKitRoom,
   useVoiceAssistant,
   BarVisualizer,
   RoomAudioRenderer,
   VoiceAssistantControlBar,
+  AgentState,
 } from "@livekit/components-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { MediaDeviceFailure } from "livekit-client";
 import type { ConnectionDetails } from "./api/connection-details/route";
 import { NoAgentNotification } from "@/components/NoAgentNotification";
@@ -18,6 +19,9 @@ export default function Page() {
   const [connectionDetails, updateConnectionDetails] = useState<
     ConnectionDetails | undefined
   >(undefined);
+
+  const [agentState, setAgentState] = useState<AgentState>("disconnected");
+  console.log({ agentState });
 
   const onConnectButtonClicked = useCallback(async () => {
     const url = new URL(
@@ -31,7 +35,10 @@ export default function Page() {
   }, []);
 
   return (
-    <main data-lk-theme="default" className="h-full grid place-items-center">
+    <main
+      data-lk-theme="default"
+      className="h-full grid content-center bg-[var(--lk-bg)]"
+    >
       <LiveKitRoom
         token={connectionDetails?.participantToken}
         serverUrl={connectionDetails?.serverUrl}
@@ -42,33 +49,59 @@ export default function Page() {
         onDisconnected={() => {
           updateConnectionDetails(undefined);
         }}
-        className="grid items-center grid-rows-[1fr_min-content]"
+        className="grid grid-rows-[2fr_1fr] items-center"
       >
-        {connectionDetails ? (
-          <SimpleVoiceAssistant />
-        ) : (
-          <div className="flex w-full justify-center text-sm">
+        <div className="relative">
+          <div>
+            <SimpleVoiceAssistant onStateChange={setAgentState} />
+          </div>
+        </div>
+        <div className="relative h-[100px]">
+          {connectionDetails === undefined && (
             <button
-              className="lk-button uppercase"
+              className="uppercase absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 py-2 bg-white text-black rounded-md"
               onClick={() => onConnectButtonClicked()}
             >
               Start a conversation
             </button>
-          </div>
-        )}
-        <VoiceAssistantControlBar />
+          )}
+          <AnimatePresence>
+            {agentState !== "disconnected" && agentState !== "connecting" && (
+              <motion.div
+                initial={{ opacity: 0, transform: "translateY(10px)" }}
+                animate={{ opacity: 1, transform: "translateY(0px)" }}
+                exit={{ opacity: 0, transform: "translateY(10px)" }}
+                transition={{ duration: 1, ease: [0.09, 1.04, 0.245, 1.055] }}
+              >
+                <VoiceAssistantControlBar />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
         <RoomAudioRenderer />
       </LiveKitRoom>
     </main>
   );
 }
 
-function SimpleVoiceAssistant() {
+function SimpleVoiceAssistant(props: {
+  onStateChange: (state: AgentState) => void;
+}) {
   const { state, audioTrack } = useVoiceAssistant();
+
+  useEffect(() => {
+    props.onStateChange(state);
+  }, [props, state]);
+
   return (
-    <div className="h-80">
-      <BarVisualizer state={state} barCount={7} trackRef={audioTrack} />
-      <p className="text-center">{state}</p>
+    <div className="h-[300px]">
+      <BarVisualizer
+        state={state}
+        barCount={5}
+        trackRef={audioTrack}
+        className="agent-visualizer"
+        options={{ minHeight: 24 }}
+      />
       <NoAgentNotification state={state} />
     </div>
   );
