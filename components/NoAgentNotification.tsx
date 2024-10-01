@@ -71,7 +71,7 @@ export function NoAgentNotification(props: NoAgentNotificationProps) {
             is properly configured and running on your machine.
           </p>
           <a
-            href="https://github.com/livekit-examples/voice-assistant-frontend/blob/main/README.md"
+            href="https://docs.livekit.io/agents/quickstarts/s2s/"
             target="_blank"
             className="underline whitespace-nowrap"
           >
