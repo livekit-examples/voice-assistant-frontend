@@ -89,7 +89,9 @@ function ControlBar(props: {
 }) {
   // Use the Krisp noise filter to reduce background noise.
   const krisp = useKrispNoiseFilter();
-  krisp.setNoiseFilterEnabled(true);
+  useEffect(() => {
+    krisp.setNoiseFilterEnabled(true);
+  }, []);
 
   return (
     <div className="relative h-[100px]">
