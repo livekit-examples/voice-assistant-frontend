@@ -15,6 +15,7 @@ import { MediaDeviceFailure } from "livekit-client";
 import type { ConnectionDetails } from "./api/connection-details/route";
 import { NoAgentNotification } from "@/components/NoAgentNotification";
 import { CloseIcon } from "@/components/CloseIcon";
+import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
 
 export default function Page() {
   const [connectionDetails, updateConnectionDetails] = useState<
@@ -86,6 +87,12 @@ function ControlBar(props: {
   onConnectButtonClicked: () => void;
   agentState: AgentState;
 }) {
+  // Use the Krisp noise filter to reduce background noise.
+  const krisp = useKrispNoiseFilter();
+  useEffect(() => {
+    krisp.setNoiseFilterEnabled(true);
+  }, []);
+
   return (
     <div className="relative h-[100px]">
       <AnimatePresence>
