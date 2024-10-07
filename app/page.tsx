@@ -9,12 +9,14 @@ import {
   VoiceAssistantControlBar,
   AgentState,
   DisconnectButton,
+  useLocalParticipant,
 } from "@livekit/components-react";
 import { useCallback, useEffect, useState } from "react";
 import { MediaDeviceFailure } from "livekit-client";
 import type { ConnectionDetails } from "./api/connection-details/route";
 import { NoAgentNotification } from "@/components/NoAgentNotification";
 import { CloseIcon } from "@/components/CloseIcon";
+import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
 
 export default function Page() {
   const [connectionDetails, updateConnectionDetails] = useState<
@@ -86,6 +88,17 @@ function ControlBar(props: {
   onConnectButtonClicked: () => void;
   agentState: AgentState;
 }) {
+  // Add Krisp noise filter to the users microphone track.
+  const { microphoneTrack } = useLocalParticipant();
+  const krisp = useKrispNoiseFilter();
+  useEffect(() => {
+    if (microphoneTrack && krisp?.processor) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      microphoneTrack.track?.setProcessor(krisp.processor);
+    }
+  }, [krisp?.processor, microphoneTrack]);
+
   return (
     <div className="relative h-[100px]">
       <AnimatePresence>
