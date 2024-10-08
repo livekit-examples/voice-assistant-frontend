@@ -87,7 +87,10 @@ function ControlBar(props: {
   onConnectButtonClicked: () => void;
   agentState: AgentState;
 }) {
-  // Use the Krisp noise filter to reduce background noise.
+  /**
+   * Use Krisp background noise reduction when available.
+   * Note: This is only available on paid plans, see {@link https://livekit.io/pricing | LiveKit Pricing} for more details.
+   */
   const krisp = useKrispNoiseFilter();
   useEffect(() => {
     krisp.setNoiseFilterEnabled(true);
