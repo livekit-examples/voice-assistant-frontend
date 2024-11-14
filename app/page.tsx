@@ -24,9 +24,18 @@ export default function Page() {
   const [agentState, setAgentState] = useState<AgentState>("disconnected");
 
   const onConnectButtonClicked = useCallback(async () => {
+    // Generate room connection details, including:
+    //   - A random Room name
+    //   - A random Participant name
+    //   - An Access Token to permit the participant to join the room
+    //   - The URL of the LiveKit server to connect to
+    //
+    // In real-world application, you would likely allow the user to specify their
+    // own participant name, and possibly to choose from existing rooms to join.
+
     const url = new URL(
       process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ??
-        "/api/connection-details",
+      "/api/connection-details",
       window.location.origin
     );
     const response = await fetch(url.toString());
