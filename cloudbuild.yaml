@@ -9,7 +9,7 @@ steps:
 
 # Substitutions for dynamic values
 substitutions:
-  _SERVICE_NAME: 'jpmc-frontend'
+  _SERVICE_NAME: 'askMEv2-frontend'
 
 options:
   logging: CLOUD_LOGGING_ONLY
