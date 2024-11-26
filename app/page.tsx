@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   LiveKitRoom,
   useVoiceAssistant,
@@ -13,7 +13,6 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { MediaDeviceFailure } from "livekit-client";
 import { NoAgentNotification } from "@/components/NoAgentNotification";
-import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
 import urlConfig from "./config-url";
 import { useRouter } from 'next/navigation';
 import { CloseIcon } from "@/components/CloseIcon";
