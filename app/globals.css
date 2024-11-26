@@ -5,16 +5,229 @@
 :root {
   --lk-va-bar-width: 72px;
   --lk-control-bar-height: unset;
+  --lk-bg: #fdfeff;
 }
 
-.agent-visualizer > .lk-audio-bar {
-  width: 72px;
+body {
+  background-color: #fdfeff;
 }
 
-.lk-agent-control-bar {
-  @apply border-t-0 p-0 h-min mr-4;
+/* Base Control Bar Styles */
+.custom-control-bar {
+  position: relative !important;
+  z-index: 1000 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
 }
 
-.lk-disconnect-button {
-  @apply h-[36px] hover:bg-[#6b221a] hover:text-[white] bg-[#31100c] border-[#6b221a];
+/* Button Group Container */
+.lk-button-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  position: relative !important;
+  z-index: 1001 !important;
+  
+}
+
+/* Mic Toggle Button */
+.lk-track-toggle {
+  height: 40px !important;
+  min-width: 160px !important;
+  padding: 0 16px !important;
+  background-color: rgba(162,103,71,255) !important;
+  border-radius: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 8px !important;
+  color: white !important;
+}
+
+.lk-track-toggle:hover {
+  background-color: rgba(142,83,51,255) !important;
+}
+
+/* Mic Button Visualizer */
+.lk-track-toggle .lk-visualizer {
+  margin-left: 8px !important;
+  height: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+/* Target all visualizer bars in the mic button */
+.lk-track-toggle .lk-visualizer > *,
+.lk-track-toggle .lk-visualizer [data-lk-bar],
+.lk-track-toggle .lk-visualizer [data-lk-bar-index],
+.lk-track-toggle .lk-visualizer span,
+.lk-track-toggle .lk-visualizer .lk-bar {
+  background-color: white !important;
+  width: 4px !important;
+  border-radius: 2px !important;
+}
+
+/* Ensure mic icon is white */
+.lk-track-toggle svg {
+  color: white !important;
+  fill: white !important;
+}
+
+/* Device Menu Button */
+.lk-button-group-menu {
+  position: relative !important;
+  z-index: 1002 !important;
+}
+
+.lk-button-group-menu button {
+  height: 40px !important;
+  width: 40px !important;
+  padding: 0 !important;
+  background-color: rgba(162,103,71,255) !important;
+  border-radius: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s !important;
+}
+
+.lk-button-group-menu button:hover {
+  background-color: rgba(142,83,51,255) !important;
+}
+
+.lk-button-group-menu button svg {
+  width: 16px !important;
+  height: 16px !important;
+  color: white !important;
+}
+
+/* Device Menu Dropdown */
+.lk-device-menu {
+  position: absolute !important;
+  top: auto !important;
+  bottom: calc(100% + 8px) !important;
+  right: 0 !important;
+  width: 240px !important;
+  background: white !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid rgba(162, 103, 71, 0.2) !important;
+  z-index: 1003 !important;
+  padding: 8px 0 !important;
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  scrollbar-width: thin !important;
+  display: none !important;
+}
+
+/* Show Menu when Open */
+.lk-button-group-menu[data-open="true"] .lk-device-menu {
+  display: block !important;
+}
+
+/* Menu Items */
+.lk-device-menu-item {
+  padding: 10px 16px !important;
+  width: 100% !important;
+  text-align: left !important;
+  background: none !important;
+  border: none !important;
+  color: #333 !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  transition: background-color 0.2s !important;
+}
+
+.lk-device-menu-item:hover {
+  background-color: rgba(162, 103, 71, 0.1) !important;
+}
+
+.lk-device-menu-item[data-selected="true"] {
+  background-color: rgba(162, 103, 71, 0.15) !important;
+  font-weight: 500 !important;
+}
+
+/* Main Visualizer */
+.agent-visualizer {
+  --lk-bar-color: rgba(162, 103, 71, 1) !important;
+  --lk-active-bar-color: rgba(162, 103, 71, 1) !important;
+  --lk-inactive-bar-color: rgba(162, 103, 71, 0.3) !important;
+  background-color: white !important;
+}
+
+.agent-visualizer canvas,
+.agent-visualizer rect,
+.agent-visualizer path,
+.agent-visualizer line {
+  fill: rgba(162, 103, 71, 1) !important;
+  stroke: rgba(162, 103, 71, 1) !important;
+  background-color: white !important;
+}
+
+.agent-visualizer [data-lk-bar],
+.agent-visualizer [data-lk-bar-index] {
+  background-color: rgba(162, 103, 71, 1) !important;
+}
+
+.agent-visualizer [data-lk-highlighted="true"] {
+  background-color: rgba(142, 83, 51, 1) !important;
+}
+
+/* Scrollbar Styles */
+.lk-device-menu::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+.lk-device-menu::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.lk-device-menu::-webkit-scrollbar-thumb {
+  background-color: rgba(162, 103, 71, 0.3) !important;
+  border-radius: 3px !important;
+}
+
+.lk-audio-bar {
+  background-color: rgba(162, 103, 71, 1) !important;
+}
+
+.lk-audio-bar.lk-highlighted {
+  background-color: rgba(142, 83, 51, 1) !important;
+}
+
+/* Target the bars with data attributes */
+[data-lk-highlighted="true"] {
+  background-color: rgba(162, 103, 71, 1) !important;
+}
+
+[data-lk-bar-index] {
+  background-color: rgba(162, 103, 71, 1) !important;
+}
+
+[data-lk-highlighted="true"][data-lk-bar-index] {
+  background-color: rgba(142, 83, 51, 1) !important;
+}
+
+/* Remove any conflicting styles */
+.lk-audio-bar,
+[data-lk-bar-index],
+[data-lk-highlighted="true"] {
+  background-color: unset !important;
+}
+
+/* Override only within specific contexts */
+.agent-visualizer .lk-audio-bar {
+  background-color: rgba(162, 103, 71, 1) !important;
+}
+
+.lk-track-toggle .lk-audio-bar {
+  background-color: white !important;
 }

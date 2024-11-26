@@ -6,6 +6,7 @@ export function CloseIcon() {
       viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className="text-white"
     >
       <path
         d="M3.33398 3.33334L12.6673 12.6667M12.6673 3.33334L3.33398 12.6667"
