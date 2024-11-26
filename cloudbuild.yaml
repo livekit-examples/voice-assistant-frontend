@@ -1,0 +1,29 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - '-c'
+      - 'docker pull gcr.io/$PROJECT_ID/AskME_FE:latest || exit 0'
+    entrypoint: bash
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - '--cache-from'
+      - 'gcr.io/$PROJECT_ID/AskME_FE:latest'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/AskME_FE:$COMMIT_SHA'
+      - .
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - 'gcr.io/$PROJECT_ID/AskME_FE:$COMMIT_SHA'
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - tag
+      - 'gcr.io/$PROJECT_ID/AskME_FE:$COMMIT_SHA'
+      - 'gcr.io/$PROJECT_ID/AskME_FE:latest'
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - 'gcr.io/$PROJECT_ID/AskME_FE:latest'
+options:
+  logging: CLOUD_LOGGING_ONLY
