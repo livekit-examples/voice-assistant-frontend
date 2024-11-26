@@ -29,7 +29,6 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
   const [secretCode, setSecretCode] = useState<string>("");
   const serverUrl = urlConfig.webSocketUrl;
-  const [type, setType] = useState<string | undefined>(undefined);
   const [title, setTitle] = useState<string>("Loading...");
   const [language, setLanguage] = useState("english");
   const [roomID, setRoomID] = useState("");
@@ -111,7 +110,6 @@ export default function Page() {
         if (response.ok) {
           const data = await response.json();
           console.log("Received data:", data);
-          setType(data.type);
           setTitle(data.title);
         } else {
           const errorData = await response.json();
@@ -271,8 +269,6 @@ function SimpleVoiceAssistant(props: {
           options={{ 
             minHeight: 4,
             maxHeight: 200,
-            barWidth: 16,
-            gap: 16,
           }}
         >
           <span className="bg-[rgba(162,103,71,1)]" />
