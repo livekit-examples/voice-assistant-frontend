@@ -1,5 +1,5 @@
-# Use the official Node.js image to build the app
-FROM node:16 AS build
+# Use Node.js 18 LTS for building
+FROM node:18-alpine AS builder
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -20,9 +20,8 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copy the Next.js build output to the default NGINX public directory
-# For Next.js, the static files are in .next/static
-COPY --from=build /app/.next/static /usr/share/nginx/html/_next/static
-COPY --from=build /app/public /usr/share/nginx/html
+COPY --from=builder /app/.next/static /usr/share/nginx/html/_next/static
+COPY --from=builder /app/public /usr/share/nginx/html
 
 # Copy custom NGINX configuration if needed
 # COPY nginx.conf /etc/nginx/conf.d/default.conf
