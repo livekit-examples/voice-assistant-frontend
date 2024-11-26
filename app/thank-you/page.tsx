@@ -1,10 +1,18 @@
 "use client";
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation';
 import urlConfig from "../config-url";
 
 export default function ThankYouPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ThankYouContent />
+    </Suspense>
+  );
+}
+
+const ThankYouContent = () => {
   const [loading, setLoading] = useState(true)
   const [summary, setSummary] = useState<string | null>(null)
   const router = useRouter()
