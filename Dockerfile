@@ -1,33 +1,35 @@
-# Use Node.js 18 LTS for building
+# Build stage
 FROM node:18-alpine AS builder
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Copy package files
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
 
-# Copy the rest of the application's source code
+# Copy source code
 COPY . .
 
-# Build the Next.js app for production
+# Build the Next.js app
 RUN npm run build
 
-# Use an NGINX image to serve the build files
-FROM nginx:alpine
+# Runner stage
+FROM node:18-alpine AS runner
 
-# Copy the Next.js build output to the default NGINX public directory
-COPY --from=builder /app/.next/static /usr/share/nginx/html/_next/static
-COPY --from=builder /app/public /usr/share/nginx/html
+WORKDIR /app
 
-# Copy custom NGINX configuration if needed
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Set to production
+ENV NODE_ENV=production
 
-# Expose port 80 to the outside world
-EXPOSE 80
+# Copy necessary files from builder
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
 
-# Start NGINX
-CMD ["nginx", "-g", "daemon off;"]
+# Expose the port Next.js runs on
+EXPOSE 3000
+
+# Start the Next.js application
+CMD ["npm", "start"]
