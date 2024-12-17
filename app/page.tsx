@@ -9,6 +9,9 @@ import {
   VoiceAssistantControlBar,
   AgentState,
   DisconnectButton,
+  ParticipantContext,
+  ParticipantContextIfNeeded,
+  useLocalParticipant,
 } from "@livekit/components-react";
 import { useCallback, useEffect, useState } from "react";
 import { MediaDeviceFailure } from "livekit-client";
@@ -16,6 +19,7 @@ import type { ConnectionDetails } from "./api/connection-details/route";
 import { NoAgentNotification } from "@/components/NoAgentNotification";
 import { CloseIcon } from "@/components/CloseIcon";
 import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
+import { ConnectionQualityIndicator } from "@livekit/components-react";
 
 export default function Page() {
   const [connectionDetails, updateConnectionDetails] = useState<
@@ -35,7 +39,7 @@ export default function Page() {
 
     const url = new URL(
       process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ??
-      "/api/connection-details",
+        "/api/connection-details",
       window.location.origin
     );
     const response = await fetch(url.toString());
@@ -105,6 +109,8 @@ function ControlBar(props: {
     krisp.setNoiseFilterEnabled(true);
   }, []);
 
+  const { localParticipant } = useLocalParticipant();
+
   return (
     <div className="relative h-[100px]">
       <AnimatePresence>
@@ -129,8 +135,11 @@ function ControlBar(props: {
               animate={{ opacity: 1, top: 0 }}
               exit={{ opacity: 0, top: "-10px" }}
               transition={{ duration: 0.4, ease: [0.09, 1.04, 0.245, 1.055] }}
-              className="flex h-8 absolute left-1/2 -translate-x-1/2  justify-center"
+              className="flex h-8 absolute left-1/2 -translate-x-1/2  justify-center items-center"
             >
+              <ParticipantContextIfNeeded participant={localParticipant}>
+                <ConnectionQualityIndicator className="mr-2 self-end" />
+              </ParticipantContextIfNeeded>
               <VoiceAssistantControlBar controls={{ leave: false }} />
               <DisconnectButton>
                 <CloseIcon />
