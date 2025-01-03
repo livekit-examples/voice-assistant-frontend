@@ -10,6 +10,9 @@ const API_KEY = process.env.LIVEKIT_API_KEY;
 const API_SECRET = process.env.LIVEKIT_API_SECRET;
 const LIVEKIT_URL = process.env.LIVEKIT_URL;
 
+// don't cache the results
+export const revalidate = 0;
+
 export type ConnectionDetails = {
   serverUrl: string;
   roomName: string;
@@ -44,7 +47,10 @@ export async function GET() {
       participantToken: participantToken,
       participantName: participantIdentity,
     };
-    return NextResponse.json(data);
+    const headers = new Headers({
+      "Cache-Control": "no-store",
+    });
+    return NextResponse.json(data, { headers });
   } catch (error) {
     if (error instanceof Error) {
       console.error(error);
