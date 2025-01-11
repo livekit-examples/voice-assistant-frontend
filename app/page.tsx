@@ -16,6 +16,7 @@ import type { ConnectionDetails } from "./api/connection-details/route";
 import { NoAgentNotification } from "@/components/NoAgentNotification";
 import { CloseIcon } from "@/components/CloseIcon";
 import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
+import { PushToTalkButton } from "@/components/PushToTalkButton";
 
 export default function Page() {
   const [connectionDetails, updateConnectionDetails] = useState<
@@ -129,9 +130,10 @@ function ControlBar(props: {
               animate={{ opacity: 1, top: 0 }}
               exit={{ opacity: 0, top: "-10px" }}
               transition={{ duration: 0.4, ease: [0.09, 1.04, 0.245, 1.055] }}
-              className="flex h-8 absolute left-1/2 -translate-x-1/2  justify-center"
+              className="flex h-8 absolute left-1/2 -translate-x-1/2 justify-center items-center gap-4"
             >
               <VoiceAssistantControlBar controls={{ leave: false }} />
+              <PushToTalkButton />
               <DisconnectButton>
                 <CloseIcon />
               </DisconnectButton>
