@@ -1,6 +1,9 @@
-import { useLocalParticipant, useParticipants } from "@livekit/components-react";
-import { useCallback, useEffect, useState, useRef } from "react";
+import {
+  useLocalParticipant,
+  useParticipants,
+} from "@livekit/components-react";
 import { motion } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export function PushToTalkButton() {
   const { localParticipant } = useLocalParticipant();
@@ -9,20 +12,30 @@ export function PushToTalkButton() {
   const lastReleaseTime = useRef(0);
 
   // Find agent participant that supports PTT
-  const agent = participants.find((p) => p.attributes?.['supports-ptt'] === '1');
+  const agent = participants.find(
+    (p) => p.attributes?.["supports-ptt"] === "1"
+  );
+
+  useEffect(() => {
+    // start with microphone enabled for PTT agents
+    if (agent && localParticipant) {
+      localParticipant.setMicrophoneEnabled(false);
+    }
+  }, [localParticipant, agent]);
 
   const handlePushStart = useCallback(async () => {
     if (!agent || !localParticipant) return;
 
     try {
+      await localParticipant.setMicrophoneEnabled(true);
       await localParticipant.performRpc({
         destinationIdentity: agent.identity,
-        method: 'ptt',
-        payload: 'push'
+        method: "ptt",
+        payload: "push",
       });
       setIsPressed(true);
     } catch (error) {
-      console.error('Failed to send PTT push:', error);
+      console.error("Failed to send PTT push:", error);
     }
   }, [agent, localParticipant]);
 
@@ -37,14 +50,16 @@ export function PushToTalkButton() {
     lastReleaseTime.current = now;
 
     try {
+      await localParticipant.setMicrophoneEnabled(false);
       await localParticipant.performRpc({
         destinationIdentity: agent.identity,
-        method: 'ptt',
-        payload: 'release'
+        method: "ptt",
+        payload: "release",
       });
-      setIsPressed(false);
     } catch (error) {
-      console.error('Failed to send PTT release:', error);
+      console.error("Failed to send PTT release:", error);
+    } finally {
+      setIsPressed(false);
     }
   }, [agent, localParticipant, isPressed]);
 
@@ -66,11 +81,11 @@ export function PushToTalkButton() {
       onMouseUp={handlePushEnd}
       initial={false}
       animate={{
-        backgroundColor: isPressed ? '#004085' : '#007bff',
-        scale: isPressed ? 0.95 : 1
+        backgroundColor: isPressed ? "#004085" : "#007bff",
+        scale: isPressed ? 0.95 : 1,
       }}
     >
-      {isPressed ? 'Speaking...' : 'Press to Talk'}
+      {isPressed ? "Speaking..." : "Press to Talk"}
     </motion.button>
   );
-} 
+}
