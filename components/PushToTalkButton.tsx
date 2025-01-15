@@ -30,8 +30,7 @@ export function PushToTalkButton() {
       await localParticipant.setMicrophoneEnabled(true);
       await localParticipant.performRpc({
         destinationIdentity: agent.identity,
-        method: "ptt",
-        payload: "push",
+        method: "ptt.start",
       });
       setIsPressed(true);
     } catch (error) {
@@ -53,8 +52,7 @@ export function PushToTalkButton() {
       await localParticipant.setMicrophoneEnabled(false);
       await localParticipant.performRpc({
         destinationIdentity: agent.identity,
-        method: "ptt",
-        payload: "release",
+        method: "ptt.end",
       });
     } catch (error) {
       console.error("Failed to send PTT release:", error);
