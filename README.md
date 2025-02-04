@@ -23,3 +23,17 @@ pnpm dev
 ```
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+## Quickstart for docker
+
+- Copy and rename `.env.example` to `.env.local`, then add the required environment variables to connect to your LiveKit server.
+
+> [!TIP]
+> If you are using **LiveKit Cloud**, you can find your project environment variables [here](https://cloud.livekit.io/projects/p_/settings/keys).
+
+```shell
+docker run -d --name voice-assistant-frontend \
+  -p 3006:3000 \
+  -v ${PWD}/.env.local:/voice-assistant-frontend/.env.local \
+  voice-assistant-frontend:main
+```
