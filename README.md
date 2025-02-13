@@ -1,25 +1,39 @@
-# Voice assistant frontend
+<img src="./.github/assets/app-icon.png" alt="Voice Assistant App Icon" width="100" height="100">
 
-A minimalistic frontend for interacting with [LiveKit Agents](https://docs.livekit.io/agents).
+# Web Voice Assistant
 
-![Screenshot of the frontend application.](/.github/assets/frontent-screenshot.jpeg)
+This is a starter template for [LiveKit Agents](https://docs.livekit.io/agents/overview/) that provides a simple voice interface using the [LiveKit JavaScript SDK](https://github.com/livekit/client-sdk-js).
+
+This template is built with Next.js and is free for you to use or modify as you see fit.
+
+![App screenshot](/.github/assets/frontend-screenshot.jpeg)
+
+## Getting started
 
 > [!TIP]
-> The best way to test this application along with many others is to use [LiveKit Sandbox](https://cloud.livekit.io/projects/p_/sandbox). Spin up your sandbox in a matter of seconds and test and share your local agents without having to worry about hosting your front end.
+> If you'd like to try this application without modification, you can deploy an instance in just a few clicks with [LiveKit Cloud Sandbox](https://cloud.livekit.io/projects/p_/sandbox/templates/voice-assistant-frontend).
 
-## Development setup
+Run the following command to automatically clone this template.
 
-- Copy and rename `.env.example` to `.env.local`, then add the required environment variables to connect to your LiveKit server.
-
-> [!TIP]
-> If you are using **LiveKit Cloud**, you can find your project environment variables [here](https://cloud.livekit.io/projects/p_/settings/keys).
-
-```shell
-# Make sure dependencies are installed (only required once).
-pnpm install
-# Run den local development server.
-pnpm dev
-# Open http://localhost:3000 in your browser.
+```bash
+lk app create --template voice-assistant-frontend
 ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Then run the app with:
+
+```bash
+pnpm install
+pnpm dev
+```
+
+And open http://localhost:3000 in your browser.
+
+You'll also need an agent to speak with. Try our sample voice assistant agent for [Python](https://github.com/livekit-examples/voice-pipeline-agent-python), [Node.js](https://github.com/livekit-examples/voice-pipeline-agent-node), or [create your own from scratch](https://docs.livekit.io/agents/quickstart/).
+
+> [!NOTE]
+> If you need to modify the LiveKit project credentials used, you can edit `.env.local` (copy from `.env.example` if you don't have one) to suit your needs.
+
+## Contributing
+
+This template is open source and we welcome contributions! Please open a PR or issue through GitHub, and don't forget to join us in the [LiveKit Community Slack](https://livekit.io/join-slack)!
+

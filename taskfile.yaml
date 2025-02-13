@@ -6,7 +6,8 @@ tasks:
   post_create:
     desc: "Runs after this template is instantiated as a Sandbox or Bootstrap"
     cmds:
-      - echo -e "To setup and run the frontend:\r\n"
+      - echo -e "\nYour Next.js voice assistant is ready to go!\n"
+      - echo -e "To give it a try, run the following commands:\r\n"
       - echo -e "\tcd {{.ROOT_DIR}}\r"
       - echo -e "\tpnpm install\r"
       - echo -e "\tpnpm dev\r\n"

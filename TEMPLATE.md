@@ -1,6 +1,6 @@
 ## Overview
 
-A Next.js frontend for a simple AI voice assistant using LiveKit's official [React Components](https://github.com/livekit/components-js/) library and styled with TailwindCSS. The application implements its own token server, and is designed to be used with any voice-enabled agent built using our [Agents Framework](https://docs.livekit.io/agents/).
+A Next.js frontend for a simple AI voice assistant using LiveKit's official [JavaScript SDK](https://github.com/livekit/client-sdk-js) and [React Components](https://github.com/livekit/components-js). The application implements its own token server, and is designed to be used with any voice-enabled agent built using [LiveKit Agents](https://docs.livekit.io/agents/).
 
 ## Sandbox
 
@@ -10,7 +10,7 @@ When deployed in a sandbox, LiveKit will host an instance of this application fo
 lk app create --template voice-pipeline-agent-python 
 ```
 
-**NOTE:** For a list of all available templates, run `lk app create` with no arguments.
+**NOTE:** For a list of all available templates, run `lk app list-templates`.
 
 
 ## Installation
