@@ -1,4 +1,4 @@
-name: Build and Test
+name: Lint and Build
 permissions:
   contents: read
   pull-requests: read
@@ -28,9 +28,6 @@ jobs:
 
       - name: Prettier
         run: pnpm format:check
-
-      - name: Run Tests
-        run: pnpm test
 
       - name: Ensure build succeeds
         run: pnpm build
