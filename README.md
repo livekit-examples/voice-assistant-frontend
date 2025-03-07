@@ -36,4 +36,3 @@ You'll also need an agent to speak with. Try our sample voice assistant agent fo
 ## Contributing
 
 This template is open source and we welcome contributions! Please open a PR or issue through GitHub, and don't forget to join us in the [LiveKit Community Slack](https://livekit.io/join-slack)!
-
