@@ -1,26 +1,26 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { CloseIcon } from "@/components/CloseIcon";
+import { NoAgentNotification } from "@/components/NoAgentNotification";
 import {
-  LiveKitRoom,
-  useVoiceAssistant,
+  AgentState,
   BarVisualizer,
+  DisconnectButton,
+  LiveKitRoom,
   RoomAudioRenderer,
   VoiceAssistantControlBar,
-  AgentState,
-  DisconnectButton,
+  useVoiceAssistant,
 } from "@livekit/components-react";
-import { useCallback, useEffect, useState } from "react";
-import { MediaDeviceFailure } from "livekit-client";
-import type { ConnectionDetails } from "./api/connection-details/route";
-import { NoAgentNotification } from "@/components/NoAgentNotification";
-import { CloseIcon } from "@/components/CloseIcon";
 import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
+import { AnimatePresence, motion } from "framer-motion";
+import { MediaDeviceFailure } from "livekit-client";
+import { useCallback, useEffect, useState } from "react";
+import type { ConnectionDetails } from "./api/connection-details/route";
 
 export default function Page() {
-  const [connectionDetails, updateConnectionDetails] = useState<
-    ConnectionDetails | undefined
-  >(undefined);
+  const [connectionDetails, updateConnectionDetails] = useState<ConnectionDetails | undefined>(
+    undefined
+  );
   const [agentState, setAgentState] = useState<AgentState>("disconnected");
 
   const onConnectButtonClicked = useCallback(async () => {
@@ -34,8 +34,7 @@ export default function Page() {
     // own participant name, and possibly to choose from existing rooms to join.
 
     const url = new URL(
-      process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ??
-      "/api/connection-details",
+      process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? "/api/connection-details",
       window.location.origin
     );
     const response = await fetch(url.toString());
@@ -44,10 +43,7 @@ export default function Page() {
   }, []);
 
   return (
-    <main
-      data-lk-theme="default"
-      className="h-full grid content-center bg-[var(--lk-bg)]"
-    >
+    <main data-lk-theme="default" className="h-full grid content-center bg-[var(--lk-bg)]">
       <LiveKitRoom
         token={connectionDetails?.participantToken}
         serverUrl={connectionDetails?.serverUrl}
@@ -61,10 +57,7 @@ export default function Page() {
         className="grid grid-rows-[2fr_1fr] items-center"
       >
         <SimpleVoiceAssistant onStateChange={setAgentState} />
-        <ControlBar
-          onConnectButtonClicked={onConnectButtonClicked}
-          agentState={agentState}
-        />
+        <ControlBar onConnectButtonClicked={onConnectButtonClicked} agentState={agentState} />
         <RoomAudioRenderer />
         <NoAgentNotification state={agentState} />
       </LiveKitRoom>
@@ -72,9 +65,7 @@ export default function Page() {
   );
 }
 
-function SimpleVoiceAssistant(props: {
-  onStateChange: (state: AgentState) => void;
-}) {
+function SimpleVoiceAssistant(props: { onStateChange: (state: AgentState) => void }) {
   const { state, audioTrack } = useVoiceAssistant();
   useEffect(() => {
     props.onStateChange(state);
@@ -92,10 +83,7 @@ function SimpleVoiceAssistant(props: {
   );
 }
 
-function ControlBar(props: {
-  onConnectButtonClicked: () => void;
-  agentState: AgentState;
-}) {
+function ControlBar(props: { onConnectButtonClicked: () => void; agentState: AgentState }) {
   /**
    * Use Krisp background noise reduction when available.
    * Note: This is only available on Scale plan, see {@link https://livekit.io/pricing | LiveKit Pricing} for more details.
@@ -122,21 +110,20 @@ function ControlBar(props: {
         )}
       </AnimatePresence>
       <AnimatePresence>
-        {props.agentState !== "disconnected" &&
-          props.agentState !== "connecting" && (
-            <motion.div
-              initial={{ opacity: 0, top: "10px" }}
-              animate={{ opacity: 1, top: 0 }}
-              exit={{ opacity: 0, top: "-10px" }}
-              transition={{ duration: 0.4, ease: [0.09, 1.04, 0.245, 1.055] }}
-              className="flex h-8 absolute left-1/2 -translate-x-1/2  justify-center"
-            >
-              <VoiceAssistantControlBar controls={{ leave: false }} />
-              <DisconnectButton>
-                <CloseIcon />
-              </DisconnectButton>
-            </motion.div>
-          )}
+        {props.agentState !== "disconnected" && props.agentState !== "connecting" && (
+          <motion.div
+            initial={{ opacity: 0, top: "10px" }}
+            animate={{ opacity: 1, top: 0 }}
+            exit={{ opacity: 0, top: "-10px" }}
+            transition={{ duration: 0.4, ease: [0.09, 1.04, 0.245, 1.055] }}
+            className="flex h-8 absolute left-1/2 -translate-x-1/2  justify-center"
+          >
+            <VoiceAssistantControlBar controls={{ leave: false }} />
+            <DisconnectButton>
+              <CloseIcon />
+            </DisconnectButton>
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   );

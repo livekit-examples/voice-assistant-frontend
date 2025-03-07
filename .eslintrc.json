@@ -1,3 +1,8 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript", "prettier"]
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript",
+    "prettier",
+    "prettier-plugin-sort-imports/recommended"
+  ]
 }

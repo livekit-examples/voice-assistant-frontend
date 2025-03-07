@@ -1,5 +1,6 @@
 import type { AgentState } from "@livekit/components-react";
 import { useEffect, useRef, useState } from "react";
+
 interface NoAgentNotificationProps extends React.PropsWithChildren<object> {
   state: AgentState;
 }
@@ -24,10 +25,7 @@ export function NoAgentNotification(props: NoAgentNotificationProps) {
   useEffect(() => {
     if (props.state === "connecting") {
       timeoutRef.current = window.setTimeout(() => {
-        if (
-          props.state === "connecting" &&
-          agentHasConnected.current === false
-        ) {
+        if (props.state === "connecting" && agentHasConnected.current === false) {
           setShowNotification(true);
         }
       }, timeToWaitMs);
@@ -67,8 +65,8 @@ export function NoAgentNotification(props: NoAgentNotificationProps) {
             </svg>
           </div>
           <p className="text-pretty w-max">
-            It&apos;s quiet... too quiet. Is your agent lost? Ensure your agent
-            is properly configured and running on your machine.
+            It&apos;s quiet... too quiet. Is your agent lost? Ensure your agent is properly
+            configured and running on your machine.
           </p>
           <a
             href="https://docs.livekit.io/agents/quickstarts/s2s/"
