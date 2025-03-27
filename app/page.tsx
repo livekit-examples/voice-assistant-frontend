@@ -86,7 +86,7 @@ function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
 
       <RoomAudioRenderer />
       <NoAgentNotification state={agentState} />
-      <div className="fixed bottom-0 w-full">
+      <div className="fixed bottom-0 w-full px-4 py-2">
         <ControlBar onConnectButtonClicked={props.onConnectButtonClicked} />
       </div>
     </>
@@ -120,7 +120,7 @@ function ControlBar(props: { onConnectButtonClicked: () => void }) {
               state={agentState}
               barCount={5}
               trackRef={audioTrack}
-              className="agent-visualizer w-32 gap-2"
+              className="agent-visualizer w-24 gap-2"
               options={{ minHeight: 12 }}
             />
             <div className="flex items-center">
