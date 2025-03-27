@@ -85,13 +85,13 @@ function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
       <RoomAudioRenderer />
       <NoAgentNotification state={agentState} />
       <div className="fixed bottom-0 w-full px-4 py-2">
-        <ControlBar onConnectButtonClicked={props.onConnectButtonClicked} />
+        <ControlBar />
       </div>
     </>
   );
 }
 
-function ControlBar(props: { onConnectButtonClicked: () => void }) {
+function ControlBar() {
   /**
    * Use Krisp background noise reduction when available.
    * Note: This is only available on Scale plan, see {@link https://livekit.io/pricing | LiveKit Pricing} for more details.
