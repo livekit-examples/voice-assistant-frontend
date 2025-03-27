@@ -3,9 +3,7 @@
 import { CloseIcon } from "@/components/CloseIcon";
 import { NoAgentNotification } from "@/components/NoAgentNotification";
 import TranscriptionView from "@/components/TranscriptionView";
-import useCombinedTranscriptions from "@/hooks/useCombinedTranscriptions";
 import {
-  AgentState,
   BarVisualizer,
   DisconnectButton,
   RoomAudioRenderer,
