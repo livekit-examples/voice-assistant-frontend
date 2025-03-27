@@ -6,22 +6,21 @@ import {
   AgentState,
   BarVisualizer,
   DisconnectButton,
-  LiveKitRoom,
   RoomAudioRenderer,
+  RoomContext,
   VoiceAssistantControlBar,
   useVoiceAssistant,
 } from "@livekit/components-react";
 import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
 import { AnimatePresence, motion } from "framer-motion";
-import { MediaDeviceFailure } from "livekit-client";
+import { Room, RoomEvent } from "livekit-client";
 import { useCallback, useEffect, useState } from "react";
 import type { ConnectionDetails } from "./api/connection-details/route";
 
 export default function Page() {
-  const [connectionDetails, updateConnectionDetails] = useState<ConnectionDetails | undefined>(
-    undefined
-  );
   const [agentState, setAgentState] = useState<AgentState>("disconnected");
+
+  const [room] = useState(new Room());
 
   const onConnectButtonClicked = useCallback(async () => {
     // Generate room connection details, including:
@@ -38,29 +37,29 @@ export default function Page() {
       window.location.origin
     );
     const response = await fetch(url.toString());
-    const connectionDetailsData = await response.json();
-    updateConnectionDetails(connectionDetailsData);
-  }, []);
+    const connectionDetailsData: ConnectionDetails = await response.json();
+
+    await room.connect(connectionDetailsData.serverUrl, connectionDetailsData.participantToken);
+  }, [room]);
+
+  useEffect(() => {
+    room.on(RoomEvent.MediaDevicesError, onDeviceFailure);
+
+    return () => {
+      room.off(RoomEvent.MediaDevicesError, onDeviceFailure);
+    };
+  }, [room]);
 
   return (
     <main data-lk-theme="default" className="h-full grid content-center bg-[var(--lk-bg)]">
-      <LiveKitRoom
-        token={connectionDetails?.participantToken}
-        serverUrl={connectionDetails?.serverUrl}
-        connect={connectionDetails !== undefined}
-        audio={true}
-        video={false}
-        onMediaDeviceFailure={onDeviceFailure}
-        onDisconnected={() => {
-          updateConnectionDetails(undefined);
-        }}
-        className="grid grid-rows-[2fr_1fr] items-center"
-      >
-        <SimpleVoiceAssistant onStateChange={setAgentState} />
-        <ControlBar onConnectButtonClicked={onConnectButtonClicked} agentState={agentState} />
-        <RoomAudioRenderer />
-        <NoAgentNotification state={agentState} />
-      </LiveKitRoom>
+      <RoomContext.Provider value={room}>
+        <div className="lk-room-container grid grid-rows-[2fr_1fr] items-center">
+          <SimpleVoiceAssistant onStateChange={setAgentState} />
+          <ControlBar onConnectButtonClicked={onConnectButtonClicked} agentState={agentState} />
+          <RoomAudioRenderer />
+          <NoAgentNotification state={agentState} />
+        </div>
+      </RoomContext.Provider>
     </main>
   );
 }
@@ -129,7 +128,7 @@ function ControlBar(props: { onConnectButtonClicked: () => void; agentState: Age
   );
 }
 
-function onDeviceFailure(error?: MediaDeviceFailure) {
+function onDeviceFailure(error: Error) {
   console.error(error);
   alert(
     "Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab"
