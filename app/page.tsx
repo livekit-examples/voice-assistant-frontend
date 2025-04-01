@@ -52,7 +52,7 @@ export default function Page() {
   return (
     <main data-lk-theme="default" className="h-full grid content-center bg-[var(--lk-bg)]">
       <RoomContext.Provider value={room}>
-        <div className="lk-room-container">
+        <div className="lk-room-container max-h-[90vh]">
           <SimpleVoiceAssistant onConnectButtonClicked={onConnectButtonClicked} />
         </div>
       </RoomContext.Provider>
@@ -77,7 +77,7 @@ function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
             Start a conversation
           </motion.button>
         )}
-        <div className="w-3/4 lg:w-1/2 mx-auto">
+        <div className="w-3/4 lg:w-1/2 mx-auto h-full">
           <TranscriptionView />
         </div>
       </AnimatePresence>
