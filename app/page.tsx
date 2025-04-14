@@ -63,7 +63,7 @@ export default function Page() {
 function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
   const { state: agentState } = useVoiceAssistant();
   return (
-    <>
+    <div className="flex flex-col h-full relative">
       <AnimatePresence>
         {agentState === "disconnected" && (
           <motion.button
@@ -77,17 +77,17 @@ function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
             Start a conversation
           </motion.button>
         )}
-        <div className="w-3/4 lg:w-1/2 mx-auto h-full">
+        <div className="w-3/4 lg:w-1/2 mx-auto flex-grow overflow-y-auto pb-28">
           <TranscriptionView />
         </div>
       </AnimatePresence>
 
       <RoomAudioRenderer />
       <NoAgentNotification state={agentState} />
-      <div className="fixed bottom-0 w-full px-4 py-2">
+      <div className="fixed bottom-0 w-full px-4 py-2 bg-[var(--lk-bg)]">
         <ControlBar />
       </div>
-    </>
+    </div>
   );
 }
 
