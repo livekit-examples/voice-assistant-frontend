@@ -51,7 +51,7 @@ export default function Page() {
   return (
     <main data-lk-theme="default" className="h-full grid content-center bg-[var(--lk-bg)]">
       <RoomContext.Provider value={room}>
-        <div className="lk-room-container max-h-[90vh]">
+        <div className="lk-room-container max-w-[1024px] w-[90vw] mx-auto max-h-[90vh]">
           <SimpleVoiceAssistant onConnectButtonClicked={onConnectButtonClicked} />
         </div>
       </RoomContext.Provider>
@@ -63,7 +63,7 @@ function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
   const { state: agentState, audioTrack } = useVoiceAssistant();
   
   return (
-    <div className="lk-room-container max-w-[1024px] w-[90vw] mx-auto">
+    <>
       <AnimatePresence mode="wait">
         {agentState === "disconnected" ? (
           <motion.div
@@ -91,9 +91,9 @@ function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: [0.09, 1.04, 0.245, 1.055] }}
-            className="grid grid-rows-[1fr_auto_1fr] items-center gap-4"
+            className="flex flex-col items-center gap-4 h-full"
           >
-            <div className="h-[300px] w-full mt-[200px]">
+            <div className="h-[300px] w-full">
               <BarVisualizer
                 state={agentState}
                 barCount={5}
@@ -102,14 +102,18 @@ function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
                 options={{ minHeight: 24 }}
               />
             </div>
-            <TranscriptionView />
-            <ControlBar onConnectButtonClicked={props.onConnectButtonClicked} />
+            <div className="flex-1 w-full">
+              <TranscriptionView />
+            </div>
+            <div className="w-full">
+              <ControlBar onConnectButtonClicked={props.onConnectButtonClicked} />
+            </div>
             <RoomAudioRenderer />
             <NoAgentNotification state={agentState} />
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }
 
@@ -117,7 +121,7 @@ function ControlBar(props: { onConnectButtonClicked: () => void }) {
   const { state: agentState, audioTrack } = useVoiceAssistant();
 
   return (
-    <div className="relative h-[100px]">
+    <div className="relative h-[60px]">
       <AnimatePresence>
       {agentState === "disconnected" && (
            <motion.button
