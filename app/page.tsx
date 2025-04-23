@@ -8,10 +8,10 @@ import {
   DisconnectButton,
   RoomAudioRenderer,
   RoomContext,
+  VideoTrack,
   VoiceAssistantControlBar,
   useVoiceAssistant,
 } from "@livekit/components-react";
-import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
 import { AnimatePresence, motion } from "framer-motion";
 import { Room, RoomEvent } from "livekit-client";
 import { useCallback, useEffect, useState } from "react";
@@ -52,7 +52,7 @@ export default function Page() {
   return (
     <main data-lk-theme="default" className="h-full grid content-center bg-[var(--lk-bg)]">
       <RoomContext.Provider value={room}>
-        <div className="lk-room-container max-h-[90vh]">
+        <div className="lk-room-container max-w-[1024px] w-[90vw] mx-auto max-h-[90vh]">
           <SimpleVoiceAssistant onConnectButtonClicked={onConnectButtonClicked} />
         </div>
       </RoomContext.Provider>
@@ -62,8 +62,82 @@ export default function Page() {
 
 function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
   const { state: agentState } = useVoiceAssistant();
+
   return (
     <>
+      <AnimatePresence mode="wait">
+        {agentState === "disconnected" ? (
+          <motion.div
+            key="disconnected"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.3, ease: [0.09, 1.04, 0.245, 1.055] }}
+            className="grid items-center justify-center h-full"
+          >
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+              className="uppercase px-4 py-2 bg-white text-black rounded-md"
+              onClick={() => props.onConnectButtonClicked()}
+            >
+              Start a conversation
+            </motion.button>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="connected"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: [0.09, 1.04, 0.245, 1.055] }}
+            className="flex flex-col items-center gap-4 h-full"
+          >
+            <AgentVisualizer />
+            <div className="flex-1 w-full">
+              <TranscriptionView />
+            </div>
+            <div className="w-full">
+              <ControlBar onConnectButtonClicked={props.onConnectButtonClicked} />
+            </div>
+            <RoomAudioRenderer />
+            <NoAgentNotification state={agentState} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
+function AgentVisualizer() {
+  const { state: agentState, videoTrack, audioTrack } = useVoiceAssistant();
+
+  if (videoTrack) {
+    return (
+      <div className="h-[512px] w-[512px] rounded-lg overflow-hidden">
+        <VideoTrack trackRef={videoTrack} />
+      </div>
+    );
+  }
+  return (
+    <div className="h-[300px] w-full">
+      <BarVisualizer
+        state={agentState}
+        barCount={5}
+        trackRef={audioTrack}
+        className="agent-visualizer"
+        options={{ minHeight: 24 }}
+      />
+    </div>
+  );
+}
+
+function ControlBar(props: { onConnectButtonClicked: () => void }) {
+  const { state: agentState } = useVoiceAssistant();
+
+  return (
+    <div className="relative h-[60px]">
       <AnimatePresence>
         {agentState === "disconnected" && (
           <motion.button
@@ -77,34 +151,7 @@ function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
             Start a conversation
           </motion.button>
         )}
-        <div className="w-3/4 lg:w-1/2 mx-auto h-full">
-          <TranscriptionView />
-        </div>
       </AnimatePresence>
-
-      <RoomAudioRenderer />
-      <NoAgentNotification state={agentState} />
-      <div className="fixed bottom-0 w-full px-4 py-2">
-        <ControlBar />
-      </div>
-    </>
-  );
-}
-
-function ControlBar() {
-  /**
-   * Use Krisp background noise reduction when available.
-   * Note: This is only available on Scale plan, see {@link https://livekit.io/pricing | LiveKit Pricing} for more details.
-   */
-  const krisp = useKrispNoiseFilter();
-  useEffect(() => {
-    krisp.setNoiseFilterEnabled(true);
-  }, []);
-
-  const { state: agentState, audioTrack } = useVoiceAssistant();
-
-  return (
-    <div className="relative h-[100px]">
       <AnimatePresence>
         {agentState !== "disconnected" && agentState !== "connecting" && (
           <motion.div
@@ -112,21 +159,12 @@ function ControlBar() {
             animate={{ opacity: 1, top: 0 }}
             exit={{ opacity: 0, top: "-10px" }}
             transition={{ duration: 0.4, ease: [0.09, 1.04, 0.245, 1.055] }}
-            className="flex absolute w-full h-full justify-between px-8 sm:px-4"
+            className="flex h-8 absolute left-1/2 -translate-x-1/2  justify-center"
           >
-            <BarVisualizer
-              state={agentState}
-              barCount={5}
-              trackRef={audioTrack}
-              className="agent-visualizer w-24 gap-2"
-              options={{ minHeight: 12 }}
-            />
-            <div className="flex items-center">
-              <VoiceAssistantControlBar controls={{ leave: false }} />
-              <DisconnectButton>
-                <CloseIcon />
-              </DisconnectButton>
-            </div>
+            <VoiceAssistantControlBar controls={{ leave: false }} />
+            <DisconnectButton>
+              <CloseIcon />
+            </DisconnectButton>
           </motion.div>
         )}
       </AnimatePresence>

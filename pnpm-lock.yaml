@@ -9,14 +9,11 @@ importers:
   .:
     dependencies:
       '@livekit/components-react':
-        specifier: ^2.7.0
-        version: 2.9.2(@livekit/krisp-noise-filter@0.2.16(livekit-client@2.11.3))(livekit-client@2.11.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.8.1)
+        specifier: ^2.9.3
+        version: 2.9.3(@livekit/krisp-noise-filter@0.2.16(livekit-client@2.11.3))(livekit-client@2.11.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.8.1)
       '@livekit/components-styles':
         specifier: ^1.1.4
         version: 1.1.5
-      '@livekit/krisp-noise-filter':
-        specifier: ^0.2.14
-        version: 0.2.16(livekit-client@2.11.3)
       framer-motion:
         specifier: ^11.18.0
         version: 11.18.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -184,8 +181,8 @@ packages:
       livekit-client: ^2.11.1
       tslib: ^2.6.2
 
-  '@livekit/components-react@2.9.2':
-    resolution: {integrity: sha512-VYeR1BLt0UOYj/o9FM+lAjC3q/DeyYyNFSC0d+3UCbuH6woW1l25UPN5MF4kAXSTqAjxpPWZ9hvuds2FQCyNdw==}
+  '@livekit/components-react@2.9.3':
+    resolution: {integrity: sha512-gE1sEE57BkBz3+TQHrOXVDVwVMwV5wtIYokdrfd7vshh22/PtWWj3vON9wzYLFRKx98L6QyAzyh7W9EWu3Lj9Q==}
     engines: {node: '>=18'}
     peerDependencies:
       '@livekit/krisp-noise-filter': ^0.2.12
@@ -1982,7 +1979,7 @@ snapshots:
       rxjs: 7.8.2
       tslib: 2.8.1
 
-  '@livekit/components-react@2.9.2(@livekit/krisp-noise-filter@0.2.16(livekit-client@2.11.3))(livekit-client@2.11.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.8.1)':
+  '@livekit/components-react@2.9.3(@livekit/krisp-noise-filter@0.2.16(livekit-client@2.11.3))(livekit-client@2.11.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.8.1)':
     dependencies:
       '@livekit/components-core': 0.12.4(livekit-client@2.11.3)(tslib@2.8.1)
       clsx: 2.1.1
@@ -1999,6 +1996,7 @@ snapshots:
   '@livekit/krisp-noise-filter@0.2.16(livekit-client@2.11.3)':
     dependencies:
       livekit-client: 2.11.3
+    optional: true
 
   '@livekit/mutex@1.1.1': {}
 
