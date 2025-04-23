@@ -18,7 +18,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { ConnectionDetails } from "./api/connection-details/route";
 
 export default function Page() {
-  const [room, setRoom] = useState(new Room());
+  const [room] = useState(new Room());
 
   const onConnectButtonClicked = useCallback(async () => {
     // Generate room connection details, including:
@@ -61,7 +61,7 @@ export default function Page() {
 }
 
 function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
-  const { state: agentState, audioTrack } = useVoiceAssistant();
+  const { state: agentState } = useVoiceAssistant();
 
   return (
     <>
@@ -134,7 +134,7 @@ function AgentVisualizer() {
 }
 
 function ControlBar(props: { onConnectButtonClicked: () => void }) {
-  const { state: agentState, audioTrack } = useVoiceAssistant();
+  const { state: agentState } = useVoiceAssistant();
 
   return (
     <div className="relative h-[60px]">
