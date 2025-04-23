@@ -63,8 +63,8 @@ export default function Page() {
 function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
   const { state: agentState, audioTrack } = useVoiceAssistant();
   return (
-    <div className="lk-room-container grid grid-rows-[2fr_1fr] items-center">
-      <div className="h-[300px] max-w-[90vw] mx-auto">
+    <div className="lk-room-container grid grid-rows-[1fr_auto_1fr] items-center gap-4 max-w-[1024px] w-[90vw] mx-auto">
+      <div className="h-[300px] w-full">
         <BarVisualizer
           state={agentState}
           barCount={5}
@@ -72,8 +72,8 @@ function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
           className="agent-visualizer"
           options={{ minHeight: 24 }}
         />
-        <TranscriptionView />
       </div>
+      <TranscriptionView />
       <ControlBar onConnectButtonClicked={props.onConnectButtonClicked} />
       <RoomAudioRenderer />
       <NoAgentNotification state={agentState} />
