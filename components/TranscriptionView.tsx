@@ -17,12 +17,9 @@ export default function TranscriptionView() {
       {/* Fade-out gradient mask */}
       <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-[var(--lk-bg)] to-transparent z-10 pointer-events-none" />
       <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--lk-bg)] to-transparent z-10 pointer-events-none" />
-      
+
       {/* Scrollable content */}
-      <div 
-        ref={containerRef}
-        className="h-full flex flex-col gap-2 overflow-y-auto px-4 py-8"
-      >
+      <div ref={containerRef} className="h-full flex flex-col gap-2 overflow-y-auto px-4 py-8">
         {combinedTranscriptions.map((segment) => (
           <div
             id={segment.id}

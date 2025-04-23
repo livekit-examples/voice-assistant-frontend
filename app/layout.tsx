@@ -1,7 +1,7 @@
 import "@livekit/components-styles";
+import { Metadata } from "next";
 import { Public_Sans } from "next/font/google";
 import "./globals.css";
-import { Metadata } from "next";
 
 const publicSans400 = Public_Sans({
   weight: "400",
@@ -9,7 +9,7 @@ const publicSans400 = Public_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Voice Assistant',
+  title: "Voice Assistant",
 };
 
 export default function RootLayout({
