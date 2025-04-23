@@ -11,14 +11,14 @@ import {
   VoiceAssistantControlBar,
   useVoiceAssistant,
 } from "@livekit/components-react";
-import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
 import { AnimatePresence, motion } from "framer-motion";
 import { Room, RoomEvent } from "livekit-client";
 import { useCallback, useEffect, useState } from "react";
 import type { ConnectionDetails } from "./api/connection-details/route";
 
 export default function Page() {
-  const [room] = useState(new Room());
+  const [room, setRoom] = useState(new Room());
+  const [roomKey, setRoomKey] = useState(0);
 
   const onConnectButtonClicked = useCallback(async () => {
     // Generate room connection details, including:
@@ -42,10 +42,18 @@ export default function Page() {
   }, [room]);
 
   useEffect(() => {
+    const handleDisconnect = () => {
+      console.log("Disconnected from room");
+      room.disconnect();
+      setRoom(new Room());
+    };
+
     room.on(RoomEvent.MediaDevicesError, onDeviceFailure);
+    room.on(RoomEvent.Disconnected, handleDisconnect);
 
     return () => {
       room.off(RoomEvent.MediaDevicesError, onDeviceFailure);
+      room.off(RoomEvent.Disconnected, handleDisconnect);
     };
   }, [room]);
 
@@ -53,7 +61,7 @@ export default function Page() {
     <main data-lk-theme="default" className="h-full grid content-center bg-[var(--lk-bg)]">
       <RoomContext.Provider value={room}>
         <div className="lk-room-container max-h-[90vh]">
-          <SimpleVoiceAssistant onConnectButtonClicked={onConnectButtonClicked} />
+          <SimpleVoiceAssistant key={roomKey} onConnectButtonClicked={onConnectButtonClicked} />
         </div>
       </RoomContext.Provider>
     </main>
@@ -82,15 +90,6 @@ function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
 }
 
 function ControlBar(props: { onConnectButtonClicked: () => void }) {
-  /**
-   * Use Krisp background noise reduction when available.
-   * Note: This is only available on Scale plan, see {@link https://livekit.io/pricing | LiveKit Pricing} for more details.
-   */
-  const krisp = useKrispNoiseFilter();
-  useEffect(() => {
-    krisp.setNoiseFilterEnabled(true);
-  }, []);
-
   const { state: agentState, audioTrack } = useVoiceAssistant();
 
   return (
