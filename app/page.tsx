@@ -10,6 +10,7 @@ import {
   RoomContext,
   VoiceAssistantControlBar,
   useVoiceAssistant,
+  VideoTrack,
 } from "@livekit/components-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Room, RoomEvent } from "livekit-client";
@@ -93,15 +94,7 @@ function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
             transition={{ duration: 0.3, ease: [0.09, 1.04, 0.245, 1.055] }}
             className="flex flex-col items-center gap-4 h-full"
           >
-            <div className="h-[300px] w-full">
-              <BarVisualizer
-                state={agentState}
-                barCount={5}
-                trackRef={audioTrack}
-                className="agent-visualizer"
-                options={{ minHeight: 24 }}
-              />
-            </div>
+            <AgentVisualizer />
             <div className="flex-1 w-full">
               <TranscriptionView />
             </div>
@@ -114,6 +107,23 @@ function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
         )}
       </AnimatePresence>
     </>
+  );
+}
+
+function AgentVisualizer() {
+  const { state: agentState, videoTrack, audioTrack } = useVoiceAssistant();
+
+  if (videoTrack) {
+    return (
+      <div className="h-[300px] w-full">
+        <VideoTrack trackRef={videoTrack} />
+      </div>
+    );
+  }
+  return (
+    <div className="h-[300px] w-full">
+      <BarVisualizer state={agentState} barCount={5} trackRef={audioTrack} className="agent-visualizer" options={{ minHeight: 24 }} />
+    </div>
   );
 }
 
