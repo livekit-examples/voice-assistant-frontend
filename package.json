@@ -11,16 +11,12 @@
     "format:write": "prettier --write ."
   },
   "dependencies": {
-    "@livekit/components-react": "file:../../livekit/components-js/packages/react",
-    "@livekit/components-styles": "file:../../livekit/components-js/packages/styles",
+    "@livekit/components-react": "^2.7.0",
+    "@livekit/components-styles": "^1.1.4",
     "framer-motion": "^11.18.0",
     "livekit-client": "^2.8.0",
     "livekit-server-sdk": "^2.9.7",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-  },
-  "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
