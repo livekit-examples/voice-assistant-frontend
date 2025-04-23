@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@livekit/components-react':
-        specifier: file:/Users/ben/dev/livekit/components-js/packages/react
-        version: file:../../livekit/components-js/packages/react(@livekit/krisp-noise-filter@0.2.16(livekit-client@2.11.2))(livekit-client@2.11.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.8.1)
+        specifier: ^2.7.0
+        version: 2.9.2(@livekit/krisp-noise-filter@0.2.16(livekit-client@2.11.2))(livekit-client@2.11.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.8.1)
       '@livekit/components-styles':
-        specifier: file:/Users/ben/dev/livekit/components-js/packages/styles
-        version: file:../../livekit/components-js/packages/styles
+        specifier: ^1.1.4
+        version: 1.1.5
       framer-motion:
         specifier: ^11.18.0
         version: 11.18.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -171,19 +171,19 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@livekit/components-core@file:../../livekit/components-js/packages/core':
-    resolution: {directory: ../../livekit/components-js/packages/core, type: directory}
+  '@livekit/components-core@0.12.4':
+    resolution: {integrity: sha512-a/GkK8XFULPhXoSKxuXEU62gwTAYJ83DP5/vlRzwESEY+rsoiw2NvvPZtDCU17yyd/5QBIF9VdDjB9ZZF0dOfQ==}
     engines: {node: '>=18'}
     peerDependencies:
-      livekit-client: 'catalog:'
+      livekit-client: ^2.11.1
       tslib: ^2.6.2
 
-  '@livekit/components-react@file:../../livekit/components-js/packages/react':
-    resolution: {directory: ../../livekit/components-js/packages/react, type: directory}
+  '@livekit/components-react@2.9.2':
+    resolution: {integrity: sha512-VYeR1BLt0UOYj/o9FM+lAjC3q/DeyYyNFSC0d+3UCbuH6woW1l25UPN5MF4kAXSTqAjxpPWZ9hvuds2FQCyNdw==}
     engines: {node: '>=18'}
     peerDependencies:
       '@livekit/krisp-noise-filter': ^0.2.12
-      livekit-client: 'catalog:'
+      livekit-client: ^2.11.1
       react: '>=18'
       react-dom: '>=18'
       tslib: ^2.6.2
@@ -191,8 +191,8 @@ packages:
       '@livekit/krisp-noise-filter':
         optional: true
 
-  '@livekit/components-styles@file:../../livekit/components-js/packages/styles':
-    resolution: {directory: ../../livekit/components-js/packages/styles, type: directory}
+  '@livekit/components-styles@1.1.5':
+    resolution: {integrity: sha512-SocIPcwm18S28zVruvJcmiHfbUIwGTfxGbUOIp1Db78EON/iJ2v7B2g/xD5sr+c7jXoV1DNUPl2qQiFW2S9dbw==}
     engines: {node: '>=18'}
 
   '@livekit/krisp-noise-filter@0.2.16':
@@ -1966,7 +1966,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@livekit/components-core@file:../../livekit/components-js/packages/core(livekit-client@2.11.2)(tslib@2.8.1)':
+  '@livekit/components-core@0.12.4(livekit-client@2.11.2)(tslib@2.8.1)':
     dependencies:
       '@floating-ui/dom': 1.6.13
       livekit-client: 2.11.2
@@ -1974,9 +1974,9 @@ snapshots:
       rxjs: 7.8.2
       tslib: 2.8.1
 
-  '@livekit/components-react@file:../../livekit/components-js/packages/react(@livekit/krisp-noise-filter@0.2.16(livekit-client@2.11.2))(livekit-client@2.11.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.8.1)':
+  '@livekit/components-react@2.9.2(@livekit/krisp-noise-filter@0.2.16(livekit-client@2.11.2))(livekit-client@2.11.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.8.1)':
     dependencies:
-      '@livekit/components-core': file:../../livekit/components-js/packages/core(livekit-client@2.11.2)(tslib@2.8.1)
+      '@livekit/components-core': 0.12.4(livekit-client@2.11.2)(tslib@2.8.1)
       clsx: 2.1.1
       livekit-client: 2.11.2
       react: 18.3.1
@@ -1986,7 +1986,7 @@ snapshots:
     optionalDependencies:
       '@livekit/krisp-noise-filter': 0.2.16(livekit-client@2.11.2)
 
-  '@livekit/components-styles@file:../../livekit/components-js/packages/styles': {}
+  '@livekit/components-styles@1.1.5': {}
 
   '@livekit/krisp-noise-filter@0.2.16(livekit-client@2.11.2)':
     dependencies:

@@ -18,7 +18,6 @@ import type { ConnectionDetails } from "./api/connection-details/route";
 
 export default function Page() {
   const [room, setRoom] = useState(new Room());
-  const [roomKey, setRoomKey] = useState(0);
 
   const onConnectButtonClicked = useCallback(async () => {
     // Generate room connection details, including:
@@ -42,18 +41,10 @@ export default function Page() {
   }, [room]);
 
   useEffect(() => {
-    const handleDisconnect = () => {
-      console.log("Disconnected from room");
-      room.disconnect();
-      setRoom(new Room());
-    };
-
     room.on(RoomEvent.MediaDevicesError, onDeviceFailure);
-    room.on(RoomEvent.Disconnected, handleDisconnect);
 
     return () => {
       room.off(RoomEvent.MediaDevicesError, onDeviceFailure);
-      room.off(RoomEvent.Disconnected, handleDisconnect);
     };
   }, [room]);
 
@@ -61,7 +52,7 @@ export default function Page() {
     <main data-lk-theme="default" className="h-full grid content-center bg-[var(--lk-bg)]">
       <RoomContext.Provider value={room}>
         <div className="lk-room-container max-h-[90vh]">
-          <SimpleVoiceAssistant key={roomKey} onConnectButtonClicked={onConnectButtonClicked} />
+          <SimpleVoiceAssistant onConnectButtonClicked={onConnectButtonClicked} />
         </div>
       </RoomContext.Provider>
     </main>
@@ -70,21 +61,54 @@ export default function Page() {
 
 function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
   const { state: agentState, audioTrack } = useVoiceAssistant();
+  
   return (
-    <div className="lk-room-container grid grid-rows-[1fr_auto_1fr] items-center gap-4 max-w-[1024px] w-[90vw] mx-auto">
-      <div className="h-[300px] w-full">
-        <BarVisualizer
-          state={agentState}
-          barCount={5}
-          trackRef={audioTrack}
-          className="agent-visualizer"
-          options={{ minHeight: 24 }}
-        />
-      </div>
-      <TranscriptionView />
-      <ControlBar onConnectButtonClicked={props.onConnectButtonClicked} />
-      <RoomAudioRenderer />
-      <NoAgentNotification state={agentState} />
+    <div className="lk-room-container max-w-[1024px] w-[90vw] mx-auto">
+      <AnimatePresence mode="wait">
+        {agentState === "disconnected" ? (
+          <motion.div
+            key="disconnected"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.3, ease: [0.09, 1.04, 0.245, 1.055] }}
+            className="grid items-center justify-center h-full"
+          >
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+              className="uppercase px-4 py-2 bg-white text-black rounded-md"
+              onClick={() => props.onConnectButtonClicked()}
+            >
+              Start a conversation
+            </motion.button>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="connected"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: [0.09, 1.04, 0.245, 1.055] }}
+            className="grid grid-rows-[1fr_auto_1fr] items-center gap-4"
+          >
+            <div className="h-[300px] w-full mt-[200px]">
+              <BarVisualizer
+                state={agentState}
+                barCount={5}
+                trackRef={audioTrack}
+                className="agent-visualizer"
+                options={{ minHeight: 24 }}
+              />
+            </div>
+            <TranscriptionView />
+            <ControlBar onConnectButtonClicked={props.onConnectButtonClicked} />
+            <RoomAudioRenderer />
+            <NoAgentNotification state={agentState} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

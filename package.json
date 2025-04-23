@@ -11,8 +11,8 @@
     "format:write": "prettier --write ."
   },
   "dependencies": {
-    "@livekit/components-react": "file:/Users/ben/dev/livekit/components-js/packages/react",
-    "@livekit/components-styles": "file:/Users/ben/dev/livekit/components-js/packages/styles",
+    "@livekit/components-react": "^2.7.0",
+    "@livekit/components-styles": "^1.1.4",
     "framer-motion": "^11.18.0",
     "livekit-client": "^2.8.0",
     "livekit-server-sdk": "^2.9.7",
