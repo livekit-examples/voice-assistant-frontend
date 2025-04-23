@@ -72,6 +72,7 @@ function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
           className="agent-visualizer"
           options={{ minHeight: 24 }}
         />
+        <TranscriptionView />
       </div>
       <ControlBar onConnectButtonClicked={props.onConnectButtonClicked} />
       <RoomAudioRenderer />
