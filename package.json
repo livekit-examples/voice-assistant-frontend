@@ -11,7 +11,7 @@
     "format:write": "prettier --write ."
   },
   "dependencies": {
-    "@livekit/components-react": "^2.7.0",
+    "@livekit/components-react": "^2.9.3",
     "@livekit/components-styles": "^1.1.4",
     "framer-motion": "^11.18.0",
     "livekit-client": "^2.8.0",
