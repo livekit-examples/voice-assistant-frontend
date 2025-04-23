@@ -61,37 +61,51 @@ export default function Page() {
 }
 
 function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
-  const { state: agentState } = useVoiceAssistant();
+  const { state: agentState, audioTrack } = useVoiceAssistant();
   return (
-    <>
-      <AnimatePresence>
-        {agentState === "disconnected" && (
-          <motion.button
-            initial={{ opacity: 0, top: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, top: "-10px" }}
-            transition={{ duration: 1, ease: [0.09, 1.04, 0.245, 1.055] }}
-            className="uppercase absolute left-1/2 -translate-x-1/2 px-4 py-2 bg-white text-black rounded-md"
-            onClick={() => props.onConnectButtonClicked()}
-          >
-            Start a conversation
-          </motion.button>
-        )}
-        <div className="w-3/4 lg:w-1/2 mx-auto h-full">
-          <TranscriptionView />
-        </div>
-      </AnimatePresence>
-
+    <div className="lk-room-container grid grid-rows-[2fr_1fr] items-center">
+      <div className="h-[300px] max-w-[90vw] mx-auto">
+        <BarVisualizer
+          state={agentState}
+          barCount={5}
+          trackRef={audioTrack}
+          className="agent-visualizer"
+          options={{ minHeight: 24 }}
+        />
+      </div>
+      <ControlBar onConnectButtonClicked={props.onConnectButtonClicked} />
       <RoomAudioRenderer />
       <NoAgentNotification state={agentState} />
-      <div className="fixed bottom-0 w-full px-4 py-2">
-        <ControlBar />
-      </div>
-    </>
+    </div>
+    // <>
+    //   <AnimatePresence>
+    //     {agentState === "disconnected" && (
+    //       <motion.button
+    //         initial={{ opacity: 0, top: 0 }}
+    //         animate={{ opacity: 1 }}
+    //         exit={{ opacity: 0, top: "-10px" }}
+    //         transition={{ duration: 1, ease: [0.09, 1.04, 0.245, 1.055] }}
+    //         className="uppercase absolute left-1/2 -translate-x-1/2 px-4 py-2 bg-white text-black rounded-md"
+    //         onClick={() => props.onConnectButtonClicked()}
+    //       >
+    //         Start a conversation
+    //       </motion.button>
+    //     )}
+    //     <div className="w-3/4 lg:w-1/2 mx-auto h-full">
+    //       <TranscriptionView />
+    //     </div>
+    //   </AnimatePresence>
+
+    //   <RoomAudioRenderer />
+    //   <NoAgentNotification state={agentState} />
+    //   <div className="fixed bottom-0 w-full px-4 py-2">
+    //     <ControlBar />
+    //   </div>
+    // </>
   );
 }
 
-function ControlBar() {
+function ControlBar(props: { onConnectButtonClicked: () => void }) {
   /**
    * Use Krisp background noise reduction when available.
    * Note: This is only available on Scale plan, see {@link https://livekit.io/pricing | LiveKit Pricing} for more details.
@@ -106,15 +120,34 @@ function ControlBar() {
   return (
     <div className="relative h-[100px]">
       <AnimatePresence>
-        {agentState !== "disconnected" && agentState !== "connecting" && (
+      {agentState === "disconnected" && (
+           <motion.button
+             initial={{ opacity: 0, top: 0 }}
+             animate={{ opacity: 1 }}
+             exit={{ opacity: 0, top: "-10px" }}
+             transition={{ duration: 1, ease: [0.09, 1.04, 0.245, 1.055] }}
+             className="uppercase absolute left-1/2 -translate-x-1/2 px-4 py-2 bg-white text-black rounded-md"
+             onClick={() => props.onConnectButtonClicked()}
+           >
+             Start a conversation
+           </motion.button>
+         )}
+       </AnimatePresence>
+       <AnimatePresence>
+       {agentState !== "disconnected" && agentState !== "connecting" && (
+        // {agentState !== "disconnected" && agentState !== "connecting" && (
           <motion.div
             initial={{ opacity: 0, top: "10px" }}
             animate={{ opacity: 1, top: 0 }}
             exit={{ opacity: 0, top: "-10px" }}
             transition={{ duration: 0.4, ease: [0.09, 1.04, 0.245, 1.055] }}
-            className="flex absolute w-full h-full justify-between px-8 sm:px-4"
+            className="flex h-8 absolute left-1/2 -translate-x-1/2  justify-center"
           >
-            <BarVisualizer
+             <VoiceAssistantControlBar controls={{ leave: false }} />
+             <DisconnectButton>
+               <CloseIcon />
+             </DisconnectButton>
+            {/* <BarVisualizer
               state={agentState}
               barCount={5}
               trackRef={audioTrack}
@@ -126,7 +159,7 @@ function ControlBar() {
               <DisconnectButton>
                 <CloseIcon />
               </DisconnectButton>
-            </div>
+            </div> */}
           </motion.div>
         )}
       </AnimatePresence>
