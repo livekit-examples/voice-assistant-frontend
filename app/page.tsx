@@ -77,31 +77,6 @@ function SimpleVoiceAssistant(props: { onConnectButtonClicked: () => void }) {
       <RoomAudioRenderer />
       <NoAgentNotification state={agentState} />
     </div>
-    // <>
-    //   <AnimatePresence>
-    //     {agentState === "disconnected" && (
-    //       <motion.button
-    //         initial={{ opacity: 0, top: 0 }}
-    //         animate={{ opacity: 1 }}
-    //         exit={{ opacity: 0, top: "-10px" }}
-    //         transition={{ duration: 1, ease: [0.09, 1.04, 0.245, 1.055] }}
-    //         className="uppercase absolute left-1/2 -translate-x-1/2 px-4 py-2 bg-white text-black rounded-md"
-    //         onClick={() => props.onConnectButtonClicked()}
-    //       >
-    //         Start a conversation
-    //       </motion.button>
-    //     )}
-    //     <div className="w-3/4 lg:w-1/2 mx-auto h-full">
-    //       <TranscriptionView />
-    //     </div>
-    //   </AnimatePresence>
-
-    //   <RoomAudioRenderer />
-    //   <NoAgentNotification state={agentState} />
-    //   <div className="fixed bottom-0 w-full px-4 py-2">
-    //     <ControlBar />
-    //   </div>
-    // </>
   );
 }
 
@@ -135,7 +110,6 @@ function ControlBar(props: { onConnectButtonClicked: () => void }) {
        </AnimatePresence>
        <AnimatePresence>
        {agentState !== "disconnected" && agentState !== "connecting" && (
-        // {agentState !== "disconnected" && agentState !== "connecting" && (
           <motion.div
             initial={{ opacity: 0, top: "10px" }}
             animate={{ opacity: 1, top: 0 }}
@@ -147,19 +121,6 @@ function ControlBar(props: { onConnectButtonClicked: () => void }) {
              <DisconnectButton>
                <CloseIcon />
              </DisconnectButton>
-            {/* <BarVisualizer
-              state={agentState}
-              barCount={5}
-              trackRef={audioTrack}
-              className="agent-visualizer w-24 gap-2"
-              options={{ minHeight: 12 }}
-            />
-            <div className="flex items-center">
-              <VoiceAssistantControlBar controls={{ leave: false }} />
-              <DisconnectButton>
-                <CloseIcon />
-              </DisconnectButton>
-            </div> */}
           </motion.div>
         )}
       </AnimatePresence>
