@@ -33,9 +33,41 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Prevent text selection */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* Ensure text doesn't break */
+  white-space: nowrap;
 }
 
 .ptt-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive styles for mobile devices */
+@media (max-width: 768px) {
+  .ptt-button {
+    height: 50px;
+    padding: 0 20px;
+    font-size: 15px;
+    width: calc(100% - 20px);
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
+
+/* Smaller phones */
+@media (max-width: 480px) {
+  .ptt-button {
+    height: 60px;
+    padding: 0 15px;
+    font-size: 16px;
+    font-weight: 600;
+    width: calc(100% - 10px);
+  }
 }

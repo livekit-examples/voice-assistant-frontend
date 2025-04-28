@@ -1,49 +1,128 @@
 import { useLocalParticipant, useParticipants } from "@livekit/components-react";
 import { motion } from "framer-motion";
-import { MouseEvent as ReactMouseEvent, useCallback, useEffect, useRef, useState } from "react";
+import {
+  MouseEvent as ReactMouseEvent,
+  TouchEvent as ReactTouchEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 export function PushToTalkButton() {
+  // state and refs
   const { localParticipant } = useLocalParticipant();
   const participants = useParticipants();
   const [isPressed, setIsPressed] = useState(false);
   const [isOutside, setIsOutside] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const lastActionTime = useRef(0);
+  const rpcTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   // find agent participant that supports PTT
   const agent = participants.find((p) => p.attributes?.["push-to-talk"] === "1");
 
+  // initialize mic state
   useEffect(() => {
-    // start with microphone disabled for PTT agents
     if (agent && localParticipant) {
-      // localParticipant.setMicrophoneEnabled(false);
+      localParticipant.setMicrophoneEnabled(false);
     }
   }, [localParticipant, agent]);
 
-  // when user presses the button
-  const handleMouseDown = useCallback(
-    async (e: ReactMouseEvent<HTMLButtonElement>) => {
-      e.preventDefault(); // prevent default browser behavior
+  // perform RPC call with timeout handling
+  const performRpcWithTimeout = useCallback(
+    async (method: string, timeoutMs = 3000) => {
+      if (!agent || !localParticipant) return false;
 
-      if (!agent || !localParticipant) return;
+      let succeeded = false;
+      setIsLoading(true);
 
-      console.log("starting turn");
       try {
-        // await localParticipant.setMicrophoneEnabled(true);
-        await localParticipant.performRpc({
-          destinationIdentity: agent.identity,
-          method: "start_turn",
-          payload: "",
+        const timeoutPromise = new Promise<void>((_, reject) => {
+          rpcTimeoutRef.current = setTimeout(() => {
+            reject(new Error(`RPC timeout after ${timeoutMs}ms`));
+          }, timeoutMs);
         });
-        setIsPressed(true);
-        setIsOutside(false);
+
+        const startTime = Date.now();
+        await Promise.race([
+          (async () => {
+            await localParticipant.performRpc({
+              destinationIdentity: agent.identity,
+              method,
+              payload: "",
+            });
+            succeeded = true;
+          })(),
+          timeoutPromise,
+        ]);
+
+        const endTime = Date.now();
+        console.log(`${method} RPC completed in ${endTime - startTime}ms`);
       } catch (error) {
-        console.error("Failed to start turn:", error);
+        console.error(`RPC ${method} failed:`, error);
+      } finally {
+        if (rpcTimeoutRef.current) {
+          clearTimeout(rpcTimeoutRef.current);
+          rpcTimeoutRef.current = null;
+        }
+        setIsLoading(false);
       }
+
+      return succeeded;
     },
     [agent, localParticipant]
   );
 
-  // when mouse leaves the button area while pressed
+  // shared function to end turn with specified method
+  const endTurn = useCallback(
+    async (method: string) => {
+      if (!agent || !localParticipant || !isPressed || isLoading) return;
+
+      // prevent multiple actions within 250ms
+      const now = Date.now();
+      if (now - lastActionTime.current < 250) return;
+      lastActionTime.current = now;
+
+      console.log(`ending turn with method: ${method}`);
+      try {
+        await localParticipant.setMicrophoneEnabled(false);
+        await performRpcWithTimeout(method);
+      } finally {
+        setIsPressed(false);
+        setIsOutside(false);
+      }
+    },
+    [agent, localParticipant, isPressed, isLoading, performRpcWithTimeout]
+  );
+
+  // start turn (mouse or touch)
+  const startTurn = useCallback(async () => {
+    if (!agent || !localParticipant || isLoading) return;
+
+    console.log("starting turn");
+    try {
+      await localParticipant.setMicrophoneEnabled(true);
+      const success = await performRpcWithTimeout("start_turn");
+      if (success) {
+        setIsPressed(true);
+        setIsOutside(false);
+      }
+    } catch (error) {
+      console.error("Failed to start turn:", error);
+    }
+  }, [agent, localParticipant, isLoading, performRpcWithTimeout]);
+
+  // mouse event handlers
+  const handleMouseDown = useCallback(
+    (e: ReactMouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      startTurn();
+    },
+    [startTurn]
+  );
+
   const handleMouseLeave = useCallback(() => {
     if (isPressed) {
       console.log("mouse left button while pressed");
@@ -51,7 +130,6 @@ export function PushToTalkButton() {
     }
   }, [isPressed]);
 
-  // when mouse re-enters the button area while pressed
   const handleMouseEnter = useCallback(() => {
     if (isPressed && isOutside) {
       console.log("mouse re-entered button while pressed");
@@ -59,89 +137,165 @@ export function PushToTalkButton() {
     }
   }, [isPressed, isOutside]);
 
-  // shared function to end turn with specified method
-  const endTurnWithMethod = useCallback(
-    async (method: string) => {
-      if (!agent || !localParticipant || !isPressed) return;
+  const handleMouseUp = useCallback(
+    (e: ReactMouseEvent) => {
+      e.preventDefault();
+      if (!isPressed) return;
 
-      // Prevent multiple actions within 100ms
-      const now = Date.now();
-      if (now - lastActionTime.current < 100) return;
-      lastActionTime.current = now;
+      const method = isOutside ? "cancel_turn" : "end_turn";
+      endTurn(method);
+    },
+    [isPressed, isOutside, endTurn]
+  );
 
-      console.log(`ending turn with method: ${method}`);
-      try {
-        // await localParticipant.setMicrophoneEnabled(false);
-        await localParticipant.performRpc({
-          destinationIdentity: agent.identity,
-          method: method,
-          payload: "",
-        });
-      } catch (error) {
-        console.error(`Failed to ${method}:`, error);
-      } finally {
-        setIsPressed(false);
+  // touch event handlers
+  const handleTouchStart = useCallback(
+    (e: ReactTouchEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      startTurn();
+    },
+    [startTurn]
+  );
+
+  // check if touch is outside the button
+  const isTouchOutside = useCallback((clientX: number, clientY: number): boolean => {
+    if (!buttonRef.current) return false;
+
+    const rect = buttonRef.current.getBoundingClientRect();
+    return (
+      clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom
+    );
+  }, []);
+
+  const handleTouchMove = useCallback(
+    (e: ReactTouchEvent) => {
+      if (!isPressed) return;
+
+      const touch = e.touches[0];
+      const touchIsOutside = isTouchOutside(touch.clientX, touch.clientY);
+
+      if (touchIsOutside && !isOutside) {
+        console.log("touch moved outside button");
+        setIsOutside(true);
+      } else if (!touchIsOutside && isOutside) {
+        console.log("touch moved back inside button");
         setIsOutside(false);
       }
     },
-    [agent, localParticipant, isPressed]
+    [isPressed, isOutside, isTouchOutside]
   );
 
-  // when user releases the mouse anywhere
-  const handleMouseUp = useCallback(
-    (e: ReactMouseEvent) => {
-      e.preventDefault(); // prevent default browser behavior
-
+  const handleTouchEnd = useCallback(
+    (e: ReactTouchEvent) => {
+      e.preventDefault();
       if (!isPressed) return;
 
-      // if mouse is outside the button on release, cancel the turn
-      // otherwise, end the turn normally
       const method = isOutside ? "cancel_turn" : "end_turn";
-      endTurnWithMethod(method);
+      endTurn(method);
     },
-    [isPressed, isOutside, endTurnWithMethod]
+    [isPressed, isOutside, endTurn]
   );
 
-  // ensure turn is ended when component unmounts
+  const handleTouchCancel = useCallback(() => {
+    if (!isPressed) return;
+
+    console.log("touch cancelled - ending turn");
+    endTurn("end_turn");
+  }, [isPressed, endTurn]);
+
+  // cleanup on unmount
   useEffect(() => {
     return () => {
       if (isPressed) {
-        endTurnWithMethod("end_turn");
+        endTurn("end_turn");
+      }
+
+      if (rpcTimeoutRef.current) {
+        clearTimeout(rpcTimeoutRef.current);
+        rpcTimeoutRef.current = null;
       }
     };
-  }, [isPressed, endTurnWithMethod]);
+  }, [isPressed, endTurn]);
 
-  // add global mouse-up handler to catch events outside the button
+  // global event handlers
   useEffect(() => {
     if (isPressed) {
+      // global mouse handler
       const handleGlobalMouseUp = (e: MouseEvent) => {
-        handleMouseUp(e as unknown as ReactMouseEvent);
+        const syntheticEvent = {
+          ...e,
+          preventDefault: () => e.preventDefault(),
+        } as unknown as ReactMouseEvent;
+
+        handleMouseUp(syntheticEvent);
       };
 
-      window.addEventListener("mouseup", handleGlobalMouseUp);
+      // global touch handler
+      const handleGlobalTouchEnd = (e: TouchEvent) => {
+        const syntheticEvent = {
+          ...e,
+          preventDefault: () => e.preventDefault(),
+        } as unknown as ReactTouchEvent;
+
+        handleTouchEnd(syntheticEvent);
+      };
+
+      window.addEventListener("mouseup", handleGlobalMouseUp, { once: true });
+      window.addEventListener("touchend", handleGlobalTouchEnd, { once: true });
+
       return () => {
         window.removeEventListener("mouseup", handleGlobalMouseUp);
+        window.removeEventListener("touchend", handleGlobalTouchEnd);
       };
     }
-  }, [isPressed, handleMouseUp]);
+  }, [isPressed, handleMouseUp, handleTouchEnd]);
+
+  // prevent context menu (long press) on touch devices
+  useEffect(() => {
+    const preventDefault = (e: Event) => e.preventDefault();
+
+    if (buttonRef.current) {
+      buttonRef.current.addEventListener("contextmenu", preventDefault);
+      return () => {
+        if (buttonRef.current) {
+          buttonRef.current.removeEventListener("contextmenu", preventDefault);
+        }
+      };
+    }
+  }, []);
 
   if (!agent) return null;
 
+  // visual and text state based on current status
+  const getButtonColor = () => {
+    if (isLoading) return "#cccccc"; // gray when loading
+    if (isPressed) {
+      return isOutside ? "#d9534f" : "#004085"; // red when cancelling, blue when speaking
+    }
+    return "#007bff"; // default blue
+  };
+
+  const getButtonText = () => {
+    if (isLoading) return "Processing...";
+    if (isPressed) return isOutside ? "Release to Cancel" : "Speaking...";
+    return "Press to Talk";
+  };
+
   return (
     <motion.button
+      ref={buttonRef}
       className="ptt-button"
       onMouseDown={handleMouseDown}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
-      // we handle mouseup at the window level to catch all cases
-      // onTouchStart/End would be implemented similarly
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchCancel}
+      disabled={isLoading}
       initial={false}
       animate={{
-        backgroundColor: isPressed
-          ? isOutside
-            ? "#d9534f" // red when outside and pressed (about to cancel)
-            : "#004085" // blue when speaking normally
-          : "#007bff", // default blue
+        backgroundColor: getButtonColor(),
         scale: isPressed ? 0.95 : 1,
         boxShadow:
           isOutside && isPressed
@@ -149,7 +303,7 @@ export function PushToTalkButton() {
             : "0 4px 6px rgba(0, 0, 0, 0.1)",
       }}
     >
-      {isPressed ? (isOutside ? "Release to Cancel" : "Speaking...") : "Press to Talk"}
+      {getButtonText()}
     </motion.button>
   );
 }
