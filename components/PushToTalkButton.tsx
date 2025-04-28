@@ -3,7 +3,7 @@ import {
   useParticipants,
 } from "@livekit/components-react";
 import { motion } from "framer-motion";
-import { useCallback, useEffect, useRef, useState, MouseEvent } from "react";
+import { useCallback, useEffect, useRef, useState, MouseEvent as ReactMouseEvent } from "react";
 
 export function PushToTalkButton() {
   const { localParticipant } = useLocalParticipant();
@@ -25,7 +25,7 @@ export function PushToTalkButton() {
   }, [localParticipant, agent]);
 
   // when user presses the button
-  const handleMouseDown = useCallback(async (e: MouseEvent<HTMLButtonElement>) => {
+  const handleMouseDown = useCallback(async (e: ReactMouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // prevent default browser behavior
 
     if (!agent || !localParticipant) return;
@@ -87,7 +87,7 @@ export function PushToTalkButton() {
   }, [agent, localParticipant, isPressed]);
 
   // when user releases the mouse anywhere
-  const handleMouseUp = useCallback((e: MouseEvent) => {
+  const handleMouseUp = useCallback((e: ReactMouseEvent) => {
     e.preventDefault(); // prevent default browser behavior
 
     if (!isPressed) return;
@@ -111,12 +111,12 @@ export function PushToTalkButton() {
   useEffect(() => {
     if (isPressed) {
       const handleGlobalMouseUp = (e: MouseEvent) => {
-        handleMouseUp(e);
+        handleMouseUp(e as unknown as ReactMouseEvent);
       };
 
-      window.addEventListener('mouseup', handleGlobalMouseUp as any);
+      window.addEventListener('mouseup', handleGlobalMouseUp);
       return () => {
-        window.removeEventListener('mouseup', handleGlobalMouseUp as any);
+        window.removeEventListener('mouseup', handleGlobalMouseUp);
       };
     }
   }, [isPressed, handleMouseUp]);
