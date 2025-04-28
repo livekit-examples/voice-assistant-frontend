@@ -1,9 +1,6 @@
-import {
-  useLocalParticipant,
-  useParticipants,
-} from "@livekit/components-react";
+import { useLocalParticipant, useParticipants } from "@livekit/components-react";
 import { motion } from "framer-motion";
-import { useCallback, useEffect, useRef, useState, MouseEvent as ReactMouseEvent } from "react";
+import { MouseEvent as ReactMouseEvent, useCallback, useEffect, useRef, useState } from "react";
 
 export function PushToTalkButton() {
   const { localParticipant } = useLocalParticipant();
@@ -13,9 +10,7 @@ export function PushToTalkButton() {
   const lastActionTime = useRef(0);
 
   // find agent participant that supports PTT
-  const agent = participants.find(
-    (p) => p.attributes?.["push-to-talk"] === "1"
-  );
+  const agent = participants.find((p) => p.attributes?.["push-to-talk"] === "1");
 
   useEffect(() => {
     // start with microphone disabled for PTT agents
@@ -25,25 +20,28 @@ export function PushToTalkButton() {
   }, [localParticipant, agent]);
 
   // when user presses the button
-  const handleMouseDown = useCallback(async (e: ReactMouseEvent<HTMLButtonElement>) => {
-    e.preventDefault(); // prevent default browser behavior
+  const handleMouseDown = useCallback(
+    async (e: ReactMouseEvent<HTMLButtonElement>) => {
+      e.preventDefault(); // prevent default browser behavior
 
-    if (!agent || !localParticipant) return;
+      if (!agent || !localParticipant) return;
 
-    console.log("starting turn");
-    try {
-      // await localParticipant.setMicrophoneEnabled(true);
-      await localParticipant.performRpc({
-        destinationIdentity: agent.identity,
-        method: "start_turn",
-        payload: "",
-      });
-      setIsPressed(true);
-      setIsOutside(false);
-    } catch (error) {
-      console.error("Failed to start turn:", error);
-    }
-  }, [agent, localParticipant]);
+      console.log("starting turn");
+      try {
+        // await localParticipant.setMicrophoneEnabled(true);
+        await localParticipant.performRpc({
+          destinationIdentity: agent.identity,
+          method: "start_turn",
+          payload: "",
+        });
+        setIsPressed(true);
+        setIsOutside(false);
+      } catch (error) {
+        console.error("Failed to start turn:", error);
+      }
+    },
+    [agent, localParticipant]
+  );
 
   // when mouse leaves the button area while pressed
   const handleMouseLeave = useCallback(() => {
@@ -62,41 +60,47 @@ export function PushToTalkButton() {
   }, [isPressed, isOutside]);
 
   // shared function to end turn with specified method
-  const endTurnWithMethod = useCallback(async (method: string) => {
-    if (!agent || !localParticipant || !isPressed) return;
+  const endTurnWithMethod = useCallback(
+    async (method: string) => {
+      if (!agent || !localParticipant || !isPressed) return;
 
-    // Prevent multiple actions within 100ms
-    const now = Date.now();
-    if (now - lastActionTime.current < 100) return;
-    lastActionTime.current = now;
+      // Prevent multiple actions within 100ms
+      const now = Date.now();
+      if (now - lastActionTime.current < 100) return;
+      lastActionTime.current = now;
 
-    console.log(`ending turn with method: ${method}`);
-    try {
-      // await localParticipant.setMicrophoneEnabled(false);
-      await localParticipant.performRpc({
-        destinationIdentity: agent.identity,
-        method: method,
-        payload: "",
-      });
-    } catch (error) {
-      console.error(`Failed to ${method}:`, error);
-    } finally {
-      setIsPressed(false);
-      setIsOutside(false);
-    }
-  }, [agent, localParticipant, isPressed]);
+      console.log(`ending turn with method: ${method}`);
+      try {
+        // await localParticipant.setMicrophoneEnabled(false);
+        await localParticipant.performRpc({
+          destinationIdentity: agent.identity,
+          method: method,
+          payload: "",
+        });
+      } catch (error) {
+        console.error(`Failed to ${method}:`, error);
+      } finally {
+        setIsPressed(false);
+        setIsOutside(false);
+      }
+    },
+    [agent, localParticipant, isPressed]
+  );
 
   // when user releases the mouse anywhere
-  const handleMouseUp = useCallback((e: ReactMouseEvent) => {
-    e.preventDefault(); // prevent default browser behavior
+  const handleMouseUp = useCallback(
+    (e: ReactMouseEvent) => {
+      e.preventDefault(); // prevent default browser behavior
 
-    if (!isPressed) return;
+      if (!isPressed) return;
 
-    // if mouse is outside the button on release, cancel the turn
-    // otherwise, end the turn normally
-    const method = isOutside ? "cancel_turn" : "end_turn";
-    endTurnWithMethod(method);
-  }, [isPressed, isOutside, endTurnWithMethod]);
+      // if mouse is outside the button on release, cancel the turn
+      // otherwise, end the turn normally
+      const method = isOutside ? "cancel_turn" : "end_turn";
+      endTurnWithMethod(method);
+    },
+    [isPressed, isOutside, endTurnWithMethod]
+  );
 
   // ensure turn is ended when component unmounts
   useEffect(() => {
@@ -114,9 +118,9 @@ export function PushToTalkButton() {
         handleMouseUp(e as unknown as ReactMouseEvent);
       };
 
-      window.addEventListener('mouseup', handleGlobalMouseUp);
+      window.addEventListener("mouseup", handleGlobalMouseUp);
       return () => {
-        window.removeEventListener('mouseup', handleGlobalMouseUp);
+        window.removeEventListener("mouseup", handleGlobalMouseUp);
       };
     }
   }, [isPressed, handleMouseUp]);
@@ -139,16 +143,13 @@ export function PushToTalkButton() {
             : "#004085" // blue when speaking normally
           : "#007bff", // default blue
         scale: isPressed ? 0.95 : 1,
-        boxShadow: isOutside && isPressed
-          ? "0 0 0 3px rgba(217, 83, 79, 0.5)"
-          : "0 4px 6px rgba(0, 0, 0, 0.1)",
+        boxShadow:
+          isOutside && isPressed
+            ? "0 0 0 3px rgba(217, 83, 79, 0.5)"
+            : "0 4px 6px rgba(0, 0, 0, 0.1)",
       }}
     >
-      {isPressed
-        ? isOutside
-          ? "Release to Cancel"
-          : "Speaking..."
-        : "Press to Talk"}
+      {isPressed ? (isOutside ? "Release to Cancel" : "Speaking...") : "Press to Talk"}
     </motion.button>
   );
 }

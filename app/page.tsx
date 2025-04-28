@@ -2,6 +2,7 @@
 
 import { CloseIcon } from "@/components/CloseIcon";
 import { NoAgentNotification } from "@/components/NoAgentNotification";
+import { PushToTalkButton } from "@/components/PushToTalkButton";
 import TranscriptionView from "@/components/TranscriptionView";
 import {
   BarVisualizer,
@@ -16,7 +17,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Room, RoomEvent } from "livekit-client";
 import { useCallback, useEffect, useState } from "react";
 import type { ConnectionDetails } from "./api/connection-details/route";
-import { PushToTalkButton } from "@/components/PushToTalkButton";
 
 export default function Page() {
   const [room] = useState(new Room());
@@ -155,20 +155,20 @@ function ControlBar(props: { onConnectButtonClicked: () => void }) {
       </AnimatePresence>
       <AnimatePresence>
         {agentState !== "disconnected" && agentState !== "connecting" && (
-            <motion.div
-              initial={{ opacity: 0, top: "10px" }}
-              animate={{ opacity: 1, top: 0 }}
-              exit={{ opacity: 0, top: "-10px" }}
-              transition={{ duration: 0.4, ease: [0.09, 1.04, 0.245, 1.055] }}
-              className="flex h-8 absolute left-1/2 -translate-x-1/2 justify-center items-center gap-3"
-            >
-              <VoiceAssistantControlBar controls={{ leave: false }} />
-              <PushToTalkButton />
-              <DisconnectButton>
-                <CloseIcon />
-              </DisconnectButton>
-            </motion.div>
-          )}
+          <motion.div
+            initial={{ opacity: 0, top: "10px" }}
+            animate={{ opacity: 1, top: 0 }}
+            exit={{ opacity: 0, top: "-10px" }}
+            transition={{ duration: 0.4, ease: [0.09, 1.04, 0.245, 1.055] }}
+            className="flex h-8 absolute left-1/2 -translate-x-1/2 justify-center items-center gap-3"
+          >
+            <VoiceAssistantControlBar controls={{ leave: false }} />
+            <PushToTalkButton />
+            <DisconnectButton>
+              <CloseIcon />
+            </DisconnectButton>
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   );
