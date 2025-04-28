@@ -20,7 +20,7 @@ export function PushToTalkButton() {
   useEffect(() => {
     // start with microphone disabled for PTT agents
     if (agent && localParticipant) {
-      localParticipant.setMicrophoneEnabled(false);
+      // localParticipant.setMicrophoneEnabled(false);
     }
   }, [localParticipant, agent]);
 
@@ -32,7 +32,7 @@ export function PushToTalkButton() {
 
     console.log("starting turn");
     try {
-      await localParticipant.setMicrophoneEnabled(true);
+      // await localParticipant.setMicrophoneEnabled(true);
       await localParticipant.performRpc({
         destinationIdentity: agent.identity,
         method: "start_turn",
@@ -72,7 +72,7 @@ export function PushToTalkButton() {
 
     console.log(`ending turn with method: ${method}`);
     try {
-      await localParticipant.setMicrophoneEnabled(false);
+      // await localParticipant.setMicrophoneEnabled(false);
       await localParticipant.performRpc({
         destinationIdentity: agent.identity,
         method: method,
