@@ -1,10 +1,10 @@
 "use client";
 import {
-  Microphone,
-  MicrophoneSlash,
-  VideoCamera,
-  VideoCameraSlash,
-} from "phosphor-react";
+  MicrophoneIcon,
+  MicrophoneSlashIcon,
+  VideoCameraIcon,
+  VideoCameraSlashIcon,
+} from "@phosphor-icons/react/dist/ssr";
 import { Toggle } from "@/components/ui/toggle";
 import { useTrackToggle } from "@livekit/components-react";
 import { Track } from "livekit-client";
@@ -31,14 +31,14 @@ export function TrackToggle(props: TrackToggleProps) {
     >
       {enabled ? (
         props.source === Track.Source.Microphone ? (
-          <Microphone />
+          <MicrophoneIcon />
         ) : (
-          <VideoCamera />
+          <VideoCameraIcon />
         )
       ) : props.source === Track.Source.Microphone ? (
-        <MicrophoneSlash />
+        <MicrophoneSlashIcon />
       ) : (
-        <VideoCameraSlash />
+        <VideoCameraSlashIcon />
       )}
       {props.children}
     </Toggle>

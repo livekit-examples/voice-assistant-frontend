@@ -3,7 +3,10 @@
 import * as React from "react";
 import { Track } from "livekit-client";
 import { Button } from "@/components/ui/button";
-import { ChatText, PhoneDisconnect } from "phosphor-react";
+import {
+  ChatTextIcon,
+  PhoneDisconnectIcon,
+} from "@phosphor-icons/react/dist/ssr";
 import { TrackToggle } from "../track-toggle";
 import { DeviceSelect } from "../device-select";
 import { BarVisualizer } from "@livekit/components-react";
@@ -102,7 +105,7 @@ export function AgentControlBar({
             onPressedChange={setChatOpen}
             className="h-full aspect-square"
           >
-            <ChatText />
+            <ChatTextIcon />
           </Toggle>
         )}
 
@@ -113,7 +116,7 @@ export function AgentControlBar({
             onClick={handleDisconnect}
             className="font-mono"
           >
-            <PhoneDisconnect />
+            <PhoneDisconnectIcon />
             END CALL
           </Button>
         )}
