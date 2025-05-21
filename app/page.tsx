@@ -1,103 +1,113 @@
-import Image from "next/image";
+"use client";
+import * as React from "react";
+import { Track, Room } from "livekit-client";
+import { RoomContext } from "@livekit/components-react";
+import { DeviceSelect } from "@/components/livekit/device-select";
+import { TrackToggle } from "@/components/livekit/track-toggle";
+import { AgentControlBar } from "@/components/livekit/agent-control-bar/agent-control-bar";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ChatInput } from "@/components/livekit/chat-input";
+// This page displays items from the custom registry.
+// You are free to implement this with your own design as needed.
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [source, setSource] = React.useState<Track.Source>(
+    Track.Source.Microphone
+  );
+  const room = React.useMemo(() => new Room(), []);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  React.useEffect(() => {
+    if (room.state === "disconnected") {
+      room.connect(
+        process.env.NEXT_PUBLIC_LIVEKIT_URL,
+        process.env.NEXT_PUBLIC_LIVEKIT_TOKEN
+      );
+    }
+    return () => {
+      room.disconnect();
+    };
+  }, [room]);
+
+  return (
+    <div className="max-w-3xl mx-auto flex flex-col min-h-svh px-4 py-8 gap-8">
+      <header className="flex flex-col gap-1">
+        <h1 className="text-3xl font-bold tracking-tight">
+          Quick Start UI overview
+        </h1>
+        <p className="text-muted-foreground">
+          A quick start UI overview for the LiveKit Voice Assistant.
+        </p>
+      </header>
+      <RoomContext.Provider value={room}>
+        <main className="flex flex-col flex-1 gap-8">
+          <div className="flex flex-col gap-4 border rounded-lg p-4 min-h-[250px] relative">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm text-muted-foreground sm:pl-3">
+                A device select component.
+              </h2>
+            </div>
+            <div className="flex items-center justify-center min-h-[100px] relative">
+              <DeviceSelect variant="default" kind="audioinput" />
+            </div>
+
+            <div className="flex items-center justify-center min-h-[100px] relative">
+              <DeviceSelect variant="small" kind="audioinput" />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4 border rounded-lg p-4 min-h-[450px] relative">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm text-muted-foreground sm:pl-3">
+                A track toggle component.
+              </h2>
+              <Select
+                value={source}
+                onValueChange={(value) => setSource(value as Track.Source)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a track" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={Track.Source.Microphone}>
+                    Microphone
+                  </SelectItem>
+                  <SelectItem value={Track.Source.Camera}>Camera</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center justify-center min-h-[400px] relative">
+              <TrackToggle variant="outline" source={source} />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4 border rounded-lg p-4 min-h-[450px] relative">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm text-muted-foreground sm:pl-3">
+                A control bar component.
+              </h2>
+            </div>
+            <div className="flex items-center justify-center min-h-[200px] relative">
+              <AgentControlBar />
+            </div>
+          </div>
+          <div className="flex flex-col gap-4 border rounded-lg p-4 min-h-[450px] relative">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm text-muted-foreground sm:pl-3">
+                A chat input component.
+              </h2>
+            </div>
+            <div className="flex items-center justify-center min-h-[200px] relative">
+              <ChatInput />
+            </div>
+          </div>
+        </main>
+      </RoomContext.Provider>
     </div>
   );
 }
