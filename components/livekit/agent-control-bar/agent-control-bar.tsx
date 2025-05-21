@@ -59,12 +59,13 @@ export function AgentControlBar({
     >
       {chatOpen && (
         <>
-          <div className="flex w-full">
+          <div className={`flex w-full overflow-hidden`}>
             <ChatInput className="w-full" onSend={handleSendMessage} />
           </div>
           <div className="w-full h-px bg-border mt-2 mb-2" />
         </>
       )}
+
       <div className="flex w-full gap-1">
         {visibleControls.microphone && (
           <div className="flex items-center gap-0">
