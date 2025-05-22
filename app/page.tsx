@@ -48,7 +48,7 @@ export default function Home() {
     return () => {
       room.disconnect();
     };
-  }, [room, sessionStarted]);
+  }, [room, sessionStarted, connectionDetails]);
 
   return (
     <div className="flex flex-col h-svh">

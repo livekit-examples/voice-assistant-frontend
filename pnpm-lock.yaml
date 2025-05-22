@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@livekit/components-react':
-        specifier: ^2.9.5
-        version: 2.9.5(livekit-client@2.13.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tslib@2.8.1)
+        specifier: ^2.9.7
+        version: 2.9.7(livekit-client@2.13.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tslib@2.8.1)
       '@phosphor-icons/react':
         specifier: ^2.1.8
         version: 2.1.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -327,15 +327,15 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@livekit/components-core@0.12.5':
-    resolution: {integrity: sha512-HaUt/Wi7WMz2QRFYcqeXbu3h9GH6bMrcBM8hjOeys/476tINVtiuVTcUkXkkx3JD1pIXpqV8HjwRATRY7iRG0g==}
+  '@livekit/components-core@0.12.7':
+    resolution: {integrity: sha512-oxP2qlFy2Dqnu2u0ESQgcKF+5LfAMpOZ87FTMXyZ+RFogM3AkU0PWR31+j3tkAMPC9fCrgh4V1lZG3h6LjGTiw==}
     engines: {node: '>=18'}
     peerDependencies:
-      livekit-client: ^2.11.1
+      livekit-client: ^2.13.1
       tslib: ^2.6.2
 
-  '@livekit/components-react@2.9.5':
-    resolution: {integrity: sha512-05fH6cRhVthaJR6usSp0XcUVAGcIKKu2AuZG7CD0NFqaJRTYVRWfZp6T0OnbkAb/kpCxDR1AxC/6S2nlT/dfXQ==}
+  '@livekit/components-react@2.9.7':
+    resolution: {integrity: sha512-tDhCbRgmv6BwXDFpZIIQjmab+NHrIRbGjtG7IAVxwuqONatSiA3ALMWZIi91rA8PK97xVKTxwO5+KCNt2zV3aw==}
     engines: {node: '>=18'}
     peerDependencies:
       '@livekit/krisp-noise-filter': ^0.2.12
@@ -2592,7 +2592,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@livekit/components-core@0.12.5(livekit-client@2.13.1)(tslib@2.8.1)':
+  '@livekit/components-core@0.12.7(livekit-client@2.13.1)(tslib@2.8.1)':
     dependencies:
       '@floating-ui/dom': 1.6.13
       livekit-client: 2.13.1
@@ -2600,9 +2600,9 @@ snapshots:
       rxjs: 7.8.2
       tslib: 2.8.1
 
-  '@livekit/components-react@2.9.5(livekit-client@2.13.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tslib@2.8.1)':
+  '@livekit/components-react@2.9.7(livekit-client@2.13.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tslib@2.8.1)':
     dependencies:
-      '@livekit/components-core': 0.12.5(livekit-client@2.13.1)(tslib@2.8.1)
+      '@livekit/components-core': 0.12.7(livekit-client@2.13.1)(tslib@2.8.1)
       clsx: 2.1.1
       livekit-client: 2.13.1
       react: 19.1.0

@@ -7,6 +7,7 @@ import "./globals.css";
 
 const publicSans = Public_Sans({
   variable: "--font-public-sans",
+  subsets: ["latin"],
 });
 
 const commitMono = localFont({
