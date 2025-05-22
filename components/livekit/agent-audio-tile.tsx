@@ -1,12 +1,12 @@
 import { BarVisualizer, useVoiceAssistant } from "@livekit/components-react";
 import { useEffect } from "react";
 
-export default function AgentAudioTile() {
+export function AgentAudioTile() {
   const agent = useVoiceAssistant();
 
   useEffect(() => {
-    console.log("agent.audioTrack", agent.audioTrack);
-  }, [agent.audioTrack]);
+    console.log("agent.state", agent.state);
+  }, [agent.state]);
   return (
     <BarVisualizer
       className="w-auto h-full flex gap-2 items-center justify-center"
@@ -15,7 +15,7 @@ export default function AgentAudioTile() {
       barCount={5}
       options={{ minHeight: 5 }}
     >
-      <span className="w-5 h-full data-lk-highlighted:bg-foreground data-lk-muted:bg-muted origin-center rounded-2xl"></span>
+      <span className="w-5 h-full bg-muted data-[lk-highlighted=true]:bg-foreground data-[lk-muted=true]:bg-muted origin-center rounded-2xl"></span>
     </BarVisualizer>
   );
 }

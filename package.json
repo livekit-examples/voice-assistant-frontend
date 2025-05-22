@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@livekit/components-react": "^2.9.7",
+    "@livekit/components-react": "^2.9.8",
     "@phosphor-icons/react": "^2.1.8",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-scroll-area": "^1.2.9",

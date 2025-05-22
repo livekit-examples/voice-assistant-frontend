@@ -18,13 +18,28 @@ export default function Home() {
 
   const connectionDetails = useConnectionDetails();
 
-  const room = React.useMemo(() => {
-    const r = new Room();
-    r.on(RoomEvent.Disconnected, () => {
+  const room = React.useMemo(() => new Room(), []);
+
+  React.useEffect(() => {
+    const onDisconnected = () => {
       setSessionStarted(false);
-    });
-    return r;
-  }, []);
+    };
+    const onMediaDevicesError = (error: Error) => {
+      toast("Encountered an error with your media devices", {
+        description: `${error.name}: ${error.message}`,
+        action: {
+          label: "Retry",
+          onClick: () => setSessionStarted(false),
+        },
+      });
+    };
+    room.on(RoomEvent.MediaDevicesError, onMediaDevicesError);
+    room.on(RoomEvent.Disconnected, onDisconnected);
+    return () => {
+      room.off(RoomEvent.Disconnected, onDisconnected);
+      room.off(RoomEvent.MediaDevicesError, onMediaDevicesError);
+    };
+  }, [room]);
 
   React.useEffect(() => {
     if (sessionStarted && room.state === "disconnected" && connectionDetails) {
@@ -37,7 +52,7 @@ export default function Home() {
         ),
       ]).catch((error) => {
         toast("There was an error connecting to the agent", {
-          description: error.message,
+          description: `${error.name}: ${error.message}`,
           action: {
             label: "Retry",
             onClick: () => setSessionStarted(false),

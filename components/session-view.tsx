@@ -2,9 +2,10 @@
 import * as React from "react";
 
 import { AgentControlBar } from "@/components/livekit/agent-control-bar/agent-control-bar";
-import { ChatMessageView } from "./livekit/chat/chat-message-view";
+import { ChatMessageView } from "@/components/livekit/chat/chat-message-view";
+import { AgentAudioTile } from "@/components/livekit/agent-audio-tile";
 import useChatAndTranscription from "@/hooks/useChatAndTranscription";
-import AgentAudioTile from "./livekit/audio-tile";
+
 export default function SessionView() {
   const [chatOpen, setChatOpen] = React.useState(false);
   const { messages, send } = useChatAndTranscription();

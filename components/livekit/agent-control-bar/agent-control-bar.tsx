@@ -9,7 +9,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { TrackToggle } from "../track-toggle";
 import { DeviceSelect } from "../device-select";
-import { BarVisualizer, StartAudio } from "@livekit/components-react";
+import { BarVisualizer } from "@livekit/components-react";
 import { cn } from "@/lib/utils";
 import {
   useAgentControlBar,
