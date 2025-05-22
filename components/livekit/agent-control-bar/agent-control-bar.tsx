@@ -20,7 +20,10 @@ import { ChatInput } from "../chat-input";
 
 export interface AgentControlBarProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    UseAgentControlBarProps {}
+    UseAgentControlBarProps {
+  onSendMessage?: (message: string) => Promise<void>;
+  onChatOpenChange?: (open: boolean) => void;
+}
 
 /**
  * A control bar specifically designed for voice assistant interfaces
@@ -29,6 +32,8 @@ export function AgentControlBar({
   controls,
   saveUserChoices = true,
   onDeviceError,
+  onSendMessage,
+  onChatOpenChange,
   className,
   ...props
 }: AgentControlBarProps) {
@@ -46,10 +51,20 @@ export function AgentControlBar({
   });
 
   const [chatOpen, setChatOpen] = React.useState(false);
+  const [isSendingMessage, setIsSendingMessage] = React.useState(false);
 
-  const handleSendMessage = (message: string) => {
-    console.log("message", message);
+  const handleSendMessage = async (message: string) => {
+    setIsSendingMessage(true);
+    try {
+      await onSendMessage?.(message);
+    } finally {
+      setIsSendingMessage(false);
+    }
   };
+
+  React.useEffect(() => {
+    onChatOpenChange?.(chatOpen);
+  }, [chatOpen, onChatOpenChange]);
 
   return (
     <div
@@ -63,7 +78,11 @@ export function AgentControlBar({
       {chatOpen && (
         <>
           <div className={`flex w-full overflow-hidden`}>
-            <ChatInput className="w-full" onSend={handleSendMessage} />
+            <ChatInput
+              className="w-full"
+              onSend={handleSendMessage}
+              disabled={isSendingMessage}
+            />
           </div>
           <div className="w-full h-px bg-border mt-2 mb-2" />
         </>

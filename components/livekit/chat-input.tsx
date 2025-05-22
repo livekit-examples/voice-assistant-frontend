@@ -4,9 +4,15 @@ import { useState } from "react";
 
 interface ChatInputProps extends React.HTMLAttributes<HTMLDivElement> {
   onSend?: (message: string) => void;
+  disabled?: boolean;
 }
 
-export function ChatInput({ onSend, className, ...props }: ChatInputProps) {
+export function ChatInput({
+  onSend,
+  className,
+  disabled,
+  ...props
+}: ChatInputProps) {
   const [message, setMessage] = useState<string>("");
   const handleSend = () => {
     onSend?.(message);
@@ -26,10 +32,11 @@ export function ChatInput({ onSend, className, ...props }: ChatInputProps) {
         placeholder="Type something..."
         value={message}
         onChange={(e) => setMessage(e.target.value)}
+        disabled={disabled}
       />
       <Button
         size="sm"
-        disabled={message.trim().length === 0}
+        disabled={message.trim().length === 0 || disabled}
         className="font-mono"
         onClick={handleSend}
       >
