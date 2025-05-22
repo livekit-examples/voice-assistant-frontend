@@ -3,48 +3,63 @@
 import * as React from "react";
 import { Welcome } from "@/components/welcome";
 import SessionView from "@/components/session-view";
-import { Room } from "livekit-client";
-import { RoomContext } from "@livekit/components-react";
+import { Room, RoomEvent } from "livekit-client";
+import {
+  RoomAudioRenderer,
+  RoomContext,
+  StartAudio,
+} from "@livekit/components-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import useConnectionDetails from "@/hooks/useConnectionDetails";
 
 export default function Home() {
-  const [callStarted, setCallStarted] = React.useState(false);
+  const [sessionStarted, setSessionStarted] = React.useState(false);
 
-  const room = React.useMemo(() => new Room(), []);
+  const connectionDetails = useConnectionDetails();
+
+  const room = React.useMemo(() => {
+    const r = new Room();
+    r.on(RoomEvent.Disconnected, () => {
+      setSessionStarted(false);
+    });
+    return r;
+  }, []);
 
   React.useEffect(() => {
-    if (callStarted && room.state === "disconnected") {
-      room
-        .connect(
-          process.env.NEXT_PUBLIC_LIVEKIT_URL,
-          process.env.NEXT_PUBLIC_LIVEKIT_TOKEN
-        )
-        .catch((error) => {
-          console.error("this should toast");
-          toast("There was an error connecting to the agent", {
-            description: error.message,
-            action: {
-              label: "Retry",
-              onClick: () => setCallStarted(false),
-            },
-          });
+    if (sessionStarted && room.state === "disconnected" && connectionDetails) {
+      Promise.all([
+        // TODO: enable preconnect audio once released
+        room.localParticipant.setMicrophoneEnabled(true),
+        room.connect(
+          connectionDetails.serverUrl,
+          connectionDetails.participantToken
+        ),
+      ]).catch((error) => {
+        toast("There was an error connecting to the agent", {
+          description: error.message,
+          action: {
+            label: "Retry",
+            onClick: () => setSessionStarted(false),
+          },
         });
+      });
     }
     return () => {
       room.disconnect();
     };
-  }, [room, callStarted]);
+  }, [room, sessionStarted]);
 
   return (
     <div className="flex flex-col h-svh">
-      {/** TODO: Add a connecting state */}
-      {callStarted ? (
+      {sessionStarted ? (
         <RoomContext.Provider value={room}>
           <SessionView />
+          <RoomAudioRenderer />‚
+          <StartAudio label="Start Audio" />
         </RoomContext.Provider>
       ) : (
-        <Welcome onStartCall={() => setCallStarted(true)} />
+        <Welcome onStartCall={() => setSessionStarted(true)} />
       )}
       <Toaster />
     </div>

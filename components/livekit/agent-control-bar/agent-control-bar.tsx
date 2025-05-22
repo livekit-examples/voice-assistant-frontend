@@ -9,14 +9,14 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { TrackToggle } from "../track-toggle";
 import { DeviceSelect } from "../device-select";
-import { BarVisualizer } from "@livekit/components-react";
+import { BarVisualizer, StartAudio } from "@livekit/components-react";
 import { cn } from "@/lib/utils";
 import {
   useAgentControlBar,
   UseAgentControlBarProps,
 } from "./hooks/use-agent-control-bar";
 import { Toggle } from "@/components/ui/toggle";
-import { ChatInput } from "../chat-input";
+import { ChatInput } from "@/components/livekit/chat/chat-input";
 
 export interface AgentControlBarProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -101,8 +101,7 @@ export function AgentControlBar({
                 barCount={5}
                 options={{ minHeight: 5 }}
               >
-                {/** TODO: this needs a fix in components-react to merge the classnames on the cloned child */}
-                <span className="w-1 h-full data-lk-highlighted:bg-foreground data-lk-muted:bg-muted origin-center rounded-2xl"></span>
+                <span className="w-0.5 h-full data-lk-highlighted:bg-foreground data-lk-muted:bg-muted origin-center rounded-2xl"></span>
               </BarVisualizer>
             </TrackToggle>
             <DeviceSelect

@@ -1,17 +1,38 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Public_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import { ApplyThemeScript, ThemeToggle } from "@/components/ThemeToggle";
 
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const publicSans = Public_Sans({
+  variable: "--font-public-sans",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const commitMono = localFont({
+  src: [
+    {
+      path: "./fonts/CommitMono-400-Regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/CommitMono-700-Regular.otf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "./fonts/CommitMono-400-Italic.otf",
+      weight: "400",
+      style: "italic",
+    },
+    {
+      path: "./fonts/CommitMono-700-Italic.otf",
+      weight: "700",
+      style: "italic",
+    },
+  ],
+  variable: "--font-commit-mono",
 });
 
 export const metadata: Metadata = {
@@ -30,7 +51,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <ApplyThemeScript />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen overflow-x-hidden relative`}
+        className={`${publicSans.variable} ${commitMono.variable} antialiased h-screen w-full overflow-x-hidden relative`}
       >
         {children}
         <ThemeToggle className="absolute bottom-0 right-0 m-2" />
