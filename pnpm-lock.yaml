@@ -13,7 +13,7 @@ importers:
         version: 2.9.8(@livekit/krisp-noise-filter@0.2.16(livekit-client@2.13.1))(livekit-client@2.13.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.8.1)
       '@livekit/components-styles':
         specifier: ^1.1.4
-        version: 1.1.5
+        version: 1.1.6
       framer-motion:
         specifier: ^11.18.0
         version: 11.18.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -191,8 +191,8 @@ packages:
       '@livekit/krisp-noise-filter':
         optional: true
 
-  '@livekit/components-styles@1.1.5':
-    resolution: {integrity: sha512-SocIPcwm18S28zVruvJcmiHfbUIwGTfxGbUOIp1Db78EON/iJ2v7B2g/xD5sr+c7jXoV1DNUPl2qQiFW2S9dbw==}
+  '@livekit/components-styles@1.1.6':
+    resolution: {integrity: sha512-V6zfuREC2ksW8z6T6WSbEvdLB5ICVikGz1GtLr59UcxHDyAsKDbuDHAyl3bF3xBqPKYmY3GWF3Qk39rnScyOtA==}
     engines: {node: '>=18'}
 
   '@livekit/krisp-noise-filter@0.2.16':
@@ -1986,7 +1986,7 @@ snapshots:
     optionalDependencies:
       '@livekit/krisp-noise-filter': 0.2.16(livekit-client@2.13.1)
 
-  '@livekit/components-styles@1.1.5': {}
+  '@livekit/components-styles@1.1.6': {}
 
   '@livekit/krisp-noise-filter@0.2.16(livekit-client@2.13.1)':
     dependencies:
