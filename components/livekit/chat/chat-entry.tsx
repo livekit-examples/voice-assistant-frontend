@@ -50,10 +50,11 @@ export const ChatEntry = ({
       )}
 
       <span
-        className={cn("rounded-lg bg-muted p-2", {
-          "bg-primary": entry.from?.isLocal,
-          "text-primary-foreground": entry.from?.isLocal,
-        })}
+        className={cn(
+          "rounded-lg bg-muted p-2",
+          entry.from?.isLocal &&
+            "bg-secondary text-secondary-foreground ml-auto max-w-md"
+        )}
       >
         {message}
       </span>

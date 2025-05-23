@@ -9,13 +9,13 @@ export function AgentAudioTile() {
   }, [agent.state]);
   return (
     <BarVisualizer
-      className="w-auto h-full flex gap-2 items-center justify-center"
+      className="flex-1 w-auto h-[200px] flex gap-4 items-center justify-center"
       trackRef={agent.audioTrack}
       state={agent.state}
       barCount={5}
       options={{ minHeight: 5 }}
     >
-      <span className="w-5 h-full bg-muted data-[lk-highlighted=true]:bg-foreground data-[lk-muted=true]:bg-muted origin-center rounded-2xl"></span>
+      <span className="w-12 min-h-12 bg-muted data-[lk-highlighted=true]:bg-foreground data-[lk-muted=true]:bg-muted origin-center rounded-full transition-colors duration-250 ease-linear"></span>
     </BarVisualizer>
   );
 }

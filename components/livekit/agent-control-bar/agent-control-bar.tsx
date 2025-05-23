@@ -69,7 +69,7 @@ export function AgentControlBar({
   return (
     <div
       className={cn(
-        "flex flex-col rounded-md bg-background p-2.5 shadow-sm",
+        "flex flex-col rounded-md bg-background p-3 shadow-md border",
         className
       )}
       aria-label="Voice assistant controls"
@@ -84,57 +84,55 @@ export function AgentControlBar({
               disabled={isSendingMessage}
             />
           </div>
-          <div className="w-full h-px bg-border mt-2 mb-2" />
+          <hr className="my-3" />
         </>
       )}
-
-      <div className="flex w-full gap-1">
-        {visibleControls.microphone && (
-          <div className="flex items-center gap-0">
-            <TrackToggle
-              className="border-r-0 rounded-r-none relative w-auto"
-              source={Track.Source.Microphone}
-            >
-              <BarVisualizer
-                className="w-auto h-full flex gap-0.5 items-center justify-center"
-                trackRef={micTrackRef}
-                barCount={5}
-                options={{ minHeight: 5 }}
+      <div className="flex flex-row justify-between">
+        <div className="flex w-full gap-1">
+          {visibleControls.microphone && (
+            <div className="flex items-center gap-0">
+              <TrackToggle
+                className="border-r-0 rounded-r-none relative w-auto"
+                source={Track.Source.Microphone}
               >
-                <span className="w-0.5 h-full data-lk-highlighted:bg-foreground data-lk-muted:bg-muted origin-center rounded-2xl"></span>
-              </BarVisualizer>
-            </TrackToggle>
-            <DeviceSelect
-              className="border-l-0 rounded-l-none"
-              variant="small"
-              kind="audioinput"
-              onActiveDeviceChange={handleDeviceChange}
-              onError={handleError}
-            />
-          </div>
-        )}
+                <BarVisualizer
+                  className="w-auto h-full flex gap-0.5 items-center justify-center"
+                  trackRef={micTrackRef}
+                  barCount={12}
+                  options={{ minHeight: 5 }}
+                >
+                  <span className="w-0.5 h-full data-lk-highlighted:bg-foreground data-lk-muted:bg-muted origin-center rounded-2xl"></span>
+                </BarVisualizer>
+              </TrackToggle>
+              <DeviceSelect
+                className="border-l-0 rounded-l-none"
+                variant="small"
+                kind="audioinput"
+                onActiveDeviceChange={handleDeviceChange}
+                onError={handleError}
+              />
+            </div>
+          )}
 
-        {visibleControls.chat && (
-          <Toggle
-            aria-label="Toggle chat"
-            variant="outline"
-            size="sm"
-            pressed={chatOpen}
-            onPressedChange={setChatOpen}
-            className="h-full aspect-square"
-          >
-            <ChatTextIcon />
-          </Toggle>
-        )}
-
+          {visibleControls.chat && (
+            <Toggle
+              aria-label="Toggle chat"
+              variant="outline"
+              pressed={chatOpen}
+              onPressedChange={setChatOpen}
+              className="h-full aspect-square"
+            >
+              <ChatTextIcon weight="bold" />
+            </Toggle>
+          )}
+        </div>
         {visibleControls.leave && (
           <Button
             variant="destructive"
-            size="sm"
             onClick={handleDisconnect}
             className="font-mono"
           >
-            <PhoneDisconnectIcon />
+            <PhoneDisconnectIcon weight="bold" />
             END CALL
           </Button>
         )}

@@ -66,11 +66,11 @@ export default function Home() {
   }, [room, sessionStarted, connectionDetails]);
 
   return (
-    <div className="flex flex-col h-svh">
+    <div className="flex flex-col min-h-svh justify-center">
       {sessionStarted ? (
         <RoomContext.Provider value={room}>
           <SessionView />
-          <RoomAudioRenderer />‚
+          <RoomAudioRenderer />
           <StartAudio label="Start Audio" />
         </RoomContext.Provider>
       ) : (

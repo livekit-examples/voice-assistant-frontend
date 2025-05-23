@@ -52,10 +52,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <ApplyThemeScript />
       </head>
       <body
-        className={`${publicSans.variable} ${commitMono.variable} antialiased h-screen w-full overflow-x-hidden relative`}
+        className={`${publicSans.variable} ${commitMono.variable} antialiased overflow-x-hidden`}
       >
         {children}
-        <ThemeToggle className="absolute bottom-0 right-0 m-2" />
+        <div className="fixed bottom-0 left-1/2 mb-2 z-50 -translate-x-1/2 group">
+          <ThemeToggle className="translate-y-20 group-hover:translate-y-0 transition-transform duration-300 delay-150" />
+        </div>
       </body>
     </html>
   );

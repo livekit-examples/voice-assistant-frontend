@@ -36,6 +36,7 @@ export function ChatInput({
       />
       <Button
         size="sm"
+        variant="secondary"
         disabled={message.trim().length === 0 || disabled}
         className="font-mono"
         onClick={handleSend}

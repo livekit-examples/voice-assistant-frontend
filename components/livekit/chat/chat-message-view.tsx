@@ -22,16 +22,22 @@ export const ChatMessageView = ({
   useAutoScroll(scrollAreaRef, scrollContentRef);
 
   return (
-    <div className={cn("flex flex-col gap-2", className)} {...props}>
-      <ScrollArea
-        ref={scrollAreaRef}
-        className="h-[200px] w-[350px] rounded-md border p-4"
-      >
-        <span className="block whitespace-pre-wrap" ref={scrollContentRef}>
+    <div
+      className={cn(
+        "flex flex-col justify-end gap-2 w-full max-w-2xl",
+        className
+      )}
+      {...props}
+    >
+      <ScrollArea ref={scrollAreaRef}>
+        <div
+          ref={scrollContentRef}
+          className="block whitespace-pre-wrap space-y-3"
+        >
           {messages.map((message: ReceivedChatMessage) => (
             <ChatEntry key={message.id} entry={message} />
           ))}
-        </span>
+        </div>
       </ScrollArea>
     </div>
   );

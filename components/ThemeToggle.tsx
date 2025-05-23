@@ -66,7 +66,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
   return (
     <div
       className={cn(
-        "flex border rounded divide-x overflow-hidden text-foreground",
+        "flex border rounded divide-x overflow-hidden text-foreground bg-background",
         className
       )}
     >

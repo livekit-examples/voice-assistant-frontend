@@ -25,17 +25,20 @@ type DeviceSelectProps = React.ComponentProps<typeof SelectTrigger> & {
   variant?: "default" | "small";
 };
 
-const selectVariants = cva("w-full rounded-md border px-3 py-2 text-sm", {
-  variants: {
-    variant: {
-      default: "w-[180px]",
-      small: "w-auto",
+const selectVariants = cva(
+  "w-full rounded-md border px-3 py-2 text-sm cursor-pointer disabled:not-allowed",
+  {
+    variants: {
+      variant: {
+        default: "w-[180px]",
+        small: "w-auto",
+      },
     },
-  },
-  defaultVariants: {
-    variant: "default",
-  },
-});
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
 
 export function DeviceSelect({
   kind,

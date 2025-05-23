@@ -31,14 +31,14 @@ export function TrackToggle(props: TrackToggleProps) {
     >
       {enabled ? (
         props.source === Track.Source.Microphone ? (
-          <MicrophoneIcon />
+          <MicrophoneIcon weight="bold" />
         ) : (
-          <VideoCameraIcon />
+          <VideoCameraIcon weight="bold" />
         )
       ) : props.source === Track.Source.Microphone ? (
-        <MicrophoneSlashIcon />
+        <MicrophoneSlashIcon weight="bold" />
       ) : (
-        <VideoCameraSlashIcon />
+        <VideoCameraSlashIcon weight="bold" />
       )}
       {props.children}
     </Toggle>
