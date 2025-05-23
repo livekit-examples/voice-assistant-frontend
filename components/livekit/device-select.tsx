@@ -1,19 +1,17 @@
-"use client";
+'use client';
+
+import { cva } from 'class-variance-authority';
+import { LocalAudioTrack, LocalVideoTrack } from 'livekit-client';
+import { useMaybeRoomContext, useMediaDeviceSelect } from '@livekit/components-react';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/select';
+import { cn } from '@/lib/utils';
 
-import {
-  useMediaDeviceSelect,
-  useMaybeRoomContext,
-} from "@livekit/components-react";
-import { cva } from "class-variance-authority";
-import { LocalAudioTrack, LocalVideoTrack } from "livekit-client";
 type DeviceSelectProps = React.ComponentProps<typeof SelectTrigger> & {
   kind: MediaDeviceKind;
   track?: LocalAudioTrack | LocalVideoTrack | undefined;
@@ -22,20 +20,20 @@ type DeviceSelectProps = React.ComponentProps<typeof SelectTrigger> & {
   initialSelection?: string;
   onActiveDeviceChange?: (deviceId: string) => void;
   onDeviceListChange?: (devices: MediaDeviceInfo[]) => void;
-  variant?: "default" | "small";
+  variant?: 'default' | 'small';
 };
 
 const selectVariants = cva(
-  "w-full rounded-md border px-3 py-2 text-sm cursor-pointer disabled:not-allowed",
+  'w-full rounded-md border px-3 py-2 text-sm cursor-pointer disabled:not-allowed',
   {
     variants: {
       variant: {
-        default: "w-[180px]",
-        small: "w-auto",
+        default: 'w-[180px]',
+        small: 'w-auto',
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: 'default',
     },
   }
 );
@@ -45,41 +43,31 @@ export function DeviceSelect({
   track,
   requestPermissions,
   onError,
-  initialSelection,
-  onActiveDeviceChange,
-  onDeviceListChange,
+  // initialSelection,
+  // onActiveDeviceChange,
+  // onDeviceListChange,
   ...props
 }: DeviceSelectProps) {
-  const variant = props.variant || "default";
+  const variant = props.variant || 'default';
 
   const room = useMaybeRoomContext();
-  const { devices, activeDeviceId, setActiveMediaDevice } =
-    useMediaDeviceSelect({
-      kind,
-      room,
-      track,
-      requestPermissions,
-      onError,
-    });
+  const { devices, activeDeviceId, setActiveMediaDevice } = useMediaDeviceSelect({
+    kind,
+    room,
+    track,
+    requestPermissions,
+    onError,
+  });
   return (
     <Select value={activeDeviceId} onValueChange={setActiveMediaDevice}>
-      <SelectTrigger
-        className={cn(selectVariants({ variant }), props.className)}
-      >
-        {variant !== "small" && (
-          <SelectValue
-            className="font-mono text-sm"
-            placeholder={`Select a ${kind}`}
-          />
+      <SelectTrigger className={cn(selectVariants({ variant }), props.className)}>
+        {variant !== 'small' && (
+          <SelectValue className="font-mono text-sm" placeholder={`Select a ${kind}`} />
         )}
       </SelectTrigger>
       <SelectContent>
         {devices.map((device) => (
-          <SelectItem
-            key={device.deviceId}
-            value={device.deviceId}
-            className="font-mono text-xs"
-          >
+          <SelectItem key={device.deviceId} value={device.deviceId} className="font-mono text-xs">
             {device.label}
           </SelectItem>
         ))}

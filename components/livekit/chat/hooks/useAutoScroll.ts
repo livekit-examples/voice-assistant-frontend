@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 export function useAutoScroll(
   scrollAreaRef: React.RefObject<HTMLDivElement | null>,
@@ -6,9 +6,7 @@ export function useAutoScroll(
 ) {
   useEffect(() => {
     const scrollToBottom = () => {
-      const scrollArea = scrollAreaRef.current?.querySelector(
-        "[data-radix-scroll-area-viewport]"
-      );
+      const scrollArea = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
       if (scrollArea) {
         scrollArea.scrollTop = scrollArea.scrollHeight;
       }

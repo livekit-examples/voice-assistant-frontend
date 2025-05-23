@@ -1,21 +1,20 @@
-"use client";
+'use client';
 
-import * as React from "react";
-
-import { AgentControlBar } from "@/components/livekit/agent-control-bar/agent-control-bar";
-import { ChatMessageView } from "@/components/livekit/chat/chat-message-view";
-import { AgentAudioTile } from "@/components/livekit/agent-audio-tile";
-import useChatAndTranscription from "@/hooks/useChatAndTranscription";
+import * as React from 'react';
+import { AgentAudioTile } from '@/components/livekit/agent-audio-tile';
+import { AgentControlBar } from '@/components/livekit/agent-control-bar/agent-control-bar';
+import { ChatMessageView } from '@/components/livekit/chat/chat-message-view';
+import useChatAndTranscription from '@/hooks/useChatAndTranscription';
 
 export default function SessionView() {
   const [chatOpen, setChatOpen] = React.useState(false);
   const { messages, send } = useChatAndTranscription();
 
   return (
-    <main className="relative flex-1 flex flex-col gap-4 min-h-[450px] p-12">
-      <div className="flex-1 flex flex-col items-center justify-center min-h-[200px]">
+    <main className="relative flex min-h-[450px] flex-1 flex-col gap-4 p-12">
+      <div className="flex min-h-[200px] flex-1 flex-col items-center justify-center">
         <AgentAudioTile />
-        <p className="text-transparent text-sm font-semibold bg-gradient-to-r from-black via-[#ACACAC] to-black bg-clip-text text-center animate-text-gradient">
+        <p className="animate-text-gradient bg-gradient-to-r from-black via-[#ACACAC] to-black bg-clip-text text-center text-sm font-semibold text-transparent">
           Agent is listening, ask it a question
         </p>
       </div>
@@ -28,7 +27,7 @@ export default function SessionView() {
         <AgentControlBar
           onSendMessage={send}
           onChatOpenChange={setChatOpen}
-          className="max-w-2xl w-full"
+          className="w-full max-w-2xl"
         />
       </div>
     </main>

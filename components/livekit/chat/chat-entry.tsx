@@ -1,10 +1,8 @@
-import { cn } from "@/lib/utils";
-import type {
-  MessageFormatter,
-  ReceivedChatMessage,
-} from "@livekit/components-react";
-import * as React from "react";
-import { useChatMessage } from "./hooks/utils";
+import * as React from 'react';
+import type { MessageFormatter, ReceivedChatMessage } from '@livekit/components-react';
+import { cn } from '@/lib/utils';
+import { useChatMessage } from './hooks/utils';
+
 export interface ChatEntryProps extends React.HTMLAttributes<HTMLLIElement> {
   /** The chat massage object to display. */
   entry: ReceivedChatMessage;
@@ -24,26 +22,23 @@ export const ChatEntry = ({
   className,
   ...props
 }: ChatEntryProps) => {
-  const { message, hasBeenEdited, time, locale, name } = useChatMessage(
-    entry,
-    messageFormatter
-  );
+  const { message, hasBeenEdited, time, locale, name } = useChatMessage(entry, messageFormatter);
 
   return (
     <li
-      className={cn("flex flex-col gap-0.5", className)}
-      title={time.toLocaleTimeString(locale, { timeStyle: "full" })}
-      data-lk-message-origin={entry.from?.isLocal ? "local" : "remote"}
+      className={cn('flex flex-col gap-0.5', className)}
+      title={time.toLocaleTimeString(locale, { timeStyle: 'full' })}
+      data-lk-message-origin={entry.from?.isLocal ? 'local' : 'remote'}
       {...props}
     >
       {(!hideTimestamp || !hideName || hasBeenEdited) && (
-        <span className="flex text-sm text-muted-foreground">
+        <span className="text-muted-foreground flex text-sm">
           {!hideName && <strong className="mt-2">{name}</strong>}
 
           {!hideTimestamp && (
-            <span className="ml-auto align-self-end">
-              {hasBeenEdited && "*"}
-              {time.toLocaleTimeString(locale, { timeStyle: "short" })}
+            <span className="align-self-end ml-auto">
+              {hasBeenEdited && '*'}
+              {time.toLocaleTimeString(locale, { timeStyle: 'short' })}
             </span>
           )}
         </span>
@@ -51,9 +46,8 @@ export const ChatEntry = ({
 
       <span
         className={cn(
-          "rounded-lg bg-muted p-2",
-          entry.from?.isLocal &&
-            "bg-secondary text-secondary-foreground ml-auto max-w-md"
+          'bg-muted rounded-lg p-2',
+          entry.from?.isLocal && 'bg-secondary text-secondary-foreground ml-auto max-w-md'
         )}
       >
         {message}

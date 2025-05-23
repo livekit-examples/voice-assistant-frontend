@@ -1,11 +1,11 @@
-import * as React from "react";
-import { Track } from "livekit-client";
+import * as React from 'react';
+import { Track } from 'livekit-client';
 import {
   useLocalParticipant,
   useLocalParticipantPermissions,
   usePersistentUserChoices,
   useRoomContext,
-} from "@livekit/components-react";
+} from '@livekit/components-react';
 
 export interface UseAgentControlBarProps {
   controls?: {
@@ -50,10 +50,9 @@ export function useAgentControlBar({
     visibleControls.microphone ??= localPermissions.canPublish;
   }
 
-  const { saveAudioInputEnabled, saveAudioInputDeviceId } =
-    usePersistentUserChoices({
-      preventSave: !saveUserChoices,
-    });
+  const { saveAudioInputEnabled, saveAudioInputDeviceId } = usePersistentUserChoices({
+    preventSave: !saveUserChoices,
+  });
 
   const microphoneOnChange = React.useCallback(
     (enabled: boolean, isUserInitiated: boolean) => {
@@ -72,7 +71,7 @@ export function useAgentControlBar({
 
   const handleDeviceChange = React.useCallback(
     (deviceId: string) => {
-      saveAudioInputDeviceId(deviceId ?? "default");
+      saveAudioInputDeviceId(deviceId ?? 'default');
     },
     [saveAudioInputDeviceId]
   );

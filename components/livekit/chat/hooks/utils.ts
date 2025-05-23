@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { ReceivedChatMessage, MessageFormatter } from '@livekit/components-react';
+import type { MessageFormatter, ReceivedChatMessage } from '@livekit/components-react';
 
 export const useChatMessage = (entry: ReceivedChatMessage, messageFormatter?: MessageFormatter) => {
   const formattedMessage = React.useMemo(() => {

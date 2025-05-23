@@ -1,17 +1,13 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { Welcome } from "@/components/welcome";
-import SessionView from "@/components/session-view";
-import { Room, RoomEvent } from "livekit-client";
-import {
-  RoomAudioRenderer,
-  RoomContext,
-  StartAudio,
-} from "@livekit/components-react";
-import { toast } from "sonner";
-import { Toaster } from "@/components/ui/sonner";
-import useConnectionDetails from "@/hooks/useConnectionDetails";
+import * as React from 'react';
+import { Room, RoomEvent } from 'livekit-client';
+import { toast } from 'sonner';
+import { RoomAudioRenderer, RoomContext, StartAudio } from '@livekit/components-react';
+import SessionView from '@/components/session-view';
+import { Toaster } from '@/components/ui/sonner';
+import { Welcome } from '@/components/welcome';
+import useConnectionDetails from '@/hooks/useConnectionDetails';
 
 export default function Home() {
   const [sessionStarted, setSessionStarted] = React.useState(false);
@@ -25,10 +21,10 @@ export default function Home() {
       setSessionStarted(false);
     };
     const onMediaDevicesError = (error: Error) => {
-      toast("Encountered an error with your media devices", {
+      toast('Encountered an error with your media devices', {
         description: `${error.name}: ${error.message}`,
         action: {
-          label: "Retry",
+          label: 'Retry',
           onClick: () => setSessionStarted(false),
         },
       });
@@ -42,19 +38,16 @@ export default function Home() {
   }, [room]);
 
   React.useEffect(() => {
-    if (sessionStarted && room.state === "disconnected" && connectionDetails) {
+    if (sessionStarted && room.state === 'disconnected' && connectionDetails) {
       Promise.all([
         // TODO: enable preconnect audio once released
         room.localParticipant.setMicrophoneEnabled(true),
-        room.connect(
-          connectionDetails.serverUrl,
-          connectionDetails.participantToken
-        ),
+        room.connect(connectionDetails.serverUrl, connectionDetails.participantToken),
       ]).catch((error) => {
-        toast("There was an error connecting to the agent", {
+        toast('There was an error connecting to the agent', {
           description: `${error.name}: ${error.message}`,
           action: {
-            label: "Retry",
+            label: 'Retry',
             onClick: () => setSessionStarted(false),
           },
         });
@@ -66,7 +59,7 @@ export default function Home() {
   }, [room, sessionStarted, connectionDetails]);
 
   return (
-    <div className="flex flex-col min-h-svh justify-center">
+    <div className="flex min-h-svh flex-col justify-center">
       {sessionStarted ? (
         <RoomContext.Provider value={room}>
           <SessionView />

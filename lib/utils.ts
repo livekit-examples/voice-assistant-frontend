@@ -1,13 +1,10 @@
-import { clsx, type ClassValue } from "clsx";
-import { Room } from "livekit-client";
-import {
-  ReceivedChatMessage,
-  type TextStreamData,
-} from "@livekit/components-react";
-import { twMerge } from "tailwind-merge";
+import { type ClassValue, clsx } from 'clsx';
+import { Room } from 'livekit-client';
+import { twMerge } from 'tailwind-merge';
+import { type ReceivedChatMessage, type TextStreamData } from '@livekit/components-react';
 
-export const THEME_STORAGE_KEY = "theme-mode";
-export const THEME_MEDIA_QUERY = "(prefers-color-scheme: dark)";
+export const THEME_STORAGE_KEY = 'theme-mode';
+export const THEME_MEDIA_QUERY = '(prefers-color-scheme: dark)';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

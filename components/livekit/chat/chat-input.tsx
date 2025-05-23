@@ -1,31 +1,20 @@
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface ChatInputProps extends React.HTMLAttributes<HTMLDivElement> {
   onSend?: (message: string) => void;
   disabled?: boolean;
 }
 
-export function ChatInput({
-  onSend,
-  className,
-  disabled,
-  ...props
-}: ChatInputProps) {
-  const [message, setMessage] = useState<string>("");
+export function ChatInput({ onSend, className, disabled, ...props }: ChatInputProps) {
+  const [message, setMessage] = useState<string>('');
   const handleSend = () => {
     onSend?.(message);
-    setMessage("");
+    setMessage('');
   };
   return (
-    <div
-      className={cn(
-        "flex items-center gap-2 rounded-md pl-1 text-sm",
-        className
-      )}
-      {...props}
-    >
+    <div className={cn('flex items-center gap-2 rounded-md pl-1 text-sm', className)} {...props}>
       <input
         type="text"
         className="flex-1 focus:outline-none"

@@ -1,13 +1,14 @@
-"use client";
+'use client';
+
+import { Track } from 'livekit-client';
+import { useTrackToggle } from '@livekit/components-react';
 import {
   MicrophoneIcon,
   MicrophoneSlashIcon,
   VideoCameraIcon,
   VideoCameraSlashIcon,
-} from "@phosphor-icons/react/dist/ssr";
-import { Toggle } from "@/components/ui/toggle";
-import { useTrackToggle } from "@livekit/components-react";
-import { Track } from "livekit-client";
+} from '@phosphor-icons/react/dist/ssr';
+import { Toggle } from '@/components/ui/toggle';
 
 export type TrackToggleProps = React.ComponentProps<typeof Toggle> & {
   source: Track.Source;
@@ -17,13 +18,13 @@ export function TrackToggle(props: TrackToggleProps) {
   const { enabled, pending, toggle } = useTrackToggle({
     source: props.source,
   });
-  const variant = props.variant || "outline";
+  const variant = props.variant || 'outline';
   return (
     <Toggle
       variant={variant}
       aria-label={`Toggle ${props.source}`}
       onPressedChange={() => {
-        console.log("toggle change");
+        console.log('toggle change');
         toggle();
       }}
       disabled={pending}

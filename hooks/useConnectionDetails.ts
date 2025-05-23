@@ -1,5 +1,6 @@
-import { ConnectionDetails } from "@/app/api/connection-details/route";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
+import { ConnectionDetails } from '@/app/api/connection-details/route';
+
 export default function useConnectionDetails(autoRefresh = false) {
   // Generate room connection details, including:
   //   - A random Room name
@@ -10,13 +11,11 @@ export default function useConnectionDetails(autoRefresh = false) {
   // In real-world application, you would likely allow the user to specify their
   // own participant name, and possibly to choose from existing rooms to join.
 
-  const [connectionDetails, setConnectionDetails] =
-    useState<ConnectionDetails | null>(null);
+  const [connectionDetails, setConnectionDetails] = useState<ConnectionDetails | null>(null);
 
   const fetchConnectionDetails = () => {
     const url = new URL(
-      process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ??
-        "/api/connection-details",
+      process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ?? '/api/connection-details',
       window.location.origin
     );
     fetch(url.toString())
