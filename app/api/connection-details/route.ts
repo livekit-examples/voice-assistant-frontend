@@ -68,5 +68,8 @@ function createParticipantToken(userInfo: AccessTokenOptions, roomName: string) 
     canSubscribe: true,
   };
   at.addGrant(grant);
+  at.attributes = {
+    "supports-ptt": "1",
+  };
   return at.toJwt();
 }
