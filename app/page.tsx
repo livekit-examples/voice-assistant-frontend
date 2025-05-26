@@ -40,8 +40,9 @@ export default function Home() {
   React.useEffect(() => {
     if (sessionStarted && room.state === 'disconnected' && connectionDetails) {
       Promise.all([
-        // TODO: enable preconnect audio once released
-        room.localParticipant.setMicrophoneEnabled(true),
+        room.localParticipant.setMicrophoneEnabled(true, undefined, {
+          preConnectBuffer: true,
+        }),
         room.connect(connectionDetails.serverUrl, connectionDetails.participantToken),
       ]).catch((error) => {
         toast('There was an error connecting to the agent', {
