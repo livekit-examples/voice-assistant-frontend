@@ -1,21 +1,32 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-interface ChatInputProps extends React.HTMLAttributes<HTMLDivElement> {
+interface ChatInputProps extends React.HTMLAttributes<HTMLFormElement> {
   onSend?: (message: string) => void;
   disabled?: boolean;
 }
 
 export function ChatInput({ onSend, className, disabled, ...props }: ChatInputProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState<string>('');
-  const handleSend = () => {
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    props.onSubmit?.(e);
     onSend?.(message);
     setMessage('');
+    inputRef.current?.focus();
   };
+
   return (
-    <div className={cn('flex items-center gap-2 rounded-md pl-1 text-sm', className)} {...props}>
+    <form
+      {...props}
+      onSubmit={handleSubmit}
+      className={cn('flex items-center gap-2 rounded-md pl-1 text-sm', className)}
+    >
       <input
+        ref={inputRef}
         type="text"
         className="flex-1 focus:outline-none"
         placeholder="Type something..."
@@ -24,14 +35,14 @@ export function ChatInput({ onSend, className, disabled, ...props }: ChatInputPr
         disabled={disabled}
       />
       <Button
+        type="submit"
         size="sm"
         variant="secondary"
         disabled={message.trim().length === 0 || disabled}
         className="font-mono"
-        onClick={handleSend}
       >
         SEND
       </Button>
-    </div>
+    </form>
   );
 }

@@ -62,14 +62,14 @@ export function AgentControlBar({
 
   return (
     <div
-      className={cn('bg-background flex flex-col rounded-md border p-3 shadow-md', className)}
       aria-label="Voice assistant controls"
+      className={cn('bg-background flex flex-col rounded-md border p-3 shadow-md', className)}
       {...props}
     >
       {chatOpen && (
         <>
           <div className={`flex w-full overflow-hidden`}>
-            <ChatInput className="w-full" onSend={handleSendMessage} disabled={isSendingMessage} />
+            <ChatInput onSend={handleSendMessage} disabled={isSendingMessage} className="w-full" />
           </div>
           <hr className="my-3" />
         </>

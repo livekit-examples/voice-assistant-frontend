@@ -24,11 +24,14 @@ export const ChatEntry = ({
 }: ChatEntryProps) => {
   const { message, hasBeenEdited, time, locale, name } = useChatMessage(entry, messageFormatter);
 
+  const isUser = entry.from?.isLocal ?? false;
+  const messageOrigin = isUser ? 'remote' : 'local';
+
   return (
     <li
-      className={cn('flex flex-col gap-0.5', className)}
+      data-lk-message-origin={messageOrigin}
       title={time.toLocaleTimeString(locale, { timeStyle: 'full' })}
-      data-lk-message-origin={entry.from?.isLocal ? 'local' : 'remote'}
+      className={cn('flex flex-col gap-0.5', className)}
       {...props}
     >
       {(!hideTimestamp || !hideName || hasBeenEdited) && (
@@ -44,12 +47,7 @@ export const ChatEntry = ({
         </span>
       )}
 
-      <span
-        className={cn(
-          'bg-muted rounded-lg p-2',
-          entry.from?.isLocal && 'bg-secondary text-secondary-foreground ml-auto max-w-md'
-        )}
-      >
+      <span className={cn('max-w-4/5 rounded-lg p-2', isUser ? 'bg-muted ml-auto' : 'mr-auto')}>
         {message}
       </span>
     </li>
