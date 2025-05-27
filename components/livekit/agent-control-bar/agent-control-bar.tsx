@@ -101,6 +101,28 @@ export function AgentControlBar({
             </div>
           )}
 
+          {visibleControls.camera && (
+            <div className="flex items-center gap-0">
+              <TrackToggle
+                className="relative w-auto rounded-r-none border-r-0"
+                source={Track.Source.Camera}
+              />
+              <DeviceSelect
+                className="rounded-l-none border-l-0"
+                variant="small"
+                kind="videoinput"
+                onActiveDeviceChange={handleDeviceChange}
+                onError={handleError}
+              />
+            </div>
+          )}
+
+          {visibleControls.screenShare && (
+            <div className="flex items-center gap-0">
+              <TrackToggle className="relative w-auto" source={Track.Source.ScreenShare} />
+            </div>
+          )}
+
           {visibleControls.chat && (
             <Toggle
               aria-label="Toggle chat"

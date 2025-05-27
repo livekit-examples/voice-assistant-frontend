@@ -6,6 +6,7 @@ import { RoomAudioRenderer, RoomContext, StartAudio } from '@livekit/components-
 import { toastAlert } from '@/components/alert-toast';
 import SessionView from '@/components/session-view';
 import { Toaster } from '@/components/ui/sonner';
+import { toastAlert } from '@/components/warning-toast';
 import { Welcome } from '@/components/welcome';
 import useConnectionDetails from '@/hooks/useConnectionDetails';
 

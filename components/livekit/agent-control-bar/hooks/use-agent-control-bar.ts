@@ -27,9 +27,9 @@ export function useAgentControlBar({
   const visibleControls = {
     leave: true,
     microphone: true,
-    screenShare: false,
+    screenShare: true,
     chat: true,
-    camera: false,
+    camera: true,
     ...controls,
   };
   const localPermissions = useLocalParticipantPermissions();

@@ -5,6 +5,7 @@ import { useTrackToggle } from '@livekit/components-react';
 import {
   MicrophoneIcon,
   MicrophoneSlashIcon,
+  MonitorArrowUpIcon,
   VideoCameraIcon,
   VideoCameraSlashIcon,
 } from '@phosphor-icons/react/dist/ssr';
@@ -14,11 +15,23 @@ export type TrackToggleProps = React.ComponentProps<typeof Toggle> & {
   source: Parameters<typeof useTrackToggle>[0]['source'];
 };
 
+function getSourceIcon(source: Track.Source, enabled: boolean) {
+  switch (source) {
+    case Track.Source.Microphone:
+      return enabled ? <MicrophoneIcon weight="bold" /> : <MicrophoneSlashIcon weight="bold" />;
+    case Track.Source.Camera:
+      return enabled ? <VideoCameraIcon weight="bold" /> : <VideoCameraSlashIcon weight="bold" />;
+    case Track.Source.ScreenShare:
+      return <MonitorArrowUpIcon weight="bold" />;
+  }
+}
+
 export function TrackToggle(props: TrackToggleProps) {
   const { enabled, pending, toggle } = useTrackToggle({
     source: props.source,
   });
   const variant = props.variant || 'outline';
+  const icon = getSourceIcon(props.source, enabled);
   return (
     <Toggle
       variant={variant}
@@ -30,17 +43,7 @@ export function TrackToggle(props: TrackToggleProps) {
       disabled={pending}
       {...props}
     >
-      {enabled ? (
-        props.source === Track.Source.Microphone ? (
-          <MicrophoneIcon weight="bold" />
-        ) : (
-          <VideoCameraIcon weight="bold" />
-        )
-      ) : props.source === Track.Source.Microphone ? (
-        <MicrophoneSlashIcon weight="bold" />
-      ) : (
-        <VideoCameraSlashIcon weight="bold" />
-      )}
+      {icon}
       {props.children}
     </Toggle>
   );
