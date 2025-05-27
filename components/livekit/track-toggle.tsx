@@ -11,7 +11,7 @@ import {
 import { Toggle } from '@/components/ui/toggle';
 
 export type TrackToggleProps = React.ComponentProps<typeof Toggle> & {
-  source: Track.Source;
+  source: Parameters<typeof useTrackToggle>[0]['source'];
 };
 
 export function TrackToggle(props: TrackToggleProps) {

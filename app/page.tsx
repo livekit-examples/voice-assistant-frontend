@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import { Room, RoomEvent } from 'livekit-client';
-import { toast } from 'sonner';
 import { RoomAudioRenderer, RoomContext, StartAudio } from '@livekit/components-react';
+import { toastAlert } from '@/components/alert-toast';
 import SessionView from '@/components/session-view';
 import { Toaster } from '@/components/ui/sonner';
 import { Welcome } from '@/components/welcome';
@@ -21,12 +21,9 @@ export default function Home() {
       setSessionStarted(false);
     };
     const onMediaDevicesError = (error: Error) => {
-      toast('Encountered an error with your media devices', {
+      toastAlert({
+        title: 'Encountered an error with your media devices',
         description: `${error.name}: ${error.message}`,
-        action: {
-          label: 'Retry',
-          onClick: () => setSessionStarted(false),
-        },
       });
     };
     room.on(RoomEvent.MediaDevicesError, onMediaDevicesError);
@@ -45,12 +42,9 @@ export default function Home() {
         }),
         room.connect(connectionDetails.serverUrl, connectionDetails.participantToken),
       ]).catch((error) => {
-        toast('There was an error connecting to the agent', {
+        toastAlert({
+          title: 'There was an error connecting to the agent',
           description: `${error.name}: ${error.message}`,
-          action: {
-            label: 'Retry',
-            onClick: () => setSessionStarted(false),
-          },
         });
       });
     }
