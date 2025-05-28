@@ -6,6 +6,7 @@ import {
   usePersistentUserChoices,
   useRoomContext,
 } from '@livekit/components-react';
+import { usePublishPermissions } from './use-publish-permissions';
 
 export interface UseAgentControlBarProps {
   controls?: {
@@ -26,14 +27,10 @@ export function useAgentControlBar({
 }: UseAgentControlBarProps) {
   const visibleControls = {
     leave: true,
-    microphone: true,
-    screenShare: true,
-    chat: true,
-    camera: true,
     ...controls,
   };
-  const localPermissions = useLocalParticipantPermissions();
   const { microphoneTrack, localParticipant } = useLocalParticipant();
+  const publishPermissions = usePublishPermissions();
   const room = useRoomContext();
 
   const micTrackRef = React.useMemo(() => {
@@ -44,11 +41,10 @@ export function useAgentControlBar({
     };
   }, [localParticipant, microphoneTrack]);
 
-  if (!localPermissions) {
-    visibleControls.microphone = false;
-  } else {
-    visibleControls.microphone ??= localPermissions.canPublish;
-  }
+  visibleControls.microphone ??= publishPermissions.microphone;
+  visibleControls.screenShare ??= publishPermissions.screenShare;
+  visibleControls.camera ??= publishPermissions.camera;
+  visibleControls.chat ??= publishPermissions.data;
 
   const { saveAudioInputEnabled, saveAudioInputDeviceId } = usePersistentUserChoices({
     preventSave: !saveUserChoices,
