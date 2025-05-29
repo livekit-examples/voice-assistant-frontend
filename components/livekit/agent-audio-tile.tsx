@@ -6,7 +6,7 @@ interface AgentAudioTileProps {
   className?: string;
 }
 
-export function AgentAudioTile({className}: AgentAudioTileProps) {
+export function AgentAudioTile({ className }: AgentAudioTileProps) {
   const agent = useVoiceAssistant();
 
   useEffect(() => {
@@ -19,9 +19,15 @@ export function AgentAudioTile({className}: AgentAudioTileProps) {
       state={agent.state}
       barCount={5}
       options={{ minHeight: 5 }}
-      className={cn("flex h-[300px] w-auto items-center justify-center gap-4", className)}
+      className={cn('flex aspect-video h-[126px] items-center justify-center gap-4', className)}
     >
-      <span className="bg-muted data-[lk-highlighted=true]:bg-foreground data-[lk-muted=true]:bg-muted min-h-12 w-12 origin-center rounded-full transition-colors duration-250 ease-linear"/>
+      <span
+        className={cn([
+          'bg-muted min-h-12 w-12 rounded-full',
+          'origin-center transition-colors duration-250 ease-linear',
+          'data-[lk-highlighted=true]:bg-foreground data-[lk-muted=true]:bg-muted',
+        ])}
+      />
     </BarVisualizer>
   );
 }

@@ -27,13 +27,13 @@ const selectVariants = cva(
   'w-full rounded-md border px-3 py-2 text-sm cursor-pointer disabled:not-allowed',
   {
     variants: {
-      variant: {
+      size: {
         default: 'w-[180px]',
-        small: 'w-auto',
+        sm: 'w-auto',
       },
     },
     defaultVariants: {
-      variant: 'default',
+      size: 'default',
     },
   }
 );
@@ -48,7 +48,7 @@ export function DeviceSelect({
   // onDeviceListChange,
   ...props
 }: DeviceSelectProps) {
-  const variant = props.variant || 'default';
+  const size = props.size || 'default';
 
   const room = useMaybeRoomContext();
   const { devices, activeDeviceId, setActiveMediaDevice } = useMediaDeviceSelect({
@@ -60,8 +60,8 @@ export function DeviceSelect({
   });
   return (
     <Select value={activeDeviceId} onValueChange={setActiveMediaDevice}>
-      <SelectTrigger className={cn(selectVariants({ variant }), props.className)}>
-        {variant !== 'small' && (
+      <SelectTrigger className={cn(selectVariants({ size }), props.className)}>
+        {size !== 'sm' && (
           <SelectValue className="font-mono text-sm" placeholder={`Select a ${kind}`} />
         )}
       </SelectTrigger>

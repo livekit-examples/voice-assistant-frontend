@@ -1,36 +1,41 @@
 'use client';
 
-import * as React from 'react';
-import { type ReceivedChatMessage } from '@livekit/components-react';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { type RefObject, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { ChatEntry } from './chat-entry';
-import { useAutoScroll } from './hooks/useAutoScroll';
 
+export function useAutoScroll(scrollContentContainerRef: RefObject<Element | null>) {
+  useEffect(() => {
+    function scrollToBottom() {
+      const { scrollingElement } = document;
+
+      if (scrollingElement) {
+        scrollingElement.scrollTop = scrollingElement.scrollHeight;
+      }
+    }
+
+    if (scrollContentContainerRef.current) {
+      const resizeObserver = new ResizeObserver(scrollToBottom);
+
+      resizeObserver.observe(scrollContentContainerRef.current);
+      scrollToBottom();
+
+      return () => resizeObserver.disconnect();
+    }
+  }, [scrollContentContainerRef]);
+}
 interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
-  messages: ReceivedChatMessage[];
+  children?: React.ReactNode;
   className?: string;
 }
 
-export const ChatMessageView = ({ messages, className, ...props }: ChatProps) => {
-  const scrollContentRef = React.useRef<HTMLDivElement>(null);
-  const scrollAreaRef = React.useRef<HTMLDivElement>(null);
+export const ChatMessageView = ({ className, children, ...props }: ChatProps) => {
+  const scrollContentRef = useRef<HTMLDivElement>(null);
 
-  useAutoScroll(scrollAreaRef, scrollContentRef);
+  useAutoScroll(scrollContentRef);
 
   return (
-    <div className={cn('relative', className)} {...props}>
-      <div className="absolute inset-0">
-        <ScrollArea ref={scrollAreaRef} className="h-full">
-          <div ref={scrollContentRef} className="block space-y-3 py-5 whitespace-pre-wrap">
-            {messages.map((message: ReceivedChatMessage) => (
-              <ChatEntry key={message.id} entry={message} />
-            ))}
-          </div>
-        </ScrollArea>
-      </div>
-      <div className="from-background absolute top-0 left-0 h-5 w-full bg-gradient-to-b to-transparent" />
-      <div className="from-background absolute bottom-0 left-0 h-5 w-full bg-gradient-to-t to-transparent" />
+    <div ref={scrollContentRef} className={cn('flex flex-col justify-end', className)} {...props}>
+      {children}
     </div>
   );
 };

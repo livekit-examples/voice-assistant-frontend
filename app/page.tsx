@@ -54,8 +54,8 @@ export default function Home() {
   }, [room, sessionStarted, connectionDetails]);
 
   return (
-    <div className="flex min-h-svh flex-col justify-center">
-      <header className="absolute top-0 left-0 hidden w-full flex-row justify-between p-6 md:flex">
+    <>
+      <header className="fixed top-0 left-0 z-50 hidden w-full flex-row justify-between p-6 md:flex">
         <a
           target="_blank"
           rel="noopener noreferrer"
@@ -86,6 +86,6 @@ export default function Home() {
         <Welcome onStartCall={() => setSessionStarted(true)} />
       )}
       <Toaster />
-    </div>
+    </>
   );
 }

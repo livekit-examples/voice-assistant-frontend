@@ -74,12 +74,12 @@ export function AgentControlBar({
           <hr className="my-3" />
         </>
       )}
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row justify-between gap-1">
         <div className="flex w-full gap-1">
           {visibleControls.microphone && (
             <div className="flex items-center gap-0">
               <TrackToggle
-                className="relative w-auto rounded-r-none border-r-0"
+                className="peer relative w-auto rounded-r-none border-r-0"
                 source={Track.Source.Microphone}
               >
                 <BarVisualizer
@@ -92,8 +92,8 @@ export function AgentControlBar({
                 </BarVisualizer>
               </TrackToggle>
               <DeviceSelect
-                className="rounded-l-none border-l-0"
-                variant="small"
+                className="peer-data-[state=on]:border-button-foreground rounded-l-none border-l-0"
+                size="sm"
                 kind="audioinput"
                 onActiveDeviceChange={handleDeviceChange}
                 onError={handleError}
@@ -104,12 +104,12 @@ export function AgentControlBar({
           {visibleControls.camera && (
             <div className="flex items-center gap-0">
               <TrackToggle
-                className="relative w-auto rounded-r-none border-r-0"
+                className="peer relative w-auto rounded-r-none border-r-0"
                 source={Track.Source.Camera}
               />
               <DeviceSelect
-                className="rounded-l-none border-l-0"
-                variant="small"
+                className="peer-data-[state=on]:border-button-foreground rounded-l-none border-l-0"
+                size="sm"
                 kind="videoinput"
                 onActiveDeviceChange={handleDeviceChange}
                 onError={handleError}

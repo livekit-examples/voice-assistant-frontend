@@ -3,7 +3,7 @@ import { Button } from './ui/button';
 
 export function Welcome({ onStartCall }: { onStartCall: () => void }) {
   return (
-    <div className="mx-auto text-center">
+    <div className="mx-auto flex h-svh flex-col items-center justify-center text-center">
       <CodeBlockIcon size={64} weight="bold" className="mx-auto mb-4" />
       <h1 className="font-semibold">Voice Agent Quick Start</h1>
       <p className="text-muted-foreground max-w-prose pt-1 font-medium">

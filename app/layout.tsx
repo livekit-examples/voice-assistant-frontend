@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Public_Sans } from 'next/font/google';
 import localFont from 'next/font/local';
-import { ApplyThemeScript, ThemeToggle } from '@/components/ThemeToggle';
+import { ApplyThemeScript, ThemeToggle } from '@/components/theme-toggle';
 import './globals.css';
 
 const publicSans = Public_Sans({
@@ -46,7 +46,7 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="scroll-smooth">
       <head>
         <ApplyThemeScript />
       </head>
