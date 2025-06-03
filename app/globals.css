@@ -87,10 +87,6 @@
 }
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -154,6 +150,29 @@
     100% {
       width: 300px;
       background-position-x: 300px;
+    }
+  }
+
+  .appear-from-bottom {
+    opacity: 1;
+    transform: translateY(0);
+    transition-property: transform, opacity;
+    transition-duration: var(--tw-duration);
+    transition-timing-function: var(--tw-ease);
+
+    @starting-style {
+      transform: translateY(100%);
+    }
+  }
+
+  .appear-fade-in {
+    opacity: 1;
+    transition-property: opacity;
+    transition-duration: var(--tw-duration);
+    transition-timing-function: var(--tw-ease);
+
+    @starting-style {
+      opacity: 0;
     }
   }
 }

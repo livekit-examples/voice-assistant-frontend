@@ -63,23 +63,31 @@ export function AgentControlBar({
   return (
     <div
       aria-label="Voice assistant controls"
-      className={cn('bg-background flex flex-col rounded-md border p-3 shadow-md', className)}
+      className={cn(
+        'bg-background flex flex-col rounded-md border p-3 drop-shadow-xl/3',
+        className
+      )}
       {...props}
     >
-      {chatOpen && (
-        <>
-          <div className={`flex w-full overflow-hidden`}>
-            <ChatInput onSend={handleSendMessage} disabled={isSendingMessage} className="w-full" />
-          </div>
-          <hr className="my-3" />
-        </>
-      )}
+      <div
+        inert={!chatOpen}
+        className={cn(
+          'overflow-hidden transition-[height] duration-300 ease-out',
+          chatOpen ? 'h-[57px]' : 'h-0'
+        )}
+      >
+        <div className="flex h-8 w-full">
+          <ChatInput onSend={handleSendMessage} disabled={isSendingMessage} className="w-full" />
+        </div>
+        <hr className="my-3" />
+      </div>
+
       <div className="flex flex-row justify-between gap-1">
         <div className="flex w-full gap-1">
           {visibleControls.microphone && (
             <div className="flex items-center gap-0">
               <TrackToggle
-                className="peer relative w-auto rounded-r-none border-r-0"
+                className="peer relative w-auto md:rounded-r-none md:border-r-0"
                 source={Track.Source.Microphone}
               >
                 <BarVisualizer
@@ -92,7 +100,7 @@ export function AgentControlBar({
                 </BarVisualizer>
               </TrackToggle>
               <DeviceSelect
-                className="peer-data-[state=on]:border-button-foreground rounded-l-none border-l-0"
+                className="peer-data-[state=on]:border-button-foreground hidden rounded-l-none border-l-0 md:block"
                 size="sm"
                 kind="audioinput"
                 onActiveDeviceChange={handleDeviceChange}
@@ -104,11 +112,11 @@ export function AgentControlBar({
           {visibleControls.camera && (
             <div className="flex items-center gap-0">
               <TrackToggle
-                className="peer relative w-auto rounded-r-none border-r-0"
+                className="peer relative w-auto md:rounded-r-none md:border-r-0"
                 source={Track.Source.Camera}
               />
               <DeviceSelect
-                className="peer-data-[state=on]:border-button-foreground rounded-l-none border-l-0"
+                className="peer-data-[state=on]:border-button-foreground hidden rounded-l-none border-l-0 md:block"
                 size="sm"
                 kind="videoinput"
                 onActiveDeviceChange={handleDeviceChange}
@@ -138,7 +146,8 @@ export function AgentControlBar({
         {visibleControls.leave && (
           <Button variant="destructive" onClick={handleDisconnect} className="font-mono">
             <PhoneDisconnectIcon weight="bold" />
-            END CALL
+            <span className="hidden md:inline">END CALL</span>
+            <span className="inline md:hidden">END</span>
           </Button>
         )}
       </div>

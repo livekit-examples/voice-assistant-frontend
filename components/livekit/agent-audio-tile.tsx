@@ -19,7 +19,7 @@ export function AgentAudioTile({ className }: AgentAudioTileProps) {
       state={agent.state}
       barCount={5}
       options={{ minHeight: 5 }}
-      className={cn('flex aspect-video h-[126px] items-center justify-center gap-4', className)}
+      className={cn('flex h-[200px] items-center justify-center gap-4', className)}
     >
       <span
         className={cn([

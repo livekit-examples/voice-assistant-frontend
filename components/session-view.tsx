@@ -23,10 +23,14 @@ export default function SessionView() {
   return (
     <main>
       {chatOpen && (
-        <ChatMessageView className="mx-auto min-h-svh w-full max-w-2xl pt-56 pb-48">
+        <ChatMessageView className="appear-fade-in mx-auto min-h-svh w-full max-w-2xl px-3 pt-56 pb-48 delay-300 duration-1000 ease-out md:px-0">
           <div className="space-y-3 whitespace-pre-wrap">
             {messages.map((message: ReceivedChatMessage) => (
-              <ChatEntry key={message.id} entry={message} />
+              <ChatEntry
+                key={message.id}
+                entry={message}
+                className="appear-fade-in duration-2000 ease-out"
+              />
             ))}
           </div>
         </ChatMessageView>
@@ -39,8 +43,8 @@ export default function SessionView() {
 
       <div
         className={cn(
-          'fixed left-1/2 z-50 rounded-xl border border-transparent p-8 transition-[left,top,transform,shadow,border] duration-500 ease-out',
-          chatOpen ? 'shadow-3xl border-border top-24 shadow-md' : 'top-1/2'
+          'bg-background fixed left-1/2 z-50 rounded-2xl border border-transparent p-8 transition-[left,top,transform,shadow,border] duration-500 ease-out',
+          chatOpen ? 'border-border top-24 drop-shadow-2xl/3' : 'top-1/2'
         )}
         style={{
           transform: chatOpen
@@ -51,13 +55,20 @@ export default function SessionView() {
         <AgentAudioTile />
       </div>
 
-      <div className="bg-background fixed right-0 bottom-0 left-0 z-50 px-12 pb-12">
-        <div className="mx-auto w-full max-w-2xl">
-          {messages.length === 0 && (
-            <p className="animate-text-gradient from-foreground/20 via-foreground to-foreground/20 mx-auto mb-6 bg-gradient-to-r bg-clip-text text-sm font-semibold text-transparent">
+      <div className="bg-background appear-from-bottom fixed right-0 bottom-0 left-0 z-50 px-3 pb-3 delay-300 duration-300 ease-out md:px-12 md:pb-12">
+        <div className="relative mx-auto w-full max-w-2xl">
+          <div
+            aria-hidden={messages.length > 0}
+            className={cn(
+              'appear-fade-in absolute inset-x-0 -top-12 delay-600 duration-2000 ease-in',
+              messages.length === 0 ? 'opacity-100' : '!opacity-0'
+            )}
+          >
+            <p className="animate-text-gradient from-foreground/20 via-foreground to-foreground/20 mx-auto bg-gradient-to-r bg-clip-text text-center text-sm font-semibold text-transparent">
               Agent is listening, ask it a question
             </p>
-          )}
+          </div>
+
           <AgentControlBar onChatOpenChange={setChatOpen} onSendMessage={handleSendMessage} />
         </div>
         {/* skrim */}

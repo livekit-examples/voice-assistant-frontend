@@ -19,6 +19,8 @@ export function ChatInput({ onSend, className, disabled, ...props }: ChatInputPr
     inputRef.current?.focus();
   };
 
+  const isDisabled = disabled || message.trim().length === 0;
+
   return (
     <form
       {...props}
@@ -37,8 +39,8 @@ export function ChatInput({ onSend, className, disabled, ...props }: ChatInputPr
       <Button
         type="submit"
         size="sm"
-        variant="secondary"
-        disabled={message.trim().length === 0 || disabled}
+        variant={isDisabled ? 'secondary' : 'default'}
+        disabled={isDisabled}
         className="font-mono"
       >
         SEND
