@@ -7,6 +7,7 @@ import { ChatTextIcon, PhoneDisconnectIcon } from '@phosphor-icons/react/dist/ss
 import { ChatInput } from '@/components/livekit/chat/chat-input';
 import { Button } from '@/components/ui/button';
 import { Toggle } from '@/components/ui/toggle';
+import { AppConfig } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { DeviceSelect } from '../device-select';
 import { TrackToggle } from '../track-toggle';
@@ -15,6 +16,7 @@ import { UseAgentControlBarProps, useAgentControlBar } from './hooks/use-agent-c
 export interface AgentControlBarProps
   extends React.HTMLAttributes<HTMLDivElement>,
     UseAgentControlBarProps {
+  capabilities: AppConfig['capabilities'];
   onSendMessage?: (message: string) => Promise<void>;
   onChatOpenChange?: (open: boolean) => void;
 }
@@ -25,6 +27,7 @@ export interface AgentControlBarProps
 export function AgentControlBar({
   controls,
   saveUserChoices = true,
+  capabilities,
   onDeviceError,
   onSendMessage,
   onChatOpenChange,
@@ -69,18 +72,20 @@ export function AgentControlBar({
       )}
       {...props}
     >
-      <div
-        inert={!chatOpen}
-        className={cn(
-          'overflow-hidden transition-[height] duration-300 ease-out',
-          chatOpen ? 'h-[57px]' : 'h-0'
-        )}
-      >
-        <div className="flex h-8 w-full">
-          <ChatInput onSend={handleSendMessage} disabled={isSendingMessage} className="w-full" />
+      {capabilities.suportsChatInput && (
+        <div
+          inert={!chatOpen}
+          className={cn(
+            'overflow-hidden transition-[height] duration-300 ease-out',
+            chatOpen ? 'h-[57px]' : 'h-0'
+          )}
+        >
+          <div className="flex h-8 w-full">
+            <ChatInput onSend={handleSendMessage} disabled={isSendingMessage} className="w-full" />
+          </div>
+          <hr className="my-3" />
         </div>
-        <hr className="my-3" />
-      </div>
+      )}
 
       <div className="flex flex-row justify-between gap-1">
         <div className="flex w-full gap-1">
@@ -109,7 +114,7 @@ export function AgentControlBar({
             </div>
           )}
 
-          {visibleControls.camera && (
+          {capabilities.suportsVideoInput && visibleControls.camera && (
             <div className="flex items-center gap-0">
               <TrackToggle
                 className="peer relative w-auto md:rounded-r-none md:border-r-0"
@@ -125,7 +130,7 @@ export function AgentControlBar({
             </div>
           )}
 
-          {visibleControls.screenShare && (
+          {capabilities.suportsScreenShare && visibleControls.screenShare && (
             <div className="flex items-center gap-0">
               <TrackToggle className="relative w-auto" source={Track.Source.ScreenShare} />
             </div>

@@ -8,9 +8,14 @@ import { ChatEntry } from '@/components/livekit/chat/chat-entry';
 import { ChatMessageView } from '@/components/livekit/chat/chat-message-view';
 import useChatAndTranscription from '@/hooks/useChatAndTranscription';
 import { useDebugMode } from '@/hooks/useDebug';
+import { AppConfig } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
-export default function SessionView() {
+interface SessionViewProp {
+  capabilities: AppConfig['capabilities'];
+}
+
+export default function SessionView({ capabilities }: SessionViewProp) {
   const [chatOpen, setChatOpen] = React.useState(false);
   const { messages, send } = useChatAndTranscription();
 
@@ -27,6 +32,7 @@ export default function SessionView() {
           <div className="space-y-3 whitespace-pre-wrap">
             {messages.map((message: ReceivedChatMessage) => (
               <ChatEntry
+                hideName
                 key={message.id}
                 entry={message}
                 className="appear-fade-in duration-2000 ease-out"
@@ -69,7 +75,11 @@ export default function SessionView() {
             </p>
           </div>
 
-          <AgentControlBar onChatOpenChange={setChatOpen} onSendMessage={handleSendMessage} />
+          <AgentControlBar
+            capabilities={capabilities}
+            onChatOpenChange={setChatOpen}
+            onSendMessage={handleSendMessage}
+          />
         </div>
         {/* skrim */}
         <div className="from-background border-background absolute top-0 left-0 h-12 w-full -translate-y-full border-b-8 bg-gradient-to-t to-transparent" />

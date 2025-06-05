@@ -31,7 +31,7 @@ export const ChatEntry = ({
     <li
       data-lk-message-origin={messageOrigin}
       title={time.toLocaleTimeString(locale, { timeStyle: 'full' })}
-      className={cn('flex flex-col gap-0.5', className)}
+      className={cn('group flex flex-col gap-0.5', className)}
       {...props}
     >
       {(!hideTimestamp || !hideName || hasBeenEdited) && (
@@ -39,7 +39,7 @@ export const ChatEntry = ({
           {!hideName && <strong className="mt-2">{name}</strong>}
 
           {!hideTimestamp && (
-            <span className="align-self-end ml-auto">
+            <span className="align-self-end ml-auto opacity-0 transition-opacity ease-linear group-hover:opacity-100">
               {hasBeenEdited && '*'}
               {time.toLocaleTimeString(locale, { timeStyle: 'short' })}
             </span>

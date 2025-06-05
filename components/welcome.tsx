@@ -1,7 +1,12 @@
 import { CodeBlockIcon } from '@phosphor-icons/react/dist/ssr';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
 
-export function Welcome({ onStartCall }: { onStartCall: () => void }) {
+interface WelcomeProps {
+  startButtonText: string;
+  onStartCall: () => void;
+}
+
+export function Welcome({ startButtonText, onStartCall }: WelcomeProps) {
   return (
     <div className="mx-auto flex h-svh flex-col items-center justify-center text-center">
       <CodeBlockIcon size={64} weight="bold" className="mx-auto mb-4" />
@@ -20,8 +25,8 @@ export function Welcome({ onStartCall }: { onStartCall: () => void }) {
         </a>
         .
       </p>
-      <Button size="lg" onClick={onStartCall} className="mt-12 w-64 font-mono font-bold">
-        START CALL
+      <Button size="lg" onClick={onStartCall} className="mt-12 w-64 font-mono">
+        {startButtonText}
       </Button>
     </div>
   );
