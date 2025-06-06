@@ -1,20 +1,11 @@
-import { Metadata, ResolvingMetadata } from 'next';
+import { headers } from 'next/headers';
 import { App } from '@/components/app';
-import { getAppConfig } from '@/lib/utils';
-
-export async function generateMetadata(_props: any, parent: ResolvingMetadata): Promise<Metadata> {
-  const { pageTitle, pageDescription } = await getAppConfig();
-  const parentMetadata = await parent;
-
-  return {
-    ...parentMetadata,
-    title: pageTitle,
-    description: pageDescription + '\n\nBuilt with LiveKit Agents.',
-  } as Metadata;
-}
+import { getAppConfig, getOrigin } from '@/lib/utils';
 
 export default async function Page() {
-  const appConfig = await getAppConfig();
+  const hdrs = await headers();
+  const origin = getOrigin(hdrs);
+  const appConfig = await getAppConfig(origin);
 
   return <App appConfig={appConfig} />;
 }
