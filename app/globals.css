@@ -152,27 +152,4 @@
       background-position-x: 300px;
     }
   }
-
-  .appear-from-bottom {
-    opacity: 1;
-    transform: translateY(0);
-    transition-property: transform, opacity;
-    transition-duration: var(--tw-duration);
-    transition-timing-function: var(--tw-ease);
-
-    @starting-style {
-      transform: translateY(100%);
-    }
-  }
-
-  .appear-fade-in {
-    opacity: 1;
-    transition-property: opacity;
-    transition-duration: var(--tw-duration);
-    transition-timing-function: var(--tw-ease);
-
-    @starting-style {
-      opacity: 0;
-    }
-  }
 }
