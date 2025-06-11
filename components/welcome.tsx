@@ -9,7 +9,7 @@ interface WelcomeProps {
 export function Welcome({ startButtonText, onStartCall }: WelcomeProps) {
   return (
     <div className="mx-auto flex h-svh flex-col items-center justify-center text-center">
-      <CodeBlockIcon size={64} weight="bold" className="mx-auto mb-4" />
+      <CodeBlockIcon size={64} className="mx-auto mb-4" />
       <h1 className="font-semibold">Voice Agent Quick Start</h1>
       <p className="text-muted-foreground max-w-prose pt-1 font-medium">
         Start a call to chat with your voice agent.
@@ -21,11 +21,11 @@ export function Welcome({ startButtonText, onStartCall }: WelcomeProps) {
           href="https://docs.livekit.io/agents/start/voice-ai/"
           className="underline underline-offset-4"
         >
-          agent guide
+          Voice AI quickstart
         </a>
         .
       </p>
-      <Button size="lg" onClick={onStartCall} className="mt-12 w-64 font-mono">
+      <Button variant="primary" size="lg" onClick={onStartCall} className="mt-12 w-64 font-mono">
         {startButtonText}
       </Button>
     </div>

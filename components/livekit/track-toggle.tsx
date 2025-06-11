@@ -26,21 +26,16 @@ function getSourceIcon(source: Track.Source, enabled: boolean) {
   }
 }
 
-export function TrackToggle(props: TrackToggleProps) {
-  const { enabled, pending, toggle } = useTrackToggle({
-    source: props.source,
-  });
-  const variant = props.variant || 'outline';
-  const icon = getSourceIcon(props.source, enabled);
+export function TrackToggle({ source, ...props }: TrackToggleProps) {
+  const { enabled, pending, toggle } = useTrackToggle({ source });
+  const icon = getSourceIcon(source, enabled);
+
   return (
     <Toggle
-      variant={variant}
-      aria-label={`Toggle ${props.source}`}
-      onPressedChange={() => {
-        console.log('toggle change');
-        toggle();
-      }}
+      pressed={enabled}
       disabled={pending}
+      aria-label={`Toggle ${source}`}
+      onPressedChange={toggle}
       {...props}
     >
       {icon}

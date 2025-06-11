@@ -34,7 +34,7 @@ export default function SessionView({ capabilities, sessionStarted }: SessionVie
     <main>
       <ChatMessageView
         className={cn(
-          'mx-auto min-h-svh w-full max-w-2xl px-3 pt-56 pb-48 transition-[opacity,translate] duration-300 ease-out md:px-0',
+          'mx-auto min-h-svh w-full max-w-2xl px-3 pt-56 pb-56 transition-[opacity,translate] duration-300 ease-out md:px-0',
           chatOpen ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
         )}
       >
@@ -62,8 +62,7 @@ export default function SessionView({ capabilities, sessionStarted }: SessionVie
 
       <motion.div
         className={cn(
-          'bg-background fixed left-1/2 z-50 -translate-1/2 rounded-2xl border border-transparent p-8 transition-[shadow,border] duration-500 ease-out',
-          chatOpen && 'border-border drop-shadow-2xl/3'
+          'bg-background fixed left-1/2 z-50 -translate-1/2 rounded-2xl border border-transparent p-8 transition-[shadow,border] duration-500 ease-out'
         )}
         animate={{
           top: chatOpen ? '96px' : '50%',
@@ -74,7 +73,7 @@ export default function SessionView({ capabilities, sessionStarted }: SessionVie
         <AgentAudioTile />
       </motion.div>
 
-      <div className="bg-background fixed right-0 bottom-0 left-0 z-50 px-3 pb-3 md:px-12 md:pb-12">
+      <div className="bg-background fixed right-0 bottom-0 left-0 z-50 px-3 pt-2 pb-3 md:px-12 md:pb-12">
         <motion.div
           key="control-bar"
           initial={{ opacity: 0, translateY: '100%' }}
@@ -84,7 +83,7 @@ export default function SessionView({ capabilities, sessionStarted }: SessionVie
           }}
           transition={{ duration: 0.3, delay: sessionStarted ? 0.5 : 0, ease: 'easeOut' }}
         >
-          <div className="relative mx-auto w-full max-w-2xl">
+          <div className="relative z-10 mx-auto w-full max-w-2xl">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{
@@ -96,9 +95,12 @@ export default function SessionView({ capabilities, sessionStarted }: SessionVie
                 },
               }}
               aria-hidden={messages.length > 0}
-              className={cn('absolute inset-x-0 -top-12')}
+              className={cn(
+                'absolute inset-x-0 -top-12 text-center',
+                sessionStarted && messages.length === 0 && 'pointer-events-none'
+              )}
             >
-              <p className="animate-text-gradient from-foreground/20 via-foreground to-foreground/20 mx-auto bg-gradient-to-r bg-clip-text text-center text-sm font-semibold text-transparent">
+              <p className="animate-text-shimmer inline-block !bg-clip-text text-sm font-semibold text-transparent">
                 Agent is listening, ask it a question
               </p>
             </motion.div>
@@ -110,7 +112,7 @@ export default function SessionView({ capabilities, sessionStarted }: SessionVie
             />
           </div>
           {/* skrim */}
-          <div className="from-background border-background absolute top-0 left-0 h-12 w-full -translate-y-full border-b-8 bg-gradient-to-t to-transparent" />
+          <div className="from-background border-background absolute top-0 left-0 h-12 w-full -translate-y-full bg-gradient-to-t to-transparent" />
         </motion.div>
       </div>
     </main>

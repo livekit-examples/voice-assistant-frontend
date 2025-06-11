@@ -67,7 +67,7 @@ export function AgentControlBar({
     <div
       aria-label="Voice assistant controls"
       className={cn(
-        'bg-background flex flex-col rounded-md border p-3 drop-shadow-xl/3',
+        'bg-background flex flex-col rounded-[31px] p-3 shadow-[0_0_4px_rgba(0,0,0,0.05)] drop-shadow-md/3',
         className
       )}
       {...props}
@@ -88,28 +88,40 @@ export function AgentControlBar({
       )}
 
       <div className="flex flex-row justify-between gap-1">
-        <div className="flex w-full gap-1">
+        <div className="flex gap-1">
           {visibleControls.microphone && (
             <div className="flex items-center gap-0">
               <TrackToggle
-                className="peer relative w-auto md:rounded-r-none md:border-r-0"
+                variant="primary"
                 source={Track.Source.Microphone}
+                className="peer/track group/track relative w-auto pr-3 pl-3 md:rounded-r-none md:border-r-0 md:pr-1"
               >
                 <BarVisualizer
-                  className="flex h-full w-auto items-center justify-center gap-0.5"
+                  barCount={5}
                   trackRef={micTrackRef}
-                  barCount={12}
                   options={{ minHeight: 5 }}
+                  className="flex h-full w-auto items-center justify-center gap-0.5"
                 >
-                  <span className="data-lk-highlighted:bg-foreground data-lk-muted:bg-muted h-full w-0.5 origin-center rounded-2xl"></span>
+                  <span
+                    className={cn([
+                      'h-full w-0.5 origin-center rounded-2xl',
+                      'group-data-[state=on]/track:bg-fg1 group-data-[state=off]/track:bg-destructive-foreground',
+                      'data-lk-muted:bg-muted',
+                    ])}
+                  ></span>
                 </BarVisualizer>
               </TrackToggle>
               <DeviceSelect
-                className="peer-data-[state=on]:border-button-foreground hidden rounded-l-none border-l-0 md:block"
                 size="sm"
                 kind="audioinput"
-                onActiveDeviceChange={handleDeviceChange}
                 onError={handleError}
+                onActiveDeviceChange={handleDeviceChange}
+                className={cn([
+                  'peer-data-[state=off]/track:text-destructive-foreground',
+                  'hover:text-fg1 focus:text-fg1',
+                  'hover:peer-data-[state=off]/track:text-destructive-foreground focus:peer-data-[state=off]/track:text-destructive-foreground',
+                  'hidden rounded-l-none md:block',
+                ])}
               />
             </div>
           )}
@@ -117,29 +129,39 @@ export function AgentControlBar({
           {capabilities.suportsVideoInput && visibleControls.camera && (
             <div className="flex items-center gap-0">
               <TrackToggle
-                className="peer relative w-auto md:rounded-r-none md:border-r-0"
+                variant="primary"
                 source={Track.Source.Camera}
+                className="peer/track relative w-auto pr-3 pl-3 md:rounded-r-none md:border-r-0 md:pr-1"
               />
               <DeviceSelect
-                className="peer-data-[state=on]:border-button-foreground hidden rounded-l-none border-l-0 md:block"
                 size="sm"
                 kind="videoinput"
-                onActiveDeviceChange={handleDeviceChange}
                 onError={handleError}
+                onActiveDeviceChange={handleDeviceChange}
+                className={cn([
+                  'peer-data-[state=off]/track:text-destructive-foreground',
+                  'hover:text-fg1 focus:text-fg1',
+                  'hover:peer-data-[state=off]/track:text-destructive-foreground focus:peer-data-[state=off]/track:text-destructive-foreground',
+                  'hidden rounded-l-none md:block',
+                ])}
               />
             </div>
           )}
 
           {capabilities.suportsScreenShare && visibleControls.screenShare && (
             <div className="flex items-center gap-0">
-              <TrackToggle className="relative w-auto" source={Track.Source.ScreenShare} />
+              <TrackToggle
+                variant="secondary"
+                className="relative w-auto"
+                source={Track.Source.ScreenShare}
+              />
             </div>
           )}
 
           {visibleControls.chat && (
             <Toggle
+              variant="secondary"
               aria-label="Toggle chat"
-              variant="outline"
               pressed={chatOpen}
               onPressedChange={setChatOpen}
               className="aspect-square h-full"
