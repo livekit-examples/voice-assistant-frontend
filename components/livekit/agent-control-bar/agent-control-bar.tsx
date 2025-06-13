@@ -184,7 +184,7 @@ export function AgentControlBar({
 
           {visibleControls.chat && (
             <Toggle
-              variant="primary"
+              variant="secondary"
               aria-label="Toggle chat"
               pressed={chatOpen}
               onPressedChange={setChatOpen}

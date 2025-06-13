@@ -22,7 +22,7 @@ const toggleVariants = cva(
         default:
           'bg-button hover:bg-muted focus:bg-muted hover:text-muted-foreground focus:text-muted-foreground',
         primary:
-          'text-fg1 bg-button hover:bg-button-hover focus:bg-button-hover data-[state=off]:bg-button-primary hover:data-[state=off]:bg-button-hover data-[state=off]:text-button-primary-foreground ',
+          'text-fg1 bg-button hover:bg-button-hover focus:bg-button-hover data-[state=off]:bg-button-primary hover:data-[state=off]:bg-button-hover data-[state=off]:text-button-primary-foreground',
         secondary:
           'text-fg1 bg-button hover:bg-button-hover focus:bg-button-hover data-[state=on]:bg-button-secondary hover:data-[state=on]:bg-button-secondary data-[state=on]:text-button-secondary-foreground',
         outline: [
