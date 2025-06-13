@@ -3,10 +3,10 @@
 import * as React from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ReceivedChatMessage } from '@livekit/components-react';
-import { AgentAudioTile } from '@/components/livekit/agent-audio-tile';
 import { AgentControlBar } from '@/components/livekit/agent-control-bar/agent-control-bar';
 import { ChatEntry } from '@/components/livekit/chat/chat-entry';
 import { ChatMessageView } from '@/components/livekit/chat/chat-message-view';
+import { MediaTiles } from '@/components/livekit/media-tiles';
 import useChatAndTranscription from '@/hooks/useChatAndTranscription';
 import { useDebugMode } from '@/hooks/useDebug';
 import { cn } from '@/lib/utils';
@@ -34,8 +34,8 @@ export default function SessionView({ capabilities, sessionStarted }: SessionVie
     <main>
       <ChatMessageView
         className={cn(
-          'mx-auto min-h-svh w-full max-w-2xl px-3 pt-56 pb-56 transition-[opacity,translate] duration-300 ease-out md:px-0',
-          chatOpen ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
+          'mx-auto min-h-svh w-full max-w-2xl px-3 pt-32 pb-40 transition-[opacity,translate] duration-300 ease-out md:px-0 md:pt-36 md:pb-48',
+          chatOpen ? 'translate-y-0 opacity-100 delay-200' : 'translate-y-20 opacity-0'
         )}
       >
         <div className="space-y-3 whitespace-pre-wrap">
@@ -55,23 +55,12 @@ export default function SessionView({ capabilities, sessionStarted }: SessionVie
         </div>
       </ChatMessageView>
 
-      <div className="bg-background mp-12 fixed top-0 right-0 left-0 h-40">
+      <div className="bg-background mp-12 fixed top-0 right-0 left-0 h-32">
         {/* skrim */}
         <div className="from-background absolute bottom-0 left-0 h-12 w-full translate-y-full bg-gradient-to-b to-transparent" />
       </div>
 
-      <motion.div
-        className={cn(
-          'bg-background fixed left-1/2 z-50 -translate-1/2 rounded-2xl border border-transparent p-8 transition-[shadow,border] duration-500 ease-out'
-        )}
-        animate={{
-          top: chatOpen ? '96px' : '50%',
-          scale: chatOpen ? 0.4 : 1,
-        }}
-        transition={{ type: 'spring', damping: 18 }}
-      >
-        <AgentAudioTile />
-      </motion.div>
+      <MediaTiles chatOpen={chatOpen} />
 
       <div className="bg-background fixed right-0 bottom-0 left-0 z-50 px-3 pt-2 pb-3 md:px-12 md:pb-12">
         <motion.div

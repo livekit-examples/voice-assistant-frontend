@@ -16,9 +16,11 @@ import { UseAgentControlBarProps, useAgentControlBar } from './hooks/use-agent-c
 export interface AgentControlBarProps
   extends React.HTMLAttributes<HTMLDivElement>,
     UseAgentControlBarProps {
-  capabilities: AppConfig['capabilities'];
-  onSendMessage?: (message: string) => Promise<void>;
+  capabilities: Pick<AppConfig, 'suportsChatInput' | 'suportsVideoInput' | 'suportsScreenShare'>;
   onChatOpenChange?: (open: boolean) => void;
+  onSendMessage?: (message: string) => Promise<void>;
+  onDisconnect?: () => void;
+  onDeviceError?: (error: { source: Track.Source; error: Error }) => void;
 }
 
 /**
@@ -28,27 +30,26 @@ export function AgentControlBar({
   controls,
   saveUserChoices = true,
   capabilities,
-  onDeviceError,
+  className,
   onSendMessage,
   onChatOpenChange,
-  className,
+  onDisconnect,
+  onDeviceError,
   ...props
 }: AgentControlBarProps) {
-  const {
-    visibleControls,
-    micTrackRef,
-    // microphoneOnChange,
-    handleDisconnect,
-    handleDeviceChange,
-    handleError,
-  } = useAgentControlBar({
-    controls,
-    saveUserChoices,
-    onDeviceError,
-  });
-
   const [chatOpen, setChatOpen] = React.useState(false);
   const [isSendingMessage, setIsSendingMessage] = React.useState(false);
+
+  const {
+    micTrackRef,
+    visibleControls,
+    cameraToggle,
+    microphoneToggle,
+    screenShareToggle,
+    handleAudioDeviceChange,
+    handleVideoDeviceChange,
+    handleDisconnect,
+  } = useAgentControlBar();
 
   const handleSendMessage = async (message: string) => {
     setIsSendingMessage(true);
@@ -59,6 +60,11 @@ export function AgentControlBar({
     }
   };
 
+  const onLeave = () => {
+    handleDisconnect();
+    onDisconnect?.();
+  };
+
   React.useEffect(() => {
     onChatOpenChange?.(chatOpen);
   }, [chatOpen, onChatOpenChange]);
@@ -67,7 +73,7 @@ export function AgentControlBar({
     <div
       aria-label="Voice assistant controls"
       className={cn(
-        'bg-background flex flex-col rounded-[31px] p-3 shadow-[0_0_4px_rgba(0,0,0,0.05)] drop-shadow-md/3',
+        'bg-background border-bg2 dark:border-separator1 flex flex-col rounded-[31px] border p-3 drop-shadow-md/3',
         className
       )}
       {...props}
@@ -94,10 +100,13 @@ export function AgentControlBar({
               <TrackToggle
                 variant="primary"
                 source={Track.Source.Microphone}
-                className="peer/track group/track relative w-auto pr-3 pl-3 md:rounded-r-none md:border-r-0 md:pr-1"
+                pressed={microphoneToggle.enabled}
+                disabled={microphoneToggle.pending}
+                onPressedChange={microphoneToggle.toggle}
+                className="peer/track group/track relative w-auto pr-3 pl-3 md:rounded-r-none md:border-r-0 md:pr-2"
               >
                 <BarVisualizer
-                  barCount={5}
+                  barCount={3}
                   trackRef={micTrackRef}
                   options={{ minHeight: 5 }}
                   className="flex h-full w-auto items-center justify-center gap-0.5"
@@ -111,12 +120,16 @@ export function AgentControlBar({
                   ></span>
                 </BarVisualizer>
               </TrackToggle>
+              <hr className="bg-separator1 peer-data-[state=off]/track:bg-separatorSerious relative z-10 -mr-px h-4 w-px" />
               <DeviceSelect
                 size="sm"
                 kind="audioinput"
-                onError={handleError}
-                onActiveDeviceChange={handleDeviceChange}
+                onError={(error) =>
+                  onDeviceError?.({ source: Track.Source.Microphone, error: error as Error })
+                }
+                onActiveDeviceChange={handleAudioDeviceChange}
                 className={cn([
+                  'pl-2',
                   'peer-data-[state=off]/track:text-destructive-foreground',
                   'hover:text-fg1 focus:text-fg1',
                   'hover:peer-data-[state=off]/track:text-destructive-foreground focus:peer-data-[state=off]/track:text-destructive-foreground',
@@ -131,14 +144,22 @@ export function AgentControlBar({
               <TrackToggle
                 variant="primary"
                 source={Track.Source.Camera}
-                className="peer/track relative w-auto pr-3 pl-3 md:rounded-r-none md:border-r-0 md:pr-1"
+                pressed={cameraToggle.enabled}
+                pending={cameraToggle.pending}
+                disabled={cameraToggle.pending}
+                onPressedChange={cameraToggle.toggle}
+                className="peer/track relative w-auto pr-3 pl-3 disabled:opacity-100 md:rounded-r-none md:border-r-0 md:pr-2"
               />
+              <hr className="bg-separator1 peer-data-[state=off]/track:bg-separatorSerious relative z-10 -mr-px h-4 w-px" />
               <DeviceSelect
                 size="sm"
                 kind="videoinput"
-                onError={handleError}
-                onActiveDeviceChange={handleDeviceChange}
+                onError={(error) =>
+                  onDeviceError?.({ source: Track.Source.Camera, error: error as Error })
+                }
+                onActiveDeviceChange={handleVideoDeviceChange}
                 className={cn([
+                  'pl-2',
                   'peer-data-[state=off]/track:text-destructive-foreground',
                   'hover:text-fg1 focus:text-fg1',
                   'hover:peer-data-[state=off]/track:text-destructive-foreground focus:peer-data-[state=off]/track:text-destructive-foreground',
@@ -152,15 +173,18 @@ export function AgentControlBar({
             <div className="flex items-center gap-0">
               <TrackToggle
                 variant="secondary"
-                className="relative w-auto"
                 source={Track.Source.ScreenShare}
+                pressed={screenShareToggle.enabled}
+                disabled={screenShareToggle.pending}
+                onPressedChange={screenShareToggle.toggle}
+                className="relative w-auto"
               />
             </div>
           )}
 
           {visibleControls.chat && (
             <Toggle
-              variant="secondary"
+              variant="primary"
               aria-label="Toggle chat"
               pressed={chatOpen}
               onPressedChange={setChatOpen}
@@ -171,7 +195,7 @@ export function AgentControlBar({
           )}
         </div>
         {visibleControls.leave && (
-          <Button variant="destructive" onClick={handleDisconnect} className="font-mono">
+          <Button variant="destructive" onClick={onLeave} className="font-mono">
             <PhoneDisconnectIcon weight="bold" />
             <span className="hidden md:inline">END CALL</span>
             <span className="inline md:hidden">END</span>
