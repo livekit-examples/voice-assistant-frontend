@@ -1,24 +1,16 @@
 import { forwardRef } from 'react';
-import { BarVisualizer, useVoiceAssistant } from '@livekit/components-react';
+import { BarVisualizer, VoiceAssistant } from '@livekit/components-react';
 import { cn } from '@/lib/utils';
-import { VideoTile } from './video-tile';
 
 interface AgentAudioTileProps {
+  agent: VoiceAssistant;
   className?: string;
 }
 
-export const AgentTile = forwardRef<HTMLDivElement, AgentAudioTileProps>(({ className }, ref) => {
-  const agent = useVoiceAssistant();
-
-  if (!agent) {
-    return null;
-  }
-
-  return (
-    <div ref={ref} className={className}>
-      {agent.videoTrack ? (
-        <VideoTile ref={ref} trackRef={agent.videoTrack} />
-      ) : (
+export const AgentTile = forwardRef<HTMLDivElement, AgentAudioTileProps>(
+  ({ agent, className }, ref) => {
+    return (
+      <div ref={ref} className={className}>
         <BarVisualizer
           barCount={5}
           state={agent.state}
@@ -34,7 +26,7 @@ export const AgentTile = forwardRef<HTMLDivElement, AgentAudioTileProps>(({ clas
             ])}
           />
         </BarVisualizer>
-      )}
-    </div>
-  );
-});
+      </div>
+    );
+  }
+);

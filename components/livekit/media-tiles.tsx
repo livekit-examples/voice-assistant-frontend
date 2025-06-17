@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Track } from 'livekit-client';
 import { AnimatePresence, motion } from 'motion/react';
-import { useTracks } from '@livekit/components-react';
+import {
+  type TrackReference,
+  useLocalParticipant,
+  useTracks,
+  useVoiceAssistant,
+} from '@livekit/components-react';
 import { cn } from '@/lib/utils';
 import { AgentTile } from './agent-tile';
+import { AvatarTile } from './avatar-tile';
 import { VideoTile } from './video-tile';
 
-const MotionAgentTile = motion.create(AgentTile);
 const MotionVideoTile = motion.create(VideoTile);
+const MotionAgentTile = motion.create(AgentTile);
+const MotionAvatarTile = motion.create(AvatarTile);
 
 const animationProps = {
   initial: {
@@ -31,72 +38,130 @@ const animationProps = {
 };
 
 const classNames = {
-  // Agent chat open with second tile
-  // Column 1 / Row 1
-  // x-end y-center
+  // GRID
+  // 2 Columns x 3 Rows
+  grid: [
+    'h-full w-full',
+    'grid gap-x-2 place-content-center',
+    'grid-cols-[1fr_1fr] grid-rows-[90px_1fr_90px]',
+  ],
+  // Agent
+  // chatOpen: true,
+  // hasSecondTile: true
+  // layout: Column 1 / Row 1
+  // align: x-end y-center
   agentChatOpenWithSecondTile: ['col-start-1 row-start-1', 'self-center justify-self-end'],
-  // Agent chat open without second tile
-  // Column 1 / Row 1 / Column-Span 2
-  // x-center y-center
+  // Agent
+  // chatOpen: true,
+  // hasSecondTile: false
+  // layout: Column 1 / Row 1 / Column-Span 2
+  // align: x-center y-center
   agentChatOpenWithoutSecondTile: ['col-start-1 row-start-1', 'col-span-2', 'place-content-center'],
-  // Agent chat closed
-  // Column 1 / Row 1 / Column-Span 2 / Row-Span 3
-  // x-center y-center
+  // Agent
+  // chatOpen: false
+  // layout: Column 1 / Row 1 / Column-Span 2 / Row-Span 3
+  // align: x-center y-center
   agentChatClosed: ['col-start-1 row-start-1', 'col-span-2 row-span-3', 'place-content-center'],
-  // Second tile chat open
-  // Column 2 / Row 1
-  // x-start y-center
+  // Second tile
+  // chatOpen: true,
+  // hasSecondTile: true
+  // layout: Column 2 / Row 1
+  // align: x-start y-center
   secondTileChatOpen: ['col-start-2 row-start-1', 'self-center justify-self-start'],
-  // Second tile chat closed
-  // Column 2 / Row 2
-  // x-end y-end
-  secondTileChatClosed: ['col-start-2 row-start-2', 'place-content-end'],
+  // Second tile
+  // chatOpen: false,
+  // hasSecondTile: false
+  // layout: Column 2 / Row 2
+  // align: x-end y-end
+  secondTileChatClosed: ['col-start-2 row-start-3', 'place-content-end'],
 };
+
+export function useLocalTrackRef(source: Track.Source) {
+  const { localParticipant } = useLocalParticipant();
+  const publication = localParticipant.getTrackPublication(source);
+  const trackRef = useMemo<TrackReference | undefined>(
+    () => (publication ? { source, participant: localParticipant, publication } : undefined),
+    [source, publication, localParticipant]
+  );
+  return trackRef;
+}
 
 interface MediaTilesProps {
   chatOpen: boolean;
 }
 
 export function MediaTiles({ chatOpen }: MediaTilesProps) {
-  const [cameraTrack] = useTracks([Track.Source.Camera]);
+  const agent = useVoiceAssistant();
   const [screenShareTrack] = useTracks([Track.Source.ScreenShare]);
+  const cameraTrack: TrackReference | undefined = useLocalTrackRef(Track.Source.Camera);
 
-  const isCameraVisible = cameraTrack && !cameraTrack.publication.isMuted;
-  const isScreenShareVisible = screenShareTrack && !screenShareTrack.publication.isMuted;
-  const hasSecondTile = isCameraVisible || isScreenShareVisible;
+  const isCameraEnabled = cameraTrack && !cameraTrack.publication.isMuted;
+  const isScreenShareEnabled = screenShareTrack && !screenShareTrack.publication.isMuted;
+  const hasSecondTile = isCameraEnabled || isScreenShareEnabled;
+
+  const transition = {
+    ...animationProps.transition,
+    delay: chatOpen ? 0 : 0.15, // delay on close
+  };
+  const agentAnimate = {
+    ...animationProps.animate,
+    scale: chatOpen ? 1 : 3,
+    transition,
+  };
+  const avatarAnimate = {
+    ...animationProps.animate,
+    transition,
+  };
+  const agentLayoutTransition = transition;
+  const avatarLayoutTransition = transition;
 
   return (
     <div className="pointer-events-none fixed inset-x-0 top-8 bottom-32 z-50 md:top-12 md:bottom-40">
       <div className="relative mx-auto h-full max-w-2xl px-4 md:px-0">
-        {/* GRID: 2 columns x 3 rows / min-content, 1fr, min-content */}
-        <div className="grid h-full w-full grid-cols-2 grid-rows-[min-content_1fr_min-content] place-content-center">
+        <div className={cn(classNames.grid)}>
           {/* agent */}
           <div
             className={cn([
-              'grid place-content-center',
+              'grid',
+              // 'bg-[hotpink]', // for debugging
               !chatOpen && classNames.agentChatClosed,
               chatOpen && hasSecondTile && classNames.agentChatOpenWithSecondTile,
               chatOpen && !hasSecondTile && classNames.agentChatOpenWithoutSecondTile,
             ])}
           >
-            <MotionAgentTile
-              key="agent"
-              layoutId="agent"
-              animate={{
-                scale: chatOpen ? 1 : 3,
-                transition: {
-                  ...animationProps.transition,
-                  delay: chatOpen ? 0 : 0.15,
-                },
-              }}
-              transition={{
-                ...animationProps.transition,
-                delay: chatOpen ? 0 : 0.15,
-              }}
-            />
+            <AnimatePresence mode="popLayout">
+              {!agent.videoTrack && (
+                // audio-only agent
+                <MotionAgentTile
+                  key="agent"
+                  agent={agent}
+                  layoutId="agent"
+                  {...animationProps}
+                  animate={agentAnimate}
+                  transition={agentLayoutTransition}
+                  className={cn(
+                    chatOpen ? 'h-[90px]' : 'h-auto w-full',
+                    agent.videoTrack && 'hidden'
+                  )}
+                />
+              )}
+              {agent.videoTrack && (
+                // avatar agent
+                <MotionAvatarTile
+                  key="avatar"
+                  agent={agent}
+                  layoutId="avatar"
+                  {...animationProps}
+                  animate={avatarAnimate}
+                  transition={avatarLayoutTransition}
+                  className={cn(
+                    chatOpen ? 'h-[90px] [&>video]:h-[90px] [&>video]:w-auto' : 'h-auto w-full'
+                  )}
+                />
+              )}
+            </AnimatePresence>
           </div>
 
-          {/* camera */}
           <div
             className={cn([
               'grid',
@@ -104,8 +169,9 @@ export function MediaTiles({ chatOpen }: MediaTilesProps) {
               !chatOpen && classNames.secondTileChatClosed,
             ])}
           >
+            {/* camera */}
             <AnimatePresence>
-              {isCameraVisible && (
+              {cameraTrack && isCameraEnabled && (
                 <MotionVideoTile
                   key="camera"
                   layout="position"
@@ -119,19 +185,8 @@ export function MediaTiles({ chatOpen }: MediaTilesProps) {
                   className="h-[90px]"
                 />
               )}
-            </AnimatePresence>
-          </div>
-
-          {/* screen */}
-          <div
-            className={cn([
-              'grid',
-              chatOpen && classNames.secondTileChatOpen,
-              !chatOpen && classNames.secondTileChatClosed,
-            ])}
-          >
-            <AnimatePresence>
-              {isScreenShareVisible && (
+              {/* screen */}
+              {isScreenShareEnabled && (
                 <MotionVideoTile
                   key="screen"
                   layout="position"
