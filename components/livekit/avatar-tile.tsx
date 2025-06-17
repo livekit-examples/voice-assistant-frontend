@@ -1,15 +1,13 @@
 import { forwardRef } from 'react';
-import { VideoTrack, VoiceAssistant } from '@livekit/components-react';
+import { TrackReference, VideoTrack } from '@livekit/components-react';
 
 interface AgentAudioTileProps {
-  agent: VoiceAssistant;
+  videoTrack: TrackReference;
   className?: string;
 }
 
 export const AvatarTile = forwardRef<HTMLDivElement, AgentAudioTileProps>(
-  ({ agent, className }, ref) => {
-    const { videoTrack } = agent;
-
+  ({ videoTrack, className }, ref) => {
     return (
       <div ref={ref} className={className}>
         <VideoTrack

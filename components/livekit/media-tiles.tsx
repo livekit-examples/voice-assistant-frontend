@@ -91,7 +91,12 @@ interface MediaTilesProps {
 }
 
 export function MediaTiles({ chatOpen }: MediaTilesProps) {
-  const agent = useVoiceAssistant();
+  const {
+    state: agentState,
+    audioTrack: agentAudioTrack,
+    videoTrack: agentVideoTrack,
+    agent: { isActive: isAgentActive = false } = {},
+  } = useVoiceAssistant();
   const [screenShareTrack] = useTracks([Track.Source.ScreenShare]);
   const cameraTrack: TrackReference | undefined = useLocalTrackRef(Track.Source.Camera);
 
@@ -115,52 +120,54 @@ export function MediaTiles({ chatOpen }: MediaTilesProps) {
   const agentLayoutTransition = transition;
   const avatarLayoutTransition = transition;
 
+  const isAvatar = agentVideoTrack !== undefined;
+
   return (
     <div className="pointer-events-none fixed inset-x-0 top-8 bottom-32 z-50 md:top-12 md:bottom-40">
       <div className="relative mx-auto h-full max-w-2xl px-4 md:px-0">
         <div className={cn(classNames.grid)}>
           {/* agent */}
-          <div
-            className={cn([
-              'grid',
-              // 'bg-[hotpink]', // for debugging
-              !chatOpen && classNames.agentChatClosed,
-              chatOpen && hasSecondTile && classNames.agentChatOpenWithSecondTile,
-              chatOpen && !hasSecondTile && classNames.agentChatOpenWithoutSecondTile,
-            ])}
-          >
-            <AnimatePresence mode="popLayout">
-              {!agent.videoTrack && (
-                // audio-only agent
-                <MotionAgentTile
-                  key="agent"
-                  agent={agent}
-                  layoutId="agent"
-                  {...animationProps}
-                  animate={agentAnimate}
-                  transition={agentLayoutTransition}
-                  className={cn(
-                    chatOpen ? 'h-[90px]' : 'h-auto w-full',
-                    agent.videoTrack && 'hidden'
-                  )}
-                />
-              )}
-              {agent.videoTrack && (
-                // avatar agent
-                <MotionAvatarTile
-                  key="avatar"
-                  agent={agent}
-                  layoutId="avatar"
-                  {...animationProps}
-                  animate={avatarAnimate}
-                  transition={avatarLayoutTransition}
-                  className={cn(
-                    chatOpen ? 'h-[90px] [&>video]:h-[90px] [&>video]:w-auto' : 'h-auto w-full'
-                  )}
-                />
-              )}
-            </AnimatePresence>
-          </div>
+          {isAgentActive && (
+            <div
+              className={cn([
+                'grid',
+                // 'bg-[hotpink]', // for debugging
+                !chatOpen && classNames.agentChatClosed,
+                chatOpen && hasSecondTile && classNames.agentChatOpenWithSecondTile,
+                chatOpen && !hasSecondTile && classNames.agentChatOpenWithoutSecondTile,
+              ])}
+            >
+              <AnimatePresence mode="popLayout">
+                {!isAvatar && (
+                  // audio-only agent
+                  <MotionAgentTile
+                    key="agent"
+                    layoutId="agent"
+                    {...animationProps}
+                    animate={agentAnimate}
+                    transition={agentLayoutTransition}
+                    state={agentState}
+                    audioTrack={agentAudioTrack}
+                    className={cn(chatOpen ? 'h-[90px]' : 'h-auto w-full')}
+                  />
+                )}
+                {isAvatar && (
+                  // avatar agent
+                  <MotionAvatarTile
+                    key="avatar"
+                    layoutId="avatar"
+                    {...animationProps}
+                    animate={avatarAnimate}
+                    transition={avatarLayoutTransition}
+                    videoTrack={agentVideoTrack}
+                    className={cn(
+                      chatOpen ? 'h-[90px] [&>video]:h-[90px] [&>video]:w-auto' : 'h-auto w-full'
+                    )}
+                  />
+                )}
+              </AnimatePresence>
+            </div>
+          )}
 
           <div
             className={cn([

@@ -1,21 +1,22 @@
 import { forwardRef } from 'react';
-import { BarVisualizer, VoiceAssistant } from '@livekit/components-react';
+import { AgentState, BarVisualizer, TrackReference } from '@livekit/components-react';
 import { cn } from '@/lib/utils';
 
 interface AgentAudioTileProps {
-  agent: VoiceAssistant;
+  state: AgentState;
+  audioTrack: TrackReference;
   className?: string;
 }
 
 export const AgentTile = forwardRef<HTMLDivElement, AgentAudioTileProps>(
-  ({ agent, className }, ref) => {
+  ({ state, audioTrack, className }, ref) => {
     return (
       <div ref={ref} className={className}>
         <BarVisualizer
           barCount={5}
-          state={agent.state}
+          state={state}
           options={{ minHeight: 5 }}
-          trackRef={agent.audioTrack}
+          trackRef={audioTrack}
           className={cn('flex aspect-video w-40 items-center justify-center gap-1')}
         >
           <span
