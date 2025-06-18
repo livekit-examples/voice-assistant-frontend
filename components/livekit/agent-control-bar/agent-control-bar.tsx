@@ -89,7 +89,7 @@ export function AgentControlBar({
           <div className="flex h-8 w-full">
             <ChatInput onSend={handleSendMessage} disabled={isSendingMessage} className="w-full" />
           </div>
-          <hr className="my-3" />
+          <hr className="border-bg2 my-3" />
         </div>
       )}
 
@@ -120,7 +120,7 @@ export function AgentControlBar({
                   ></span>
                 </BarVisualizer>
               </TrackToggle>
-              <hr className="bg-separator1 peer-data-[state=off]/track:bg-separatorSerious relative z-10 -mr-px h-4 w-px" />
+              <hr className="bg-separator1 peer-data-[state=off]/track:bg-separatorSerious relative z-10 -mr-px hidden h-4 w-px md:block" />
               <DeviceSelect
                 size="sm"
                 kind="audioinput"
@@ -150,7 +150,7 @@ export function AgentControlBar({
                 onPressedChange={cameraToggle.toggle}
                 className="peer/track relative w-auto pr-3 pl-3 disabled:opacity-100 md:rounded-r-none md:border-r-0 md:pr-2"
               />
-              <hr className="bg-separator1 peer-data-[state=off]/track:bg-separatorSerious relative z-10 -mr-px h-4 w-px" />
+              <hr className="bg-separator1 peer-data-[state=off]/track:bg-separatorSerious relative z-10 -mr-px hidden h-4 w-px md:block" />
               <DeviceSelect
                 size="sm"
                 kind="videoinput"
