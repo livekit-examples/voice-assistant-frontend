@@ -1,10 +1,10 @@
-version: "3"
+version: '3'
 output: interleaved
-dotenv: [".env.local"]
+dotenv: ['.env.local']
 
 tasks:
   post_create:
-    desc: "Runs after this template is instantiated as a Sandbox or Bootstrap"
+    desc: 'Runs after this template is instantiated as a Sandbox or Bootstrap'
     cmds:
       - echo -e "\nYour Next.js voice assistant is ready to go!\n"
       - echo -e "To give it a try, run the following commands:\r\n"
@@ -15,9 +15,9 @@ tasks:
   install:
     interactive: true
     cmds:
-      - "pnpm install"
+      - 'pnpm install'
 
   dev:
     interactive: true
     cmds:
-      - "pnpm dev"
+      - 'pnpm dev'

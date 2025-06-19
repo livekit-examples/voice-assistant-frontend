@@ -3,9 +3,10 @@
 name: Sync main to sandbox-production
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #  branches:
+  #    - main
+  workflow_dispatch:
 
 permissions:
   contents: write
