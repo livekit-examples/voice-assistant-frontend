@@ -2,7 +2,7 @@
 
 import { toast as sonnerToast } from 'sonner';
 import { WarningIcon } from '@phosphor-icons/react/dist/ssr';
-import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import { Alert, AlertTitle } from './ui/alert';
 
 interface ToastProps {
   id: string | number;
@@ -18,7 +18,7 @@ export function toastAlert(toast: Omit<ToastProps, 'id'>) {
 }
 
 function AlertToast(props: ToastProps) {
-  const { title, description, id } = props;
+  const { title, id } = props;
 
   return (
     <Alert onClick={() => sonnerToast.dismiss(id)} className="bg-accent">

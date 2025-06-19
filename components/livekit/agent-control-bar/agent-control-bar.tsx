@@ -49,7 +49,10 @@ export function AgentControlBar({
     handleAudioDeviceChange,
     handleVideoDeviceChange,
     handleDisconnect,
-  } = useAgentControlBar();
+  } = useAgentControlBar({
+    controls,
+    saveUserChoices,
+  });
 
   const handleSendMessage = async (message: string) => {
     setIsSendingMessage(true);

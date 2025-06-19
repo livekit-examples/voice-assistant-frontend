@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Track } from 'livekit-client';
 import {
-  TrackReferenceOrPlaceholder,
+  type TrackReferenceOrPlaceholder,
   useLocalParticipant,
   usePersistentUserChoices,
   useRoomContext,
