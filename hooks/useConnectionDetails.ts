@@ -22,6 +22,10 @@ export default function useConnectionDetails(autoRefresh = false) {
       .then((res) => res.json())
       .then((data) => {
         setConnectionDetails(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching connection details:', error);
+        alert(error.message);
       });
   };
 
