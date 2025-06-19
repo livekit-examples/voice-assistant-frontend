@@ -5,7 +5,7 @@
 This is a starter template for [LiveKit Agents](https://docs.livekit.io/agents) that provides a simple voice interface using the [LiveKit JavaScript SDK](https://github.com/livekit/client-sdk-js). It supports [voice](https://docs.livekit.io/agents/start/voice-ai), [transcriptions](https://docs.livekit.io/agents/build/text/), and [virtual avatars](https://docs.livekit.io/agents/integrations/avatar).
 
 This template is built with Next.js and is free for you to use or modify as you see fit.
-
+s
 ![App screenshot](/.github/assets/frontend-screenshot.jpeg)
 
 ## Getting started
