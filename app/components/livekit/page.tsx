@@ -51,7 +51,14 @@ export default function LiveKit() {
           <h3 className="text-muted-foreground text-sm">A control bar component.</h3>
         </div>
         <div className="relative flex items-center justify-center">
-          <AgentControlBar className="w-full" />
+          <AgentControlBar
+            className="w-full"
+            capabilities={{
+              suportsChatInput: true,
+              suportsVideoInput: true,
+              suportsScreenShare: true,
+            }}
+          />
         </div>
       </Container>
     </>
