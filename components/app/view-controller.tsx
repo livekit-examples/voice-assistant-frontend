@@ -2,7 +2,7 @@
 
 import { useTheme } from 'next-themes';
 import { AnimatePresence, motion } from 'motion/react';
-import { useSessionContext } from '@livekit/components-react';
+import { useAgent, useSessionContext } from '@livekit/components-react';
 import { AgentSessionView_01 } from '@/components/agents-ui/blocks/agent-session-view-01';
 import { WelcomeView } from '@/components/app/welcome-view';
 
@@ -33,6 +33,7 @@ interface ViewControllerProps {
 
 export function ViewController({ videoEnabled }: ViewControllerProps) {
   const { isConnected, start } = useSessionContext();
+  const agent = useAgent();
   const { resolvedTheme } = useTheme();
 
   return (
@@ -51,6 +52,9 @@ export function ViewController({ videoEnabled }: ViewControllerProps) {
         <MotionSessionView
           key="session-view"
           {...VIEW_MOTION_PROPS}
+          preConnectMessage={
+            agent.isConnected ? 'Agent is listening, ask it a question' : 'Waiting for agent'
+          }
           supportsChatInput={true}
           supportsVideoInput={videoEnabled}
           supportsScreenShare={videoEnabled}

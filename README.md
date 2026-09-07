@@ -42,13 +42,19 @@ The app is configured to connect to the LiveKit homepage agent by default, which
 
 To switch from the default agent to your own, you first need a LiveKit agent to speak with. For a no-code setup, use the [Agent Builder](https://docs.livekit.io/agents/start/builder/). For more customization, try our starter agent for [Python](https://github.com/livekit-examples/agent-starter-python), [Node.js](https://github.com/livekit-examples/agent-starter-node), or [create your own from scratch](https://docs.livekit.io/agents/start/voice-ai/).
 
-Second, the app needs your project's LiveKit credentials to generate tokens. The easiest way is the LiveKit CLI, which clones the template and writes them to `.env.local` for you:
+Second, you need a token server. For development, the easiest option is the [development token server](https://docs.livekit.io/frontends/build/authentication/development-token-server/): switch on the **Development token server** toggle on your project's [Settings](https://cloud.livekit.io/projects/p_/settings/project) page in LiveKit Cloud and copy the **Token server ID** below it. Then copy `.env.example` to `.env.local` and fill it in:
+
+```env
+LIVEKIT_TOKEN_SERVER_ID=<your-token-server-id>
+```
+
+Alternatively, use the token endpoint included in this app at [`app/api/token/route.ts`](./app/api/token/route.ts). It needs your project's LiveKit credentials in `.env.local`, which the LiveKit CLI fills in for you when it clones the template:
 
 ```bash
 lk app create --template agent-starter-react
 ```
 
-Or copy `.env.example` to `.env.local` and fill in the values from your project's [Settings](https://cloud.livekit.io/projects/p_/settings/project) page in LiveKit Cloud:
+Or copy them from your project's Settings page yourself:
 
 ```env
 LIVEKIT_URL=wss://<project-subdomain>.livekit.cloud
@@ -59,11 +65,11 @@ LIVEKIT_API_SECRET=<your_api_secret>
 Leave `AGENT_NAME` blank for automatic dispatch, or set it to your agent's name for [explicit dispatch](https://docs.livekit.io/agents/server/agent-dispatch).
 
 > [!NOTE]
-> The included token endpoint in [`app/api/token/route.ts`](./app/api/token/route.ts) is for development only — any client can request a token. See [Token generation in production](#token-generation-in-production) before you ship.
+> Both options are for development only — any client can request a token. See [Token generation in production](#token-generation-in-production) before you ship.
 
 ## Token generation in production
 
-In production, you will be responsible for developing a solution to [generate tokens for your users](https://docs.livekit.io/home/server/generating-tokens/) that integrates with your authentication system. Add an authentication layer to [`app/api/token/route.ts`](./app/api/token/route.ts), or point `tokenEndpoint` in [`app/page.tsx`](./app/page.tsx) at your own token server.
+In production, you will be responsible for developing a solution to [generate tokens for your users](https://docs.livekit.io/home/server/generating-tokens/) that integrates with your authentication system. Add an authentication layer to [`app/api/token/route.ts`](./app/api/token/route.ts), or point `tokenEndpoint` in [`app/page.tsx`](./app/page.tsx) at your own token server and drop the development token server.
 
 ## Project structure
 
