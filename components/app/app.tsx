@@ -21,11 +21,13 @@ function AppSetup() {
 }
 
 interface AppProps {
+  tokenEndpoint: string;
   agentName?: string;
+  videoEnabled: boolean;
 }
 
-export function App({ agentName }: AppProps) {
-  const tokenSource = useMemo(() => TokenSource.endpoint('/api/token'), []);
+export function App({ tokenEndpoint, agentName, videoEnabled }: AppProps) {
+  const tokenSource = useMemo(() => TokenSource.endpoint(tokenEndpoint), [tokenEndpoint]);
 
   const session = useSession(tokenSource, agentName ? { agentName } : undefined);
 
@@ -33,7 +35,7 @@ export function App({ agentName }: AppProps) {
     <AgentSessionProvider session={session}>
       <AppSetup />
       <main className="grid h-svh grid-cols-1 place-content-center">
-        <ViewController />
+        <ViewController videoEnabled={videoEnabled} />
       </main>
       <StartAudioButton label="Start Audio" />
       <Toaster

@@ -27,7 +27,11 @@ const VIEW_MOTION_PROPS = {
   },
 };
 
-export function ViewController() {
+interface ViewControllerProps {
+  videoEnabled: boolean;
+}
+
+export function ViewController({ videoEnabled }: ViewControllerProps) {
   const { isConnected, start } = useSessionContext();
   const { resolvedTheme } = useTheme();
 
@@ -48,8 +52,8 @@ export function ViewController() {
           key="session-view"
           {...VIEW_MOTION_PROPS}
           supportsChatInput={true}
-          supportsVideoInput={true}
-          supportsScreenShare={true}
+          supportsVideoInput={videoEnabled}
+          supportsScreenShare={videoEnabled}
           isPreConnectBufferEnabled={true}
           themeMode={resolvedTheme === 'dark' ? 'dark' : 'light'}
           className="fixed inset-0"
