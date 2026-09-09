@@ -28,10 +28,10 @@ const VIEW_MOTION_PROPS = {
 };
 
 interface ViewControllerProps {
-  videoEnabled: boolean;
+  isVideoInputSupported: boolean;
 }
 
-export function ViewController({ videoEnabled }: ViewControllerProps) {
+export function ViewController({ isVideoInputSupported }: ViewControllerProps) {
   const { isConnected, start } = useSessionContext();
   const agent = useAgent();
   const { resolvedTheme } = useTheme();
@@ -56,8 +56,8 @@ export function ViewController({ videoEnabled }: ViewControllerProps) {
             agent.isConnected ? 'Agent is listening, ask it a question' : 'Waiting for agent'
           }
           supportsChatInput={true}
-          supportsVideoInput={videoEnabled}
-          supportsScreenShare={videoEnabled}
+          supportsVideoInput={isVideoInputSupported}
+          supportsScreenShare={isVideoInputSupported}
           isPreConnectBufferEnabled={true}
           themeMode={resolvedTheme === 'dark' ? 'dark' : 'light'}
           className="fixed inset-0"

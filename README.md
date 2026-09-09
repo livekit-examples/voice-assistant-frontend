@@ -131,7 +131,7 @@ pnpm dlx shadcn@latest add @agents-ui/{component-name-a} @agents-ui/{component-n
 
 ## Configuration
 
-This starter is designed to be flexible so you can adapt it to your specific agent use case. Branding, feature toggles, and UI text are set directly in the components that use them — see [`app/layout.tsx`](./app/layout.tsx) for branding (logo, colors, page title/description) and [`components/app/view-controller.tsx`](./components/app/view-controller.tsx) for feature toggles and the audio visualizer. Video and screen share input follow the connected agent; override `videoEnabled` in [`app/page.tsx`](./app/page.tsx) to force them on or off.
+This starter is designed to be flexible so you can adapt it to your specific agent use case. Branding, feature toggles, and UI text are set directly in the components that use them — see [`app/layout.tsx`](./app/layout.tsx) for branding (logo, colors, page title/description) and [`components/app/view-controller.tsx`](./components/app/view-controller.tsx) for feature toggles and the audio visualizer. Video and screen share input follow the connected agent; override `isVideoInputSupported` in [`app/page.tsx`](./app/page.tsx) to force them on or off.
 
 #### Audio visualizer presets
 

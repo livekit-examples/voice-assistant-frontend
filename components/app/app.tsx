@@ -24,10 +24,10 @@ interface AppProps {
   tokenServerId?: string;
   tokenEndpoint: string;
   agentName?: string;
-  videoEnabled: boolean;
+  isVideoInputSupported: boolean;
 }
 
-export function App({ tokenServerId, tokenEndpoint, agentName, videoEnabled }: AppProps) {
+export function App({ tokenServerId, tokenEndpoint, agentName, isVideoInputSupported }: AppProps) {
   const tokenSource = useMemo(
     () =>
       tokenServerId
@@ -42,7 +42,7 @@ export function App({ tokenServerId, tokenEndpoint, agentName, videoEnabled }: A
     <AgentSessionProvider session={session}>
       <AppSetup />
       <main className="grid h-svh grid-cols-1 place-content-center">
-        <ViewController videoEnabled={videoEnabled} />
+        <ViewController isVideoInputSupported={isVideoInputSupported} />
       </main>
       <StartAudioButton label="Start Audio" />
       <Toaster
